@@ -1,0 +1,5 @@
+# the database
+recursive-include data/programs.d data/suggestions.d
+
+# the translations
+recursive-include po/ *.pot *.po *.mo

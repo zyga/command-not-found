@@ -1,0 +1,15 @@
+command-not-found (0.0.2) edgy; urgency=low
+
+  * return 127 to bash if nothing was found in the database
+  * update the database 
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 10 Aug 2006 15:05:14 +0200
+
+command-not-found (0.0.1) edgy; urgency=low
+
+  * initial release
+  * start of the implementation of 
+    https://wiki.ubuntu.com/CommandNotFoundMagic
+  * contains the current commands on edgy
+  
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 24 Nov 2005 16:34:54 +0100

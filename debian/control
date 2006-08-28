@@ -1,0 +1,19 @@
+Source: command-not-found
+Section: admin
+Priority: optional
+Maintainer: Zygmunt Krynicki <zkrynicki@gmail.com>
+Build-Depends: debhelper (>= 4.0.0), python, python-dev, devscripts, intltool, python-apt (>= 0.6.12) 
+Standards-Version: 3.7.2
+
+Package: command-not-found
+Architecture: all
+Depends: python, command-not-found-data
+Description: Suggest installation of packages in interactive bash sessions
+ This package will install handler for command_not_found that lookups
+ programs not currently installed but available from the repositiories.
+
+Package: command-not-found-data
+Architecture: all
+Description: Set of data files for command-not-found.
+ Data for edgy
+

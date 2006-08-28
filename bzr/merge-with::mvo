@@ -1,0 +1,3 @@
+#!/bin/bash
+
+bzr merge 'http://people.ubuntu.com/~mvo/bzr/cmd-not-found--mvo/'

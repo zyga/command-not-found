@@ -1,0 +1,26 @@
+
+ESSENTIAL
+
+* Build a python+fuse virtual filesystem to create a sandbox chroot in which we will execute the postinst scripts
+that might trigger update-alternatives. Current system cannot handle things like: update-alternatives $VARIABLE.
+-> OR provide a list of those packages that use update-alternatives and 
+      see if it can managed by hand
+* Figure out if it's really true that NO SINGLE PACKAGE in dapper has any symlinks to binary files!?! (zk) - mvo: not true: gksudo -> gksu
+
+TOP PRIORITY
+
+* Create separate command-not-found--data package that is arch-dependent (mvo, please :-)
+* collect if the data comes from "universe, multiverse" etc
+
+MEDIUM PRIORITY
+
+* Modify the build system so that POT creation date is not re-set every time a package is buil
+  ZK: disabled from now on, manual: make -C po update-po is needed to sync translations
+* Provide comprehensive suggestion database (sivang?)
+  ZK: sivang is off the project for the moment
+
+LOW PRIORITY
+
+* Figure out why data (the empty directory) gets copied over /usr/share/command-not-found)
+* Suggest packages for the currently used desktop before other packages
+

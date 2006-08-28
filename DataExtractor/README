@@ -1,0 +1,9 @@
+To update the intemediate database:
+
+find $PATH_TO_REPO -name '*.deb' | xargs ./scan-package-for-executable-files.py > xbits
+find $PATH_TO_REPO -name '*.deb' | xargs ./scan-package-for-symbolic-links.py > symlinks
+
+To update the binary database:
+
+./process-distro.py
+

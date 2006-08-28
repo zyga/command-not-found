@@ -1,0 +1,48 @@
+# Copyright (C) 2005, Zygmunt Krynicki
+# This file is distributed under the same license as the command-not-found package.
+# Zygmunt Krynicki <zkrynicki@gmail.com>, 2005
+msgid ""
+msgstr ""
+"Project-Id-Version: command-not-found 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-11-28 10:44+0100\n"
+"PO-Revision-Date: 2005-11-25 00:49:+0100\n"
+"Last-Translator: Zygmunt Krynicki <zkrynicki@gmail.com>\n"
+"Language-Team: Polish <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../CommandNotFound/CommandNotFound.py:113
+msgid "Ubuntu has the following similar programs"
+msgstr "Ubuntu zawiera następujące podobne programy"
+
+#: ../CommandNotFound/CommandNotFound.py:118
+#, python-format
+msgid "Program %s is currently not installed, you can install it by typing:"
+msgstr ""
+"Program %s nie jest obecnie zainstalowany, możesz go zainstalować wpisując:"
+
+#: ../CommandNotFound/CommandNotFound.py:121
+#, python-format
+msgid "To run '%s' please ask your administrator to install the package '%s'"
+msgstr ""
+"Aby uruchomić '%s' poproś swojego administratora o zainstalowanie pakietu '%"
+"s'"
+
+#: ../CommandNotFound/CommandNotFound.py:123
+#, python-format
+msgid "Program '%s' can be found in the following packages"
+msgstr "Program '%s' można znaleźć w następujących pakietch"
+
+#: ../CommandNotFound/CommandNotFound.py:127
+#, python-format
+msgid "Try: %s <selected package>"
+msgstr "Spróbuj: %s <wybrany pakiet>"
+
+#: ../CommandNotFound/CommandNotFound.py:129
+msgid "Ask your administrator to install one of them"
+msgstr "Poproś swojego administratora o zainstalowanie jednego z nich"
+
+#~ msgid "You can install '%s' by typing:"
+#~ msgstr "Możesz zainstalować '%s' wpisując:"

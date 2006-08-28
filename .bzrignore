@@ -1,0 +1,6 @@
+*.pyc
+po/mo
+debian/arch-build/
+DataExtractor/*/archives/*.deb
+DataExtractor/lists/*
+DataExtractor/raw-data-from-mvo/*

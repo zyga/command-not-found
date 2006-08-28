@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+# (c) Zygmunt Krynicki 2005,
+# Licensed under GPL, see COPYING for the whole text
+
+try:
+    import gettext, sys
+    from gettext import gettext as _
+    from CommandNotFound import CommandNotFound
+    from optparse import OptionParser
+
+    __version__ = "0.1"
+           
+    if __name__ == "__main__":
+        gettext.bindtextdomain("command-not-found", "/usr/share/locale")
+        gettext.textdomain("command-not-found")
+        gettext.install("command-not-found", unicode=True)
+        parser = OptionParser(version = __version__, usage=_("%prog [options] <command-name>"))
+        parser.add_option('-d', '--data-dir', action='store', default="/usr/share/command-not-found",
+                help=_("use this path to locate data fiels"))
+        (options, args) = parser.parse_args()
+        if len(args) == 1:
+            if not CommandNotFound(options.data_dir).advise(args[0]):
+                sys.exit(127)
+        else:
+            parser.print_usage()
+            sys.exit(1)
+except KeyboardInterrupt:
+    import sys
+    sys.exit()
