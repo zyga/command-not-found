@@ -82,7 +82,7 @@ class SuggestionDatabase:
             else:
                 return string.split(separator)
         if self.db_locale:
-            return [ Suggestion(self._localizedMsg(command) or row[self.TEXT], magicSplit([self.PROGRAMS], ",")) for row in self.db.lookup(self.COMMAND, command) ]
+            return [ Suggestion(self._localizedMsg(command) or row[self.TEXT], magicSplit(row[self.PROGRAMS], ",")) for row in self.db.lookup(self.COMMAND, command) ]
         else:
             return [ Suggestion(row[self.TEXT], magicSplit(row[self.PROGRAMS], ",")) for row in self.db.lookup(self.COMMAND, command) ]
 
