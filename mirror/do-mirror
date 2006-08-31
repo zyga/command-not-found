@@ -1,0 +1,9 @@
+ARCH_LIST="i386"
+DIST="$(echo $0 | cut -d - -f 3)"
+SECTION_LIST="main,restricted,universe,multiverse"
+MIRROR_HOST="archive.ubuntu.com"
+MIRROR_METHOD="http"
+MIRROR_ROOT="/ubuntu"
+OPTIONS="--verbose --nosource --progress --arch=$ARCH_LIST --dist=$DIST --section=$SECTION_LIST --ignore-release-gpg --host=$MIRROR_HOST --method=$MIRROR_METHOD --root=$MIRROR_ROOT"
+
+debmirror $OPTIONS $DIST
