@@ -1,0 +1,176 @@
+#!/usr/bin/env python2.4
+
+import os
+import os.path
+import sys
+import logging
+import DebPackage
+
+from string import Template
+
+class PackageInfo(object):
+    def __init__(self, name, arch, repo, executables):
+        self.name = name
+        self.arch = arch
+        self.repo = repo
+        self.executables = set(executables)
+    def __str__(self):
+        return "%s|%s|%s|%s" % (self.arch, self.repo, self.name, ",".join(self.executables))
+    def display(self):
+        print "Package: %s for arch %s in repo %s" % (self.name, self.arch, self.repo)
+        print "Executables: ", self.executables
+
+def strip_comment(line):
+    i = line.find('#')
+    if i == -1:
+        return line
+    else:
+        return line[:i]
+
+def get_alternatives(package):
+    contents = package.getControlFile("postinst")
+    shell_vars = dict()
+    values_of_i = None
+    def expand_values(*text_list):
+        if values_of_i is None:
+            if len(text_list) == 1:
+                yield Template(text_list[0]).safe_substitute(**shell_vars)
+            else:
+                yield [Template(text).safe_substitute(**shell_vars) for text in text_list]
+        else:
+            for i in values_of_i:
+                shell_vars["i"] = i
+                if len(text_list) == 1:
+                    yield Template(text_list[0]).safe_substitute(**shell_vars)
+                else:
+                    yield [Template(text).safe_substitute(**shell_vars) for text in text_list]
+    if contents != None:
+        for line in contents.replace("\\\n","").splitlines():
+            line = strip_comment(line).strip()
+            if line == "":
+                continue
+            words = line.split()
+            # this ugly hack is capable of detecting both
+            # variable=value as well as variable="list of values"
+            if '=' in words[0] and "==" not in words[0]:
+                name = words[0][:words[0].index('=')]
+                value = line[line.index('=')+1:].strip('\'"')
+                shell_vars[name] = value
+                logging.debug("%s: from line '%s' I've scanned the variable %s=%s" % (package.filename, line, name, value))
+            # This format is found in vim-* packages
+            elif line.startswith('for i in') and ';' in line:
+                values_of_i = " ".join(expand_values(line[len('for i in'):line.index(';')])).split()
+            # This format is found in emacs-* packages
+            elif line.startswith('for i in') and ';' not in line:
+                values_of_i = " ".join(expand_values(" ".join(words[3:]))).split()
+            else:
+                if words[0] == "update-alternatives":
+                    words = words[1:]
+                    while len(words) > 0:
+                        if words[0] == "--install":
+                            name = words[1]
+                            target = words[3]
+                            words = words[5:]
+                        elif words[0] == "--slave":
+                            name = words[1]
+                            target = words[3]
+                            words = words[4:]
+                        # all remaining options are ignored
+                        elif words[0] in ("--set", "--remove"):
+                            words = words[3:]
+                        elif words[0] in ("--verbose", "--quiet", "--test", "--help", "--all"):
+                            words = words[1:]
+                        elif words[0] in ("--altdir", "--admindir", "--list", "--display", "--auto", "--config", "--remove-all"):
+                            words = words[2:]
+                        # sometimes || true or redirection follows the last argument
+                        elif words[0] in (";", "||") or words[0].startswith(">"):
+                            words = []
+                        else:
+                            logging.error("%s: aborting analisys of update-alternatives on argument '%s', line: %s" % (
+                                package.filename, words[0], line))
+                            break
+                        for new_name, new_target in expand_values(name, target):
+                            if not new_name.startswith('/'):
+                                new_name = "/" + new_name
+                            if not new_target.startswith('/'):
+                                new_target = "/" + new_target
+                            if '$' in new_name or '$' in new_target:
+                                logging.error("%s: alternatives need manual analisys: %s->%s" % (
+                                    package.filename, new_name, new_target))
+                            else:
+                                logging.info("%s: alternative reported: %s->%s" % (
+                                    package.filename, new_name, new_target))
+                                yield new_name, new_target 
+
+def get_symlinks(package):
+    def symlink_filter(item_info):
+        return isinstance (item_info, DebPackage.SymbolicLinkInfo)
+    return [("/"+item_info.name, item_info.target) for item_info in package.items if symlink_filter(item_info)]
+
+def get_executables(package):
+    def exec_filter(item_info):
+        # lib*.so* are usualy +x so we'll exclude them
+        return isinstance(item_info, DebPackage.FileInfo) and item_info.is_executable() and not os.path.basename(item_info.name).startswith("lib")
+    return ["/"+item_info.name for item_info in package.items if exec_filter(item_info)]
+
+def get_symlinks_to_executables(symlinks, executables):
+    for name, target in symlinks:
+        if not target.startswith("/"):
+            target = os.path.join(os.path.dirname(name), target)
+        target = os.path.normpath(target)
+        if target in executables:
+            yield name
+
+def get_repo(package):
+    parts = package.filename.split(os.path.sep)
+    try:
+        return parts[parts.index("pool")+1]
+    except ValueError:
+        logging.error("Unable to determine repository of package %s" % package.filename)
+        return None
+
+def analyze_package(filename):
+    try:
+        package = DebPackage.load(filename)
+    except Exception, ex:
+        logging.error("Unable to process package %s: %s" % (filename, ex))
+        return None
+    repo = get_repo(package)
+    direct = get_executables(package)
+    indirect = list()
+    indirect.extend(get_symlinks(package))
+    indirect.extend(get_alternatives(package))
+    direct.extend(get_symlinks_to_executables(indirect, direct))
+    direct = [item for item in direct if item.startswith('/usr/bin') or item.startswith('/usr/sbin') or item.startswith('/bin') or item.startswith('/sbin')]
+    if len(direct) == 0:
+        return None
+    return PackageInfo(package.name, package.arch, repo, direct)
+
+def dir_walk(output, dirname, names):
+    logging.debug("Entering dir: '%s' " % dirname)
+    for filename in names:
+        if filename.endswith(".deb"):
+            package_info = analyze_package(os.path.join(dirname, filename))
+            if package_info is None:
+                continue
+            #package_info.display()
+            print >> output, package_info
+
+def scan(dir_path="mirror/archive.ubuntu.com/pool", output_filename="scan.data"):
+    logging.basicConfig(level=logging.DEBUG,
+            filename="scan.log",
+            format='%(asctime)s %(levelname)s %(message)s',
+            filemode='w')
+    output = file(output_filename, "w")
+    os.path.walk(dir_path, dir_walk, output)
+    
+if __name__ == "__main__":
+    if len(sys.argv) == 2:
+        scan(sys.argv[1])
+    else:
+        scan()
+    #scan("mirror/archive.ubuntu.com/pool/main/a")
+    #scan("mirror/archive.ubuntu.com/pool/universe/c/command-not-found")
+    #scan("mirror/archive.ubuntu.com/pool/main/g/gksu")
+    #scan("mirror/archive.ubuntu.com/pool/main/v")
+

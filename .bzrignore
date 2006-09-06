@@ -1,6 +1,7 @@
 *.pyc
 po/mo
 debian/arch-build/
-DataExtractor/*/archives/*.deb
-DataExtractor/lists/*
-DataExtractor/raw-data-from-mvo/*
+mirror/archive.ubuntu.com
+mirror/security.ubuntu.com
+UnifiedDataExtractor/scan-data.txt
+UnifiedDataExtractor/scan.log
