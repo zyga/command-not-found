@@ -1,4 +1,6 @@
 #!/usr/bin/env python2.4
+# (c) Zygmunt Krynicki 2005,
+# Licensed under GPL, see COPYING for the whole text
 
 import os
 import os.path
@@ -31,6 +33,7 @@ def get_alternatives(package):
     contents = package.getControlFile("postinst")
     shell_vars = dict()
     values_of_i = None
+    name_of_i = None
     def expand_values(*text_list):
         if values_of_i is None:
             if len(text_list) == 1:
@@ -39,7 +42,7 @@ def get_alternatives(package):
                 yield [Template(text).safe_substitute(**shell_vars) for text in text_list]
         else:
             for i in values_of_i:
-                shell_vars["i"] = i
+                shell_vars[name_of_i] = i
                 if len(text_list) == 1:
                     yield Template(text_list[0]).safe_substitute(**shell_vars)
                 else:
@@ -59,10 +62,16 @@ def get_alternatives(package):
                 logging.debug("%s: from line '%s' I've scanned the variable %s=%s" % (package.filename, line, name, value))
             # This format is found in vim-* packages
             elif line.startswith('for i in') and ';' in line:
+                name_of_i = "i"
                 values_of_i = " ".join(expand_values(line[len('for i in'):line.index(';')])).split()
             # This format is found in emacs-* packages
             elif line.startswith('for i in') and ';' not in line:
+                name_of_i = "i"
                 values_of_i = " ".join(expand_values(" ".join(words[3:]))).split()
+            # This format is found in epiphany-browser-* packages
+            elif line.startswith('for alt in') and ';' in line:
+                name_of_i = "alt"
+                values_of_i = " ".join(expand_values(line[len('for alt in'):line.index(';')])).split()
             else:
                 if words[0] == "update-alternatives":
                     words = words[1:]
@@ -78,13 +87,16 @@ def get_alternatives(package):
                         # all remaining options are ignored
                         elif words[0] in ("--set", "--remove"):
                             words = words[3:]
+                            continue
                         elif words[0] in ("--verbose", "--quiet", "--test", "--help", "--all"):
                             words = words[1:]
+                            continue
                         elif words[0] in ("--altdir", "--admindir", "--list", "--display", "--auto", "--config", "--remove-all"):
                             words = words[2:]
+                            continue
                         # sometimes || true or redirection follows the last argument
                         elif words[0] in (";", "||") or words[0].startswith(">"):
-                            words = []
+                            break
                         else:
                             logging.error("%s: aborting analisys of update-alternatives on argument '%s', line: %s" % (
                                 package.filename, words[0], line))
