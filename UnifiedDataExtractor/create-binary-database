@@ -24,7 +24,7 @@ class ProgramGroup(object):
 
 def build_binary_databases(scan_data="scan.data"):
     groups = dict()
-    for arch, repo, package_name, executables in (line.split('|') for line in file(scan_data)):
+    for arch, repo, package_name, executables in (line.strip().split('|') for line in file(scan_data)):
         group_name = "%s-%s" % (arch, repo)
         if not groups.has_key(group_name):
             groups[group_name] = ProgramGroup(arch, repo)
