@@ -5,6 +5,7 @@
 import os
 import os.path
 import sys
+import re
 import logging
 import DebPackage
 
@@ -59,19 +60,18 @@ def get_alternatives(package):
                 name = words[0][:words[0].index('=')]
                 value = line[line.index('=')+1:].strip('\'"')
                 shell_vars[name] = value
-                logging.debug("%s: from line '%s' I've scanned the variable %s=%s" % (package.filename, line, name, value))
-            # This format is found in vim-* packages
-            elif line.startswith('for i in') and ';' in line:
-                name_of_i = "i"
-                values_of_i = " ".join(expand_values(line[len('for i in'):line.index(';')])).split()
-            # This format is found in emacs-* packages
-            elif line.startswith('for i in') and ';' not in line:
-                name_of_i = "i"
+                logging.debug("Based on line: %s" % line)
+                logging.debug("Variable binding established: %s=%s" % (name, value))
+            # this ugly hack is capable of detecting
+            # for something in a list of values; do ...
+            elif words[0] == 'for' and words[2] == 'in' and ';' in line:
+                name_of_i = words[1]
+                values_of_i = " ".join(expand_values(line[len('for %s in' % name_of_i):line.index(';')])).split()
+            # this ugly hack is capable of detecting
+            # for something in a list of values\n
+            elif words[0] == 'for' and words[2] == 'in' and ';' not in line:
+                name_of_i = words[1]
                 values_of_i = " ".join(expand_values(" ".join(words[3:]))).split()
-            # This format is found in epiphany-browser-* packages
-            elif line.startswith('for alt in') and ';' in line:
-                name_of_i = "alt"
-                values_of_i = " ".join(expand_values(line[len('for alt in'):line.index(';')])).split()
             else:
                 if words[0] == "update-alternatives":
                     words = words[1:]
@@ -101,17 +101,18 @@ def get_alternatives(package):
                             logging.error("%s: aborting analisys of update-alternatives on argument '%s', line: %s" % (
                                 package.filename, words[0], line))
                             break
+                        # sometimes pathnames are quoted
+                        name = name.strip('\'"')
+                        target = target.strip('\'"')
                         for new_name, new_target in expand_values(name, target):
                             if not new_name.startswith('/'):
                                 new_name = "/" + new_name
                             if not new_target.startswith('/'):
                                 new_target = "/" + new_target
                             if '$' in new_name or '$' in new_target:
-                                logging.error("%s: alternatives need manual analisys: %s->%s" % (
+                                logging.error("%s: FIXME alternatives need manual analisys: %s -> %s" % (
                                     package.filename, new_name, new_target))
                             else:
-                                logging.info("%s: alternative reported: %s->%s" % (
-                                    package.filename, new_name, new_target))
                                 yield new_name, new_target 
 
 def get_symlinks(package):
@@ -122,16 +123,20 @@ def get_symlinks(package):
 def get_executables(package):
     def exec_filter(item_info):
         # lib*.so* are usualy +x so we'll exclude them
-        return isinstance(item_info, DebPackage.FileInfo) and item_info.is_executable() and not os.path.basename(item_info.name).startswith("lib")
+        return isinstance(item_info, DebPackage.FileInfo) and item_info.is_executable() and not re.match("^lib.*\\.so.*", os.path.basename(item_info.name))
     return ["/"+item_info.name for item_info in package.items if exec_filter(item_info)]
 
 def get_symlinks_to_executables(symlinks, executables):
     for name, target in symlinks:
+        if target in executables:
+            yield name
+
+def normalize_symlinks(symlinks):
+    for name, target in symlinks:
         if not target.startswith("/"):
             target = os.path.join(os.path.dirname(name), target)
         target = os.path.normpath(target)
-        if target in executables:
-            yield name
+        yield name, target
 
 def get_repo(package):
     parts = package.filename.split(os.path.sep)
@@ -147,19 +152,33 @@ def analyze_package(filename):
     except Exception, ex:
         logging.error("Unable to process package %s: %s" % (filename, ex))
         return None
+    logging.info("PACKAGE: %s" % package.filename)
     repo = get_repo(package)
-    direct = get_executables(package)
-    indirect = list()
-    indirect.extend(get_symlinks(package))
-    indirect.extend(get_alternatives(package))
-    direct.extend(get_symlinks_to_executables(indirect, direct))
-    direct = [item for item in direct if item.startswith('/usr/bin') or item.startswith('/usr/sbin') or item.startswith('/bin') or item.startswith('/sbin')]
-    if len(direct) == 0:
+    executables = get_executables(package)
+    logging.debug("EXECUTABLES:")
+    for executable in executables:
+        logging.debug("\t%s" % executable)
+    symlinks = list()
+    symlinks.extend(get_symlinks(package))
+    symlinks.extend(get_alternatives(package))
+    logging.debug("SYMLINKS:")
+    for name, target in symlinks:
+        logging.debug("\t%s -> %s" % (name, target))
+    symlinks = list(normalize_symlinks(symlinks))
+    logging.debug("NORMALIZED SYMLINKS:")
+    for name, target in symlinks:
+        logging.debug("\t%s -> %s" % (name, target))
+    executables.extend(get_symlinks_to_executables(symlinks, executables))
+    logging.debug("FINAL LIST OF EXECUTABLES:")
+    for executable in executables:
+        logging.debug("\t%s" % executable)
+    executables = [item for item in executables if item.startswith('/usr/bin') or item.startswith('/usr/sbin') or item.startswith('/bin') or item.startswith('/sbin')]
+    if len(executables) == 0:
         return None
-    return PackageInfo(package.name, package.arch, repo, direct)
+    return PackageInfo(package.name, package.arch, repo, executables)
 
 def dir_walk(output, dirname, names):
-    logging.debug("Entering dir: '%s' " % dirname)
+    #logging.debug("Entering dir: '%s' " % dirname)
     for filename in names:
         if filename.endswith(".deb"):
             package_info = analyze_package(os.path.join(dirname, filename))
@@ -171,7 +190,7 @@ def dir_walk(output, dirname, names):
 def scan(dir_path="mirror/archive.ubuntu.com/pool", output_filename="scan.data"):
     logging.basicConfig(level=logging.DEBUG,
             filename="scan.log",
-            format='%(asctime)s %(levelname)s %(message)s',
+            format='%(levelname)s %(message)s',
             filemode='w')
     output = file(output_filename, "w")
     os.path.walk(dir_path, dir_walk, output)
