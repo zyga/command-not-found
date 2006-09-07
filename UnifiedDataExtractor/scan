@@ -64,12 +64,12 @@ def get_alternatives(package):
                 logging.debug("Variable binding established: %s=%s" % (name, value))
             # this ugly hack is capable of detecting
             # for something in a list of values; do ...
-            elif words[0] == 'for' and words[2] == 'in' and ';' in line:
+            elif len(words) > 3 and words[0] == 'for' and words[2] == 'in' and ';' in line:
                 name_of_i = words[1]
                 values_of_i = " ".join(expand_values(line[len('for %s in' % name_of_i):line.index(';')])).split()
             # this ugly hack is capable of detecting
             # for something in a list of values\n
-            elif words[0] == 'for' and words[2] == 'in' and ';' not in line:
+            elif len(words) > 3 and words[0] == 'for' and words[2] == 'in' and ';' not in line:
                 name_of_i = words[1]
                 values_of_i = " ".join(expand_values(" ".join(words[3:]))).split()
             else:
