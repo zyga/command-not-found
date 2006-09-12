@@ -13,7 +13,7 @@ Description: Suggest installation of packages in interactive bash sessions
  programs not currently installed but available from the repositiories.
 
 Package: command-not-found-data
-Architecture: all
+Architecture: any
 Description: Set of data files for command-not-found.
  Data for edgy
 
