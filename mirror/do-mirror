@@ -1,9 +1,11 @@
-ARCH_LIST="i386"
+ARCH_LIST="i386,amd64,powerpc,sparc"
 DIST="$(echo $0 | cut -d - -f 3)"
 SECTION_LIST="main,restricted,universe,multiverse"
 MIRROR_HOST="archive.ubuntu.com"
-MIRROR_METHOD="http"
-MIRROR_ROOT="/ubuntu"
-OPTIONS="--verbose --nosource --progress --arch=$ARCH_LIST --dist=$DIST --section=$SECTION_LIST --ignore-release-gpg --host=$MIRROR_HOST --method=$MIRROR_METHOD --root=$MIRROR_ROOT"
+MIRROR_METHOD="rsync"
+MIRROR_ROOT=":ubuntu"
+OPTIONS="--verbose --nosource --progress --arch=$ARCH_LIST --dist=$DIST,$DIST-updates,$DIST-backports --section=$SECTION_LIST --ignore-release-gpg --host=$MIRROR_HOST --method=$MIRROR_METHOD --root=$MIRROR_ROOT"
 
-debmirror $OPTIONS $DIST
+debmirror $OPTIONS $MIRROR_HOST
+MIRROR_HOST="security.ubuntu.com"
+debmirror $OPTIONS $MIRROR_HOST
