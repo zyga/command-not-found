@@ -1,3 +1,15 @@
+command-not-found (0.1.0) edgy; urgency=low
+
+  [Zygmunt Krynicki]
+  * updated the suggestions database
+  * added support for update-alternative calls in the postinst (yeah!)
+  * code cleanups
+  [Michael Vogt]
+  * updated the binary database wit the latest edgy
+  
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 12 Sep 2006 19:33:33 +0200
+
 command-not-found (0.0.2) edgy; urgency=low
 
   * return 127 to bash if nothing was found in the database
