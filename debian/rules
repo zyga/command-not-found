@@ -53,6 +53,9 @@ clean:
 	find . -name "*.o" -exec rm {} \;
 	find . -name "*.pyc" -exec rm {} \;
 
+	# clean the database files as well
+	find . -name "*.db" -exec rm {} \;
+
 	dh_clean 
 
 install: build
@@ -60,6 +63,11 @@ install: build
 	dh_testroot
 	dh_clean -k 
 	dh_installdirs
+
+	# build the binary database
+	(cd UnifiedDataExtractor;  \
+	 ./create-binary-database; \
+	  mv *.db ../data/programs.d/)
 
 	# Add here commands to install the package into debian/$(PKGNAME).
 	./setup.py install --prefix=$(CURDIR)/debian/$(PKGNAME)/usr
