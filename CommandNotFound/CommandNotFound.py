@@ -140,7 +140,7 @@ class CommandNotFound:
             elif self.user_can_sudo:
                 print "sudo apt-get install %s" %  packages[0]
             else:
-                print _("To run '%s' please ask your administrator to install the package '%s'") % (command, packages[0])
+                print _("To run '%(command)s' please ask your administrator to install the package '%(package)s'") % {'command': command, 'package': packages[0]}
         elif len(packages) > 1:
             print _("The program '%s' can be found in the following packages:") % command
             for package in packages:
