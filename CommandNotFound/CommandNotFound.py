@@ -25,8 +25,10 @@ class BinaryDatabase:
 class FlatDatabase:
     def __init__(self, filename):
         self.rows = []
-        for line in [line.strip() for line in file(filename)]:
+        dbfile = file(filename)
+        for line in (line.strip() for line in dbfile):
             self.rows.append(line.split("|"))
+        dbfile.close()
     def lookup(self, column, text):
         result = []
         for row in self.rows:
@@ -89,7 +91,7 @@ class SuggestionDatabase:
 class CommandNotFound:
     programs_dir = "programs.d"
     suggestions_dir = "suggestions.d"
-    def __init__(self, data_dir="/usr/share/command-not-found"):
+    def __init__(self, data_dir=os.sep.join(('/','usr','share','command-not-found'))):
         self.programs = []
         self.suggestions = []
         for filename in os.listdir(os.path.sep.join([data_dir, self.programs_dir])):
@@ -110,9 +112,12 @@ class CommandNotFound:
         return list(result)
     def getBlacklist(self):
         try:
-            return [line.strip() for line in file("%s/.command-not-found.blacklist" % os.getenv("HOME")) if line.strip() != ""]
+            blacklist = file(os.sep.join((os.getenv("HOME"), ".command-not-found.blacklist")))
+            return [line.strip() for line in blacklist if line.strip() != ""]
         except IOError:
             return []
+        else:
+            blacklist.close()
     def advise(self, command):
         if command in self.getBlacklist():
             return False
