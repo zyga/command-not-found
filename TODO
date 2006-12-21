@@ -1,16 +1,6 @@
-
-ESSENTIAL
-
-* Build a python+fuse virtual filesystem to create a sandbox chroot in which we will execute the postinst scripts
-that might trigger update-alternatives. Current system cannot handle things like: update-alternatives $VARIABLE.
--> OR provide a list of those packages that use update-alternatives and 
-      see if it can managed by hand
-* Figure out if it's really true that NO SINGLE PACKAGE in dapper has any symlinks to binary files!?! (zk) - mvo: not true: gksudo -> gksu
-
 TOP PRIORITY
 
-* Create separate command-not-found--data package that is arch-dependent (mvo, please :-)
-* collect if the data comes from "universe, multiverse" etc
+* display repository information for each suggested package
 
 MEDIUM PRIORITY
 

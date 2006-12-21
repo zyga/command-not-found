@@ -6,6 +6,7 @@ command-not-found (0.1.0) edgy; urgency=low
   * code cleanups
   [Michael Vogt]
   * updated the binary database wit the latest edgy
+  * the command-not-found-data is build pre arch now
   
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 12 Sep 2006 19:33:33 +0200
