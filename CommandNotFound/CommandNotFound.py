@@ -1,4 +1,4 @@
-# (c) Zygmunt Krynicki 2005,
+# (c) Zygmunt Krynicki 2005, 2006
 # Licensed under GPL, see COPYING for the whole text
 
 import sys, os, os.path, dbm, posix
@@ -13,11 +13,14 @@ def _guessUserLocale():
 
 class BinaryDatabase:
     def __init__(self, filename):
-        if filename[-3:] == ".db":
-            filename = filename[:-3] # without .db part
-        self.db = dbm.open(filename, "r")
+        self.db = None
+        if filename.endswith(".db"):
+            try:
+                self.db = dbm.open(filename[:-3], "r")
+            except dbm.error, err:
+                print >>sys.stderr, "Unable to open binary database %s: %s", filename, err
     def lookup(self, key):
-        if self.db.has_key(key):
+        if self.db and self.db.has_key(key):
             return self.db[key]
         else:
             return None
