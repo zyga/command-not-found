@@ -113,10 +113,12 @@ binary-arch: build install
 
 arch-build:
 	rm -rf debian/arch-build
-	mkdir -p debian/arch-build/$(PKGNAME)-$(DEBVER)
-	tar --no-recursion -c -f - `bzr inventory` | (cd debian/arch-build/$(PKGNAME)-$(DEBVER);tar xf -)
+	mkdir -p debian/arch-build/
+	# export the bzr tree
+	bzr export debian/arch-build/$(PKGNAME)-$(DEBVER)
+	# move the scan.data into the build-tree (we do not keep it in bzr)
+	cp UnifiedDataExtractor/scan.data debian/arch-build/$(PKGNAME)-$(DEBVER)/UnifiedDataExtractor
 	(cd debian/arch-build/$(PKGNAME)-$(DEBVER); $(DEB_BUILD_PROG))
-
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install configure

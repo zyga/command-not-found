@@ -187,7 +187,7 @@ def analyze_package(filename):
     logging.debug("FINAL LIST OF EXECUTABLES:")
     for executable in executables:
         logging.debug("\t%s" % executable)
-    executables = [item for item in executables if item.startswith('/usr/bin') or item.startswith('/usr/sbin') or item.startswith('/bin') or item.startswith('/sbin')]
+    executables = [item for item in executables if item.startswith('/usr/bin') or item.startswith('/usr/sbin') or item.startswith('/bin') or item.startswith('/sbin') or item.startswith('/usr/games')]
     if len(executables) == 0:
         return None
     return PackageInfo(package.name, package.arch, repo, executables)
@@ -212,7 +212,7 @@ def verify_package(filename):
         if candVer and ":" in candVer:
             candVer = candVer.split(":")[1]
     if candVer != ver:
-        logging.debug("Skipping because '%s' it's not in our distro release" % pkgname)
+        logging.debug("Skipping because '%s' (%s) it's not in our distro release" % (ver, pkgname))
         return False
     return True
 

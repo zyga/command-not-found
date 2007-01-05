@@ -1,11 +1,16 @@
-command-not-found (0.1.1) edgy; urgency=low
+command-not-found (0.2.0) edgy; urgency=low
 
   [Zygmunt Krynicki]
   * applied patch from Daniel Werner <daniel.d.werner@googlemail.com>
   * minor fixes to the suggestions database
   * updated the README file
+  [Michael Vogt]
+  * make the extraction skip package not available in the current
+    distro release
+  * updated the binary database with the latest feisty
+  * show component information for other components than main
 
- -- Zygmunt Krynicki <zkrynicki@gmail.com>  Thu, 21 Dec 2006 22:04:35 +0100
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri,  5 Jan 2007 09:56:15 +0100
 
 command-not-found (0.1.0) edgy; urgency=low
 
