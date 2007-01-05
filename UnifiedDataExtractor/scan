@@ -226,16 +226,20 @@ def dir_walk(output, dirname, names):
             #package_info.display()
             print >> output, package_info
 
-def scan(dir_path="mirror/archive.ubuntu.com/pool", output_filename="scan.data"):
-    logging.basicConfig(level=logging.DEBUG,
-            filename="scan.log",
-            format='%(levelname)s %(message)s',
-            filemode='w')
-    output = file(output_filename, "w")
+def scan(dir_path, output):
     os.path.walk(dir_path, dir_walk, output)
     
 if __name__ == "__main__":
     global arch, cache
+
+    # init logging
+    logging.basicConfig(level=logging.DEBUG,
+            filename="scan.log",
+            format='%(levelname)s %(message)s',
+            filemode='w')
+    # init output
+    filename="scan.data"
+    out = file(filename, "w")
     
     for arch in ["i386","amd64","powerpc"]:
         # init arch specific cache
@@ -248,9 +252,9 @@ if __name__ == "__main__":
         cache.open(apt.progress.OpProgress())
         # now do the scan for this arch
         if len(sys.argv) == 2:
-            scan(sys.argv[1])
+            scan(sys.argv[1],out)
         else:
-            scan()
+            scan("mirror/archive.ubuntu.com/pool", out)
     #scan("mirror/archive.ubuntu.com/pool/main/a")
     #scan("mirror/archive.ubuntu.com/pool/universe/c/command-not-found")
     #scan("mirror/archive.ubuntu.com/pool/main/g/gksu")
