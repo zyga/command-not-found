@@ -8,6 +8,9 @@ import sys
 import re
 import logging
 import DebPackage
+import urllib
+import apt
+import apt_pkg
 
 from string import Template
 
@@ -189,10 +192,34 @@ def analyze_package(filename):
         return None
     return PackageInfo(package.name, package.arch, repo, executables)
 
+def verify_package(filename):
+    " check if the given pkg is our arch/our distribution "
+    global arch
+    m = re.match("(.*)_(.*)_(.*).deb", filename)
+    pkgname = m.group(1)
+    ver = m.group(2)
+    # fix the quoting
+    ver = urllib.unquote(ver)
+    pkgarch = m.group(3)
+    # check arch
+    if pkgarch != "all" and arch != pkgarch:
+        return False
+    # check distro
+    candVer = "xxx"
+    if cache.has_key(pkgname):
+        candVer = cache[pkgname].candidateVersion
+        # strip the epoch
+        if candVer and ":" in candVer:
+            candVer = candVer.split(":")[1]
+    if candVer != ver:
+        logging.debug("Skipping because '%s' it's not in our distro release" % pkgname)
+        return False
+    return True
+
 def dir_walk(output, dirname, names):
     #logging.debug("Entering dir: '%s' " % dirname)
     for filename in names:
-        if filename.endswith(".deb"):
+        if filename.endswith(".deb") and verify_package(filename):
             package_info = analyze_package(os.path.join(dirname, filename))
             if package_info is None:
                 continue
@@ -208,10 +235,22 @@ def scan(dir_path="mirror/archive.ubuntu.com/pool", output_filename="scan.data")
     os.path.walk(dir_path, dir_walk, output)
     
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
-        scan(sys.argv[1])
-    else:
-        scan()
+    global arch, cache
+    
+    for arch in ["i386","amd64","powerpc"]:
+        # init arch specific cache
+        apt_pkg.Config.Set("APT::Architecture",arch)
+        apt_pkg.Config.Set("Dir::state","./apt/")
+        apt_pkg.Config.Set("Dir::Etc","./apt")
+        cache = apt.Cache(apt.progress.OpProgress())
+        prog = apt.progress.FetchProgress()
+        cache.update(prog)
+        cache.open(apt.progress.OpProgress())
+        # now do the scan for this arch
+        if len(sys.argv) == 2:
+            scan(sys.argv[1])
+        else:
+            scan()
     #scan("mirror/archive.ubuntu.com/pool/main/a")
     #scan("mirror/archive.ubuntu.com/pool/universe/c/command-not-found")
     #scan("mirror/archive.ubuntu.com/pool/main/g/gksu")
