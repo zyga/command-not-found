@@ -103,6 +103,7 @@ binary-arch: build install
 	dh_strip
 	dh_compress
 	dh_fixperms
+	dh_pycentral
 	dh_python
 	dh_installdeb
 	dh_shlibdeps
