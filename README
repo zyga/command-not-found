@@ -1,11 +1,5 @@
 This application implements the command-not-found spec at:
 https://wiki.ubuntu.com/CommandNotFoundMagic
 
-To use it, please install the package and add the following to your
-.bashrc:
-
-function command_not_found_handle {
-        /usr/bin/command-not-found $1
-	return $?
-}
-
+To use it please add the following line to your .bashrc file:
+. /etc/bash_command_nof_found

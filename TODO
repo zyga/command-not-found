@@ -1,12 +1,6 @@
-
-ESSENTIAL
-* Figure out if it's really true that NO SINGLE PACKAGE in dapper has any symlinks to binary files!?! (zk) - mvo: not true: gksudo -> gksu
-
 TOP PRIORITY
 
-* Create separate command-not-found--data package that is arch-dependent [done]
-* collect if the data comes from "universe, multiverse" and display this in 
-  the UI!
+* display repository information for each suggested package
 
 MEDIUM PRIORITY
 

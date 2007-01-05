@@ -1,4 +1,4 @@
-adom|Adom is not redistributable so it cannot be legally included with Ubuntu.\nYou can obtain it from http://from www.adom.de/|
+adom|Adom is not redistributable so it cannot be legally included with Ubuntu.\nYou can obtain it from http://www.adom.de/|
 pine|Pine cannot be redistributed with modifications without an agreement from the University of Washington so it is not included with Ubuntu.\nYou can obtain it from http://http://www.washington.edu/pine/|
 gcc|The C toolchain and other useful items are best installed as dependencies of the 'build-essential' meta-package|
 g++|The C++ toolchain and other useful items are best installed as dependencies of the 'build-essential' meta-package|

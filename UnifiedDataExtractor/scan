@@ -31,6 +31,11 @@ def strip_comment(line):
         return line[:i]
 
 def get_alternatives(package):
+    """
+    Attempts to extract alternatives registerd by a package.
+    NOTE: This code is a big HACK since we don't really understand or execute
+    postinst shell scripts here. Some alternatives are not retrieved.
+    """
     contents = package.getControlFile("postinst")
     shell_vars = dict()
     values_of_i = None

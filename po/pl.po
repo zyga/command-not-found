@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: command-not-found 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-28 10:44+0100\n"
+"POT-Creation-Date: 2006-12-21 22:51+0100\n"
 "PO-Revision-Date: 2005-11-25 00:49:+0100\n"
 "Last-Translator: Zygmunt Krynicki <zkrynicki@gmail.com>\n"
 "Language-Team: Polish <LL@li.org>\n"
@@ -13,36 +13,49 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../CommandNotFound/CommandNotFound.py:113
+#: ../CommandNotFound/CommandNotFound.py:133
 msgid "Ubuntu has the following similar programs"
 msgstr "Ubuntu zawiera następujące podobne programy"
 
-#: ../CommandNotFound/CommandNotFound.py:118
+#: ../CommandNotFound/CommandNotFound.py:137
 #, python-format
-msgid "Program %s is currently not installed, you can install it by typing:"
+msgid ""
+"The program '%s' is currently not installed, you can install it by typing:"
 msgstr ""
 "Program %s nie jest obecnie zainstalowany, możesz go zainstalować wpisując:"
 
-#: ../CommandNotFound/CommandNotFound.py:121
+#: ../CommandNotFound/CommandNotFound.py:143
 #, python-format
-msgid "To run '%s' please ask your administrator to install the package '%s'"
+msgid ""
+"To run '%(command)s' please ask your administrator to install the package '%"
+"(package)s'"
 msgstr ""
-"Aby uruchomić '%s' poproś swojego administratora o zainstalowanie pakietu '%"
-"s'"
+"Aby uruchomić '%(commands)s' poproś swojego administratora o zainstalowanie "
+"pakietu '%(package)s'"
 
-#: ../CommandNotFound/CommandNotFound.py:123
+#: ../CommandNotFound/CommandNotFound.py:145
 #, python-format
-msgid "Program '%s' can be found in the following packages"
-msgstr "Program '%s' można znaleźć w następujących pakietch"
+msgid "The program '%s' can be found in the following packages:"
+msgstr "Program '%s' można znaleźć w następujących pakietch:"
 
-#: ../CommandNotFound/CommandNotFound.py:127
+#: ../CommandNotFound/CommandNotFound.py:149
+#: ../CommandNotFound/CommandNotFound.py:151
 #, python-format
 msgid "Try: %s <selected package>"
 msgstr "Spróbuj: %s <wybrany pakiet>"
 
-#: ../CommandNotFound/CommandNotFound.py:129
+#: ../CommandNotFound/CommandNotFound.py:153
 msgid "Ask your administrator to install one of them"
 msgstr "Poproś swojego administratora o zainstalowanie jednego z nich"
+
+#: ../command-not-found:17
+#, c-format
+msgid "%prog [options] <command-name>"
+msgstr "%prog [opcje] <polecenie>"
+
+#: ../command-not-found:19
+msgid "use this path to locate data fiels"
+msgstr "użyj tej ścieżki aby zlokalizowac pliki z danymi"
 
 #~ msgid "You can install '%s' by typing:"
 #~ msgstr "Możesz zainstalować '%s' wpisując:"

@@ -1,4 +1,4 @@
-# (c) Zygmunt Krynicki 2005,
+# (c) Zygmunt Krynicki 2005, 2006
 # Licensed under GPL, see COPYING for the whole text
 
 import sys, os, os.path, dbm, posix
@@ -13,11 +13,14 @@ def _guessUserLocale():
 
 class BinaryDatabase:
     def __init__(self, filename):
-        if filename[-3:] == ".db":
-            filename = filename[:-3] # without .db part
-        self.db = dbm.open(filename, "r")
+        self.db = None
+        if filename.endswith(".db"):
+            try:
+                self.db = dbm.open(filename[:-3], "r")
+            except dbm.error, err:
+                print >>sys.stderr, "Unable to open binary database %s: %s", filename, err
     def lookup(self, key):
-        if self.db.has_key(key):
+        if self.db and self.db.has_key(key):
             return self.db[key]
         else:
             return None
@@ -25,8 +28,10 @@ class BinaryDatabase:
 class FlatDatabase:
     def __init__(self, filename):
         self.rows = []
-        for line in [line.strip() for line in file(filename)]:
+        dbfile = file(filename)
+        for line in (line.strip() for line in dbfile):
             self.rows.append(line.split("|"))
+        dbfile.close()
     def lookup(self, column, text):
         result = []
         for row in self.rows:
@@ -89,7 +94,7 @@ class SuggestionDatabase:
 class CommandNotFound:
     programs_dir = "programs.d"
     suggestions_dir = "suggestions.d"
-    def __init__(self, data_dir="/usr/share/command-not-found"):
+    def __init__(self, data_dir=os.sep.join(('/','usr','share','command-not-found'))):
         self.programs = []
         self.suggestions = []
         for filename in os.listdir(os.path.sep.join([data_dir, self.programs_dir])):
@@ -110,9 +115,12 @@ class CommandNotFound:
         return list(result)
     def getBlacklist(self):
         try:
-            return [line.strip() for line in file("%s/.command-not-found.blacklist" % os.getenv("HOME")) if line.strip() != ""]
+            blacklist = file(os.sep.join((os.getenv("HOME"), ".command-not-found.blacklist")))
+            return [line.strip() for line in blacklist if line.strip() != ""]
         except IOError:
             return []
+        else:
+            blacklist.close()
     def advise(self, command):
         if command in self.getBlacklist():
             return False
@@ -132,7 +140,7 @@ class CommandNotFound:
             elif self.user_can_sudo:
                 print "sudo apt-get install %s" %  packages[0]
             else:
-                print _("To run '%s' please ask your administrator to install the package '%s'") % (command, packages[0])
+                print _("To run '%(command)s' please ask your administrator to install the package '%(package)s'") % {'command': command, 'package': packages[0]}
         elif len(packages) > 1:
             print _("The program '%s' can be found in the following packages:") % command
             for package in packages:
