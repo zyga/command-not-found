@@ -1,4 +1,4 @@
-command-not-found (0.2.0) edgy; urgency=low
+command-not-found (0.2.0) feisty; urgency=low
 
   [Zygmunt Krynicki]
   * applied patch from Daniel Werner <daniel.d.werner@googlemail.com>
