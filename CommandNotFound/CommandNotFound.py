@@ -51,6 +51,8 @@ class FlatDatabase:
 class ProgramDatabase:
     (PACKAGE, BASENAME_PATH) = range(2)
     def __init__(self, filename):
+        basename = os.path.basename(filename)
+        (self.arch, self.component) = basename.split(".")[0].split("-")
         self.db = BinaryDatabase(filename)
     def lookup(self, command):
         result = self.db.lookup(command)
@@ -111,7 +113,7 @@ class CommandNotFound:
     def getPackages(self, command):
         result = set()
         for db in self.programs:
-            result.update(db.lookup(command))
+            result.update([(pkg,db.component) for pkg in db.lookup(command)])
         return list(result)
     def getBlacklist(self):
         try:
@@ -136,19 +138,23 @@ class CommandNotFound:
         if len(packages) == 1:
             print _("The program '%s' is currently not installed, you can install it by typing:") % command
             if posix.geteuid() == 0:
-                print "apt-get install %s" %  packages[0]
+                print "apt-get install %s" %  packages[0][0]
             elif self.user_can_sudo:
-                print "sudo apt-get install %s" %  packages[0]
+                print "sudo apt-get install %s" %  packages[0][0]
             else:
-                print _("To run '%(command)s' please ask your administrator to install the package '%(package)s'") % {'command': command, 'package': packages[0]}
+                print _("To run '%(command)s' please ask your administrator to install the package '%(package)s'") % {'command': command, 'package': packages[0][0]}
+            if packages[0][1] != "main":
+                print _("Make sure you have the '%s' component enabled") % packages[0][1]
         elif len(packages) > 1:
             print _("The program '%s' can be found in the following packages:") % command
             for package in packages:
-                print " * %s" % package
+                print " * %s" % package[0]
             if posix.geteuid() == 0:
                 print _("Try: %s <selected package>") % "apt-get install"
             elif self.user_can_sudo:
                 print _("Try: %s <selected package>") % "sudo apt-get install"
             else:
                 print _("Ask your administrator to install one of them")
+            if package[1] != "main":
+                print _("Make sure you have the '%s' component enabled") % package[1]
         return ok
