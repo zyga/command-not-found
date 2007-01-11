@@ -1,3 +1,12 @@
+command-not-found (0.2.1) feisty; urgency=low
+
+  * always return 127 to be compatible with the shell (lp: #67726)
+  * make the message less confusing for non-admin users
+    (Thanks to Chris Wagner for his patch, lp: #64220)
+  * Grammar fixes (lp: #64542)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 11 Jan 2007 18:11:08 +0100
+
 command-not-found (0.2.0) feisty; urgency=low
 
   [Zygmunt Krynicki]

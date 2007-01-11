@@ -136,10 +136,12 @@ class CommandNotFound:
                 for program in suggestion.programs:
                     print " * '%s'" % program
         if len(packages) == 1:
-            print _("The program '%s' is currently not installed, you can install it by typing:") % command
+            print _("The program '%s' is currently not installed. ") % command,
             if posix.geteuid() == 0:
+                print _("You can install it by typing:")
                 print "apt-get install %s" %  packages[0][0]
             elif self.user_can_sudo:
+                print _("You can install it by typing:")                
                 print "sudo apt-get install %s" %  packages[0][0]
             else:
                 print _("To run '%(command)s' please ask your administrator to install the package '%(package)s'") % {'command': command, 'package': packages[0][0]}
