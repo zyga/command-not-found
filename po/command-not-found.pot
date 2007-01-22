@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-21 22:51+0100\n"
+"POT-Creation-Date: 2007-01-22 10:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,35 +16,41 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../CommandNotFound/CommandNotFound.py:133
+#: ../CommandNotFound/CommandNotFound.py:135
 msgid "Ubuntu has the following similar programs"
 msgstr ""
 
-#: ../CommandNotFound/CommandNotFound.py:137
+#: ../CommandNotFound/CommandNotFound.py:139
 #, python-format
 msgid ""
 "The program '%s' is currently not installed, you can install it by typing:"
 msgstr ""
 
-#: ../CommandNotFound/CommandNotFound.py:143
+#: ../CommandNotFound/CommandNotFound.py:145
 #, python-format
 msgid ""
 "To run '%(command)s' please ask your administrator to install the package '%"
 "(package)s'"
 msgstr ""
 
-#: ../CommandNotFound/CommandNotFound.py:145
+#: ../CommandNotFound/CommandNotFound.py:147
+#: ../CommandNotFound/CommandNotFound.py:159
+#, python-format
+msgid "Make sure you have the '%s' component enabled"
+msgstr ""
+
+#: ../CommandNotFound/CommandNotFound.py:149
 #, python-format
 msgid "The program '%s' can be found in the following packages:"
 msgstr ""
 
-#: ../CommandNotFound/CommandNotFound.py:149
-#: ../CommandNotFound/CommandNotFound.py:151
+#: ../CommandNotFound/CommandNotFound.py:153
+#: ../CommandNotFound/CommandNotFound.py:155
 #, python-format
 msgid "Try: %s <selected package>"
 msgstr ""
 
-#: ../CommandNotFound/CommandNotFound.py:153
+#: ../CommandNotFound/CommandNotFound.py:157
 msgid "Ask your administrator to install one of them"
 msgstr ""
 
@@ -54,5 +60,5 @@ msgid "%prog [options] <command-name>"
 msgstr ""
 
 #: ../command-not-found:19
-msgid "use this path to locate data fiels"
+msgid "use this path to locate data fields"
 msgstr ""
