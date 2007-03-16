@@ -1,8 +1,10 @@
 command-not-found (0.2.3) feisty; urgency=low
 
-  * zsh_command_not_found, README, setup.py: Added support for zsh.
+  [Johan Kiviniemi]
+  * zsh_command_not_found, README, setup.py: Added support for zsh. 
+  (thanks!)
 
- -- Johan Kiviniemi <debian@johan.kiviniemi.name>  Sat, 17 Mar 2007 00:40:43 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 16 Mar 2007 23:57:58 +0100
 
 command-not-found (0.2.2) feisty; urgency=low
 
