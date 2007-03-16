@@ -5,13 +5,13 @@
 # installation of packages available from the repository
 
 function preexec() {
-	command=("$@")
+	command="${1%% *}"
 }
 
 function precmd() {
 	(($?)) && {
-		whence -- "$command[1]" >& /dev/null ||
-			command-not-found -- "$command[1]"
+		whence -- "$command" >& /dev/null ||
+			command-not-found -- "$command"
 	}
 }
 
