@@ -1,3 +1,10 @@
+command-not-found (0.2.2) feisty; urgency=low
+
+  * refreshed database to current feisty
+  * set maintainer field to ubuntu 
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 16 Mar 2007 19:00:49 +0100
+
 command-not-found (0.2.1) feisty; urgency=low
 
   * always return 127 to be compatible with the shell (lp: #67726)
