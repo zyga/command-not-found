@@ -1,0 +1,58 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: command-not-found\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2007-03-20 13:50+0100\n"
+"Last-Translator: Bruno Bord <bruno@comedia-production.com>\n"
+"Language-Team: Bruno Bord <bruno@jehaisleprintemps.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: French\n"
+"X-Poedit-Country: FRANCE\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: ../CommandNotFound/CommandNotFound.py:135
+msgid "Ubuntu has the following similar programs"
+msgstr "Ubuntu possède les programmes similaires suivants"
+
+#: ../CommandNotFound/CommandNotFound.py:139
+#, python-format
+msgid "The program '%s' is currently not installed, you can install it by typing:"
+msgstr "Le programme '%s' n'est pas installé actuellement, vous pouvez l'installer en tapant :"
+
+#: ../CommandNotFound/CommandNotFound.py:145
+#, python-format
+msgid "To run '%(command)s' please ask your administrator to install the package '%(package)s'"
+msgstr "Pour lancer '%(command)s', veuillez prendre contact avec votre administrateur pour installer le paquet '%(package)s'"
+
+#: ../CommandNotFound/CommandNotFound.py:147
+#: ../CommandNotFound/CommandNotFound.py:159
+#, python-format
+msgid "Make sure you have the '%s' component enabled"
+msgstr "Assurez-vous que vous avez le composant '%s' activé"
+
+#: ../CommandNotFound/CommandNotFound.py:149
+#, python-format
+msgid "The program '%s' can be found in the following packages:"
+msgstr "Le programme '%s' peut être trouvé dans les paquets suivants :"
+
+#: ../CommandNotFound/CommandNotFound.py:153
+#: ../CommandNotFound/CommandNotFound.py:155
+#, python-format
+msgid "Try: %s <selected package>"
+msgstr "Essayez : %s <paquet sélectionné>"
+
+#: ../CommandNotFound/CommandNotFound.py:157
+msgid "Ask your administrator to install one of them"
+msgstr "Demandez à votre administrateur d'installer un ceux-là"
+
+#: ../command-not-found:17
+#, c-format
+msgid "%prog [options] <command-name>"
+msgstr "%prog [options] <nom-de-la-commande>"
+
+#: ../command-not-found:19
+msgid "use this path to locate data fields"
+msgstr "utilisez ce chemin pour localiser les champs de données"
+
