@@ -2,4 +2,4 @@ This application implements the command-not-found spec at:
 https://wiki.ubuntu.com/CommandNotFoundMagic
 
 To use it please add the following line to your .bashrc file:
-. /etc/bash_command_nof_found
+. /etc/bash_command_not_found
