@@ -1,5 +1,10 @@
 This application implements the command-not-found spec at:
 https://wiki.ubuntu.com/CommandNotFoundMagic
 
-To use it please add the following line to your .bashrc file:
+To use it in bash, please add the following line to your .bashrc file:
 . /etc/bash_command_not_found
+
+To use it in zsh, please add the following line to your .zshrc file:
+. /etc/zsh_command_not_found
+Note that it overrides the preexec and precmd functions, in case you have
+defined your own.
