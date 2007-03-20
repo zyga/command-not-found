@@ -1,0 +1,2 @@
+#!/bin/bash
+bzr merge 'http://bazaar.launchpad.net/~ubuntu-core-dev/command-not-found/ubuntu'

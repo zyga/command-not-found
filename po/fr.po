@@ -1,29 +1,28 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: command-not-found\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-03-20 18:10+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2007-03-20 13:50+0100\n"
+"Last-Translator: Bruno Bord <bruno@comedia-production.com>\n"
+"Language-Team: Bruno Bord <bruno@jehaisleprintemps.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: French\n"
+"X-Poedit-Country: FRANCE\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
 #: ../CommandNotFound/CommandNotFound.py:135
 msgid "Ubuntu has the following similar programs"
-msgstr "Ubuntu hat die folgenden ähnlichen Programme"
+msgstr "Ubuntu possède les programmes similaires suivants"
 
 #: ../CommandNotFound/CommandNotFound.py:139
-#, python-format
+#, fuzzy, python-format
 msgid "The program '%s' is currently not installed. "
 msgstr ""
+"Le programme '%s' n'est pas installé actuellement, vous pouvez l'installer "
+"en tapant :"
 
 #: ../CommandNotFound/CommandNotFound.py:141
 #: ../CommandNotFound/CommandNotFound.py:144
@@ -36,33 +35,35 @@ msgid ""
 "To run '%(command)s' please ask your administrator to install the package '%"
 "(package)s'"
 msgstr ""
+"Pour lancer '%(command)s', veuillez prendre contact avec votre "
+"administrateur pour installer le paquet '%(package)s'"
 
 #: ../CommandNotFound/CommandNotFound.py:149
 #: ../CommandNotFound/CommandNotFound.py:161
 #, python-format
 msgid "Make sure you have the '%s' component enabled"
-msgstr ""
+msgstr "Assurez-vous que vous avez le composant '%s' activé"
 
 #: ../CommandNotFound/CommandNotFound.py:151
 #, python-format
 msgid "The program '%s' can be found in the following packages:"
-msgstr ""
+msgstr "Le programme '%s' peut être trouvé dans les paquets suivants :"
 
 #: ../CommandNotFound/CommandNotFound.py:155
 #: ../CommandNotFound/CommandNotFound.py:157
 #, python-format
 msgid "Try: %s <selected package>"
-msgstr ""
+msgstr "Essayez : %s <paquet sélectionné>"
 
 #: ../CommandNotFound/CommandNotFound.py:159
 msgid "Ask your administrator to install one of them"
-msgstr ""
+msgstr "Demandez à votre administrateur d'installer un ceux-là"
 
 #: ../command-not-found:18
 #, c-format
 msgid "%prog [options] <command-name>"
-msgstr ""
+msgstr "%prog [options] <nom-de-la-commande>"
 
 #: ../command-not-found:20
 msgid "use this path to locate data fields"
-msgstr ""
+msgstr "utilisez ce chemin pour localiser les champs de données"

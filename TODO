@@ -1,4 +1,6 @@
 TOP PRIORITY
+* Add a soundex encoded variant of the name to another database
+and make suggestions based on the similarity.
 
 * Gather cross-references for packages during the scan process
 PKG A: /bin/prog-a (+x)
