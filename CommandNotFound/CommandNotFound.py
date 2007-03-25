@@ -104,7 +104,7 @@ class CommandNotFound:
         for filename in os.listdir(os.path.sep.join([data_dir, self.suggestions_dir])):
             if filename[-5:] == ".data":
                 self.suggestions.append(SuggestionDatabase(os.path.sep.join([data_dir, self.suggestions_dir, filename])))
-        self.user_can_sudo = "admin" in os.popen("groups").read().split()
+        self.user_can_sudo = [108 in posix.getgroups()]
     def getSuggestions(self, command):
         result = []
         for db in self.suggestions:
