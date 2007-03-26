@@ -1,8 +1,9 @@
 # (c) Zygmunt Krynicki 2005, 2006
 # Licensed under GPL, see COPYING for the whole text
 
-import sys, os, os.path, dbm, posix
+import sys, os, os.path, dbm, posix, grp
 from gettext import gettext as _
+
 
 def _guessUserLocale():
     msg = os.getenv("LC_MESSAGES") or os.getenv("LANG")
@@ -104,7 +105,10 @@ class CommandNotFound:
         for filename in os.listdir(os.path.sep.join([data_dir, self.suggestions_dir])):
             if filename[-5:] == ".data":
                 self.suggestions.append(SuggestionDatabase(os.path.sep.join([data_dir, self.suggestions_dir, filename])))
-        self.user_can_sudo = "admin" in os.popen("groups").read().split()
+        try:
+            self.user_can_sudo = grp.getgrnam("admin")[2] in posix.getgroups()
+        except KeyError:
+            self.user_can_sudo = False
     def getSuggestions(self, command):
         result = []
         for db in self.suggestions:

@@ -1,3 +1,9 @@
+command-not-found (0.2.3ubuntu1) feisty; urgency=low
+
+  * Fixed launchpad #95794: warning emitted about not finding group name 
+
+ -- Zygmunt Krynicki <zkrynicki@gmail.com>  Mon, 26 Mar 2007 10:14:31 +0200
+
 command-not-found (0.2.3) feisty; urgency=low
 
   [Johan Kiviniemi]
