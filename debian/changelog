@@ -1,6 +1,12 @@
 command-not-found (0.2.3ubuntu1) feisty; urgency=low
 
+  [ Zygmunt Krynicki ]
   * Fixed launchpad #95794: warning emitted about not finding group name 
+
+  [ Johan Kiviniemi ]
+  * zsh_command_not_found: unset the command variable, otherwise an empty
+    line will rerun command-not-found. Thanks to Chris Ball for suggesting
+    this (LP: #92942).
 
  -- Zygmunt Krynicki <zkrynicki@gmail.com>  Mon, 26 Mar 2007 10:14:31 +0200
 
