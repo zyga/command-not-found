@@ -113,6 +113,8 @@ binary-arch: build install
 
 arch-build:
 	rm -rf debian/arch-build
+	# get the current data
+	#(cd UnifiedDataExtractor; rm -f data.tar.gz ; wget http://people.ubuntu.com/~mvo/command-not-found/data.tar.gz ; tar xvf data.tar.gz)
 	mkdir -p debian/arch-build/$(PKGNAME)-$(DEBVER)
 	# export the bzr tree
 	tar -c --exclude=arch-build --no-recursion -f - `bzr inventory` | (cd debian/arch-build/$(PKGNAME)-$(DEBVER);tar xf -)
