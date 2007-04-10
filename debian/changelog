@@ -1,3 +1,10 @@
+command-not-found (0.2.3ubuntu2) feisty; urgency=low
+
+  * data files updated
+  * fix argument passing
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 10 Apr 2007 12:41:39 +0200
+
 command-not-found (0.2.3ubuntu1) feisty; urgency=low
 
   [ Zygmunt Krynicki ]
