@@ -1,27 +1,21 @@
-command-not-found (0.2.3ubuntu2) feisty; urgency=low
-
-  * data files updated
-  * fix argument passing
-
- -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 10 Apr 2007 12:41:39 +0200
-
-command-not-found (0.2.3ubuntu1) feisty; urgency=low
+command-not-found (0.2.4) feisty; urgency=low
 
   [ Zygmunt Krynicki ]
   * Fixed launchpad #95794: warning emitted about not finding group name 
+  * data files updated
 
   [ Johan Kiviniemi ]
   * zsh_command_not_found: unset the command variable, otherwise an empty
     line will rerun command-not-found. Thanks to Chris Ball for suggesting
     this (LP: #92942).
 
- -- Zygmunt Krynicki <zkrynicki@gmail.com>  Mon, 26 Mar 2007 10:14:31 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 10 Apr 2007 17:39:09 +0200
 
 command-not-found (0.2.3) feisty; urgency=low
 
   [Johan Kiviniemi]
   * zsh_command_not_found, README, setup.py: Added support for zsh. 
-  (thanks!)
+    (LP#92942, thanks!)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 16 Mar 2007 23:57:58 +0100
 
