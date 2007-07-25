@@ -102,9 +102,6 @@ class CommandNotFound:
         self.suggestions = []
         for filename in os.listdir(os.path.sep.join([data_dir, self.programs_dir])):
             self.programs.append(ProgramDatabase(os.path.sep.join([data_dir, self.programs_dir, filename])))
-        for filename in os.listdir(os.path.sep.join([data_dir, self.suggestions_dir])):
-            if filename[-5:] == ".data":
-                self.suggestions.append(SuggestionDatabase(os.path.sep.join([data_dir, self.suggestions_dir, filename])))
         try:
             self.user_can_sudo = grp.getgrnam("admin")[2] in posix.getgroups()
         except KeyError:

@@ -1,5 +1,9 @@
 command-not-found (0.2.4) feisty; urgency=low
 
+  [ Michael Vogt ]
+  * remove support for suggestins.d/ dir (not used currently and
+    may break stuff)
+  
   [ Zygmunt Krynicki ]
   * Fixed launchpad #95794: warning emitted about not finding group name 
   * data files updated
