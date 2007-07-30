@@ -1,3 +1,9 @@
+command-not-found (0.2.5) UNRELEASED; urgency=low
+
+  * Send output to stderr, not stdout (LP: #129257).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 30 Jul 2007 17:12:32 +0100
+
 command-not-found (0.2.4) feisty; urgency=low
 
   [ Michael Vogt ]
