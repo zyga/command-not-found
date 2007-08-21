@@ -20,7 +20,6 @@ setup(name='command-not-found',
         scripts=['command-not-found'],
         data_files=[
         ('share/command-not-found/programs.d', glob.glob("data/programs.d/*")),
-        ('share/command-not-found/suggestions.d', glob.glob("data/suggestions.d/*")),
         ('../etc', ['bash_command_not_found', 'zsh_command_not_found']),
         ]+I18NFILES,
         )

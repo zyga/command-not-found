@@ -71,6 +71,12 @@ install: build
 
 	# Add here commands to install the package into debian/$(PKGNAME).
 	./setup.py install --prefix=$(CURDIR)/debian/$(PKGNAME)/usr
+	# Move our script from /usr/bin to /usr/lib (not meant for end-users)
+	install -d $(CURDIR)/debian/usr/lib
+	mv $(CURDIR)/debian/usr/bin/command-not-found $(CURDIR)/debian/usr/lib/command-not-found
+	rmdir --ignore-fail-on-non-empty $(CURDIR)/debian/usr/bin
+	# Get rid of bash integration script, got merged to bash
+	rm $(CURDIR)/debian/etc/bash_command_not_found
 
 	# move the data files to a seperate package
 	mkdir -p debian/command-not-found-data/usr/share
