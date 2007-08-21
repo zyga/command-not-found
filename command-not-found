@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-# (c) Zygmunt Krynicki 2005,
+# (c) Zygmunt Krynicki 2005, 2006, 2007
 # Licensed under GPL, see COPYING for the whole text
 
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/+source/command-not-found"
 try:
     import gettext
     import sys
@@ -21,7 +22,20 @@ try:
         (options, args) = parser.parse_args()
         if len(args) == 1:
             CommandNotFound(options.data_dir).advise(args[0])
-
+except Exception, ex:
+    print
+    print _("KABOOOM!!!")
+    print        
+    print _("Whoops, command-not-found has crashed! Please file a bug report at:")
+    print BUG_REPORT_URL
+    print _("Please include the following information with the report:")
+    print ex
+    try:
+        import traceback
+        traceback.print_exc()
+    except ImportError:
+        pass
+    print _("Python version: %d.%d.%d %s %d") % sys.version_info
 finally:
     import sys
     sys.exit(127)
