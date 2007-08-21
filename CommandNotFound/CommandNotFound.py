@@ -19,7 +19,7 @@ class BinaryDatabase:
             try:
                 self.db = dbm.open(filename[:-3], "r")
             except dbm.error, err:
-                print >>sys.stderr, "Unable to open binary database %s: %s", filename, err
+                print >>sys.stderr, "Unable to open binary database %s: %s" % (filename, err)
     def lookup(self, key):
         if self.db and self.db.has_key(key):
             return self.db[key]
