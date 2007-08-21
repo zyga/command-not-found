@@ -4,6 +4,8 @@
 import sys, os, os.path, dbm, posix, grp
 from gettext import gettext as _
 
+import apt_pkg
+from aptsources.sourceslist import SourcesList
 
 def _guessUserLocale():
     msg = os.getenv("LC_MESSAGES") or os.getenv("LANG")
@@ -66,6 +68,7 @@ class CommandNotFound:
     programs_dir = "programs.d"
     def __init__(self, data_dir=os.sep.join(('/','usr','share','command-not-found'))):
         self.programs = []
+        self.sources_list = self._getSourcesList()
         for filename in os.listdir(os.path.sep.join([data_dir, self.programs_dir])):
             self.programs.append(ProgramDatabase(os.path.sep.join([data_dir, self.programs_dir, filename])))
         try:
@@ -85,6 +88,14 @@ class CommandNotFound:
             return []
         else:
             blacklist.close()
+    def _getSourcesList(self):
+        apt_pkg.init()
+        sources_list = set([])
+        for source in SourcesList():
+             if not source.disabled and not source.invalid:
+                 for component in source.comps:
+                     sources_list.add(component)
+        return sources_list
     def advise(self, command):
         if command in self.getBlacklist():
             return False
@@ -95,22 +106,23 @@ class CommandNotFound:
                 print >>sys.stderr, _("You can install it by typing:")
                 print >>sys.stderr, "apt-get install %s" %  packages[0][0]
             elif self.user_can_sudo:
-                print >>sys.stderr, _("You can install it by typing:")                
+                print >>sys.stderr, _("You can install it by typing:")
                 print >>sys.stderr, "sudo apt-get install %s" %  packages[0][0]
             else:
                 print >>sys.stderr, _("To run '%(command)s' please ask your administrator to install the package '%(package)s'") % {'command': command, 'package': packages[0][0]}
-            if packages[0][1] != "main":
-                print >>sys.stderr, _("Make sure you have the '%s' component enabled") % packages[0][1]
+            if not packages[0][1] in self.sources_list:
+                print >>sys.stderr, _("You will have to enable component called '%s'") % packages[0][1]
         elif len(packages) > 1:
             print >>sys.stderr, _("The program '%s' can be found in the following packages:") % command
             for package in packages:
-                print >>sys.stderr, " * %s" % package[0]
+                if package[1] in self.sources_list:
+                    print >>sys.stderr, " * %s" % package[0]
+                else:
+                    print >>sys.stderr, " * %s" % package[0] + " (" + _("You will have to enable component called '%s'") % package[1] + ")"
             if posix.geteuid() == 0:
                 print >>sys.stderr, _("Try: %s <selected package>") % "apt-get install"
             elif self.user_can_sudo:
                 print >>sys.stderr, _("Try: %s <selected package>") % "sudo apt-get install"
             else:
                 print >>sys.stderr, _("Ask your administrator to install one of them")
-            if package[1] != "main":
-                print >>sys.stderr, _("Make sure you have the '%s' component enabled") % package[1]
         return len(packages) > 0
