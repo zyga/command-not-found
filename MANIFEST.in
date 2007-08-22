@@ -1,5 +1,5 @@
 # the database
-recursive-include data/programs.d data/suggestions.d
+recursive-include data/programs.d
 
 # the translations
 recursive-include po/ *.pot *.po *.mo

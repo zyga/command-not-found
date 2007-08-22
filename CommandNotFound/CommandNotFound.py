@@ -4,6 +4,8 @@
 import sys, os, os.path, dbm, posix, grp
 from gettext import gettext as _
 
+import apt_pkg
+from aptsources.sourceslist import SourcesList
 
 def _guessUserLocale():
     msg = os.getenv("LC_MESSAGES") or os.getenv("LANG")
@@ -19,7 +21,7 @@ class BinaryDatabase:
             try:
                 self.db = dbm.open(filename[:-3], "r")
             except dbm.error, err:
-                print >>sys.stderr, "Unable to open binary database %s: %s", filename, err
+                print >>sys.stderr, "Unable to open binary database %s: %s" % (filename, err)
     def lookup(self, key):
         if self.db and self.db.has_key(key):
             return self.db[key]
@@ -62,55 +64,17 @@ class ProgramDatabase:
         else:
             return []
 
-class Suggestion:
-    def __init__(self, text, programs):
-        self.text = text.replace("\\n", "\n")
-        self.programs = programs
-
-class SuggestionDatabase:
-    (COMMAND, TEXT, PROGRAMS) = range(3)
-    (COMMAND, LOCALIZED_TEXT) = range(2)
-    def __init__(self, filename):
-        self.db = FlatDatabase(filename)
-        locale_database = "%s.%s" % (filename, _guessUserLocale())
-        if os.path.exists(locale_database):
-            self.db_locale = FlatDatabase(locale_database)
-        else:
-            self.db_locale = None
-    def _localizedMsg(self,command):
-        result = self.db_locale.lookup(self.COMMAND, command)
-        if len(result) == 1:
-            return result[0][self.LOCALIZED_TEXT]
-        else:
-            return None
-    def lookup(self, command):
-        def magicSplit(string, separator):
-            if string=="":
-                return []
-            else:
-                return string.split(separator)
-        if self.db_locale:
-            return [ Suggestion(self._localizedMsg(command) or row[self.TEXT], magicSplit(row[self.PROGRAMS], ",")) for row in self.db.lookup(self.COMMAND, command) ]
-        else:
-            return [ Suggestion(row[self.TEXT], magicSplit(row[self.PROGRAMS], ",")) for row in self.db.lookup(self.COMMAND, command) ]
-
 class CommandNotFound:
     programs_dir = "programs.d"
-    suggestions_dir = "suggestions.d"
     def __init__(self, data_dir=os.sep.join(('/','usr','share','command-not-found'))):
         self.programs = []
-        self.suggestions = []
+        self.sources_list = self._getSourcesList()
         for filename in os.listdir(os.path.sep.join([data_dir, self.programs_dir])):
             self.programs.append(ProgramDatabase(os.path.sep.join([data_dir, self.programs_dir, filename])))
         try:
             self.user_can_sudo = grp.getgrnam("admin")[2] in posix.getgroups()
         except KeyError:
             self.user_can_sudo = False
-    def getSuggestions(self, command):
-        result = []
-        for db in self.suggestions:
-            result.extend(db.lookup(command))
-        return result
     def getPackages(self, command):
         result = set()
         for db in self.programs:
@@ -124,40 +88,41 @@ class CommandNotFound:
             return []
         else:
             blacklist.close()
+    def _getSourcesList(self):
+        apt_pkg.init()
+        sources_list = set([])
+        for source in SourcesList():
+             if not source.disabled and not source.invalid:
+                 for component in source.comps:
+                     sources_list.add(component)
+        return sources_list
     def advise(self, command):
         if command in self.getBlacklist():
             return False
-        suggestions = self.getSuggestions(command)
         packages = self.getPackages(command)
-        ok = len(packages) > 0 or len(suggestions) > 0
-        for suggestion in suggestions:
-            print >>sys.stderr, suggestion.text
-            if len(suggestion.programs):
-                print >>sys.stderr, _("Ubuntu has the following similar programs")
-                for program in suggestion.programs:
-                    print >>sys.stderr, " * '%s'" % program
         if len(packages) == 1:
             print >>sys.stderr, _("The program '%s' is currently not installed. ") % command,
             if posix.geteuid() == 0:
                 print >>sys.stderr, _("You can install it by typing:")
                 print >>sys.stderr, "apt-get install %s" %  packages[0][0]
             elif self.user_can_sudo:
-                print >>sys.stderr, _("You can install it by typing:")                
+                print >>sys.stderr, _("You can install it by typing:")
                 print >>sys.stderr, "sudo apt-get install %s" %  packages[0][0]
             else:
                 print >>sys.stderr, _("To run '%(command)s' please ask your administrator to install the package '%(package)s'") % {'command': command, 'package': packages[0][0]}
-            if packages[0][1] != "main":
-                print >>sys.stderr, _("Make sure you have the '%s' component enabled") % packages[0][1]
+            if not packages[0][1] in self.sources_list:
+                print >>sys.stderr, _("You will have to enable component called '%s'") % packages[0][1]
         elif len(packages) > 1:
             print >>sys.stderr, _("The program '%s' can be found in the following packages:") % command
             for package in packages:
-                print >>sys.stderr, " * %s" % package[0]
+                if package[1] in self.sources_list:
+                    print >>sys.stderr, " * %s" % package[0]
+                else:
+                    print >>sys.stderr, " * %s" % package[0] + " (" + _("You will have to enable component called '%s'") % package[1] + ")"
             if posix.geteuid() == 0:
                 print >>sys.stderr, _("Try: %s <selected package>") % "apt-get install"
             elif self.user_can_sudo:
                 print >>sys.stderr, _("Try: %s <selected package>") % "sudo apt-get install"
             else:
                 print >>sys.stderr, _("Ask your administrator to install one of them")
-            if package[1] != "main":
-                print >>sys.stderr, _("Make sure you have the '%s' component enabled") % package[1]
-        return ok
+        return len(packages) > 0

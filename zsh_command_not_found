@@ -11,7 +11,7 @@ function preexec() {
 function precmd() {
 	(($?)) && [ -n "$command" ] && {
 		whence -- "$command" >& /dev/null ||
-			command-not-found -- "$command"
+			/usr/bin/python /usr/lib/command-not-found -- "$command"
 		unset command
 	}
 }

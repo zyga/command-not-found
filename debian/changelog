@@ -1,3 +1,15 @@
+command-not-found (0.2.7) UNRELEASED; urgency=low
+
+  [Zygmunt Krynicki]
+  * data/suggestions.d:
+    - removed
+  * CommandNotFound/CommandNotFound.py:
+    - fix typo in string substitution (LP: #131435)
+  * setup.py:
+    - move to /usr/lib, no end-user application
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 22 Aug 2007 06:49:01 +0200
+
 command-not-found (0.2.6) gutsy; urgency=low
 
   * updated command-not-found data to current gutsy

@@ -5,5 +5,5 @@
 # installation of packages available from the repository
 
 command_not_found_handle() {
-  command-not-found -- "$1" || return 127
+  /usr/bin/python /usr/lib/command-not-found -- "$1" || return 127
 }
