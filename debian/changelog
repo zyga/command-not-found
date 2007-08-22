@@ -1,5 +1,9 @@
 command-not-found (0.2.7) UNRELEASED; urgency=low
 
+  * DO NOT UPLOAD UNLESS the location in /etc/bashrc 
+    gets updated (from /usr/bin/command-not-found to
+    /usr/lib/command-not-found)
+
   [Zygmunt Krynicki]
   * data/suggestions.d:
     - removed

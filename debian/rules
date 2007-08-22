@@ -74,7 +74,7 @@ install: build
 	# Move our script from /usr/bin to /usr/lib (not meant for end-users)
 	install -d $(CURDIR)/debian/command-not-found/usr/lib
 	mv $(CURDIR)/debian/command-not-found/usr/bin/command-not-found $(CURDIR)/debian/command-not-found/usr/lib/command-not-found
-	rmdir --ignore-fail-on-non-empty $(CURDIR)/debian/usr/bin
+	rmdir --ignore-fail-on-non-empty $(CURDIR)/debian/command-not-found/usr/bin
 	# Get rid of bash integration script, got merged to bash
 	rm $(CURDIR)/debian/command-not-found/etc/bash_command_not_found
 
