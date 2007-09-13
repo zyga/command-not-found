@@ -1,3 +1,9 @@
+command-not-found (0.2.8) gutsy; urgency=low
+
+  * added missing pyhton-apt dependency (LP: #138842)
+
+ --
+
 command-not-found (0.2.7) gutsy; urgency=low
 
   [Zygmunt Krynicki]
