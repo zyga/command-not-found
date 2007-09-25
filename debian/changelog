@@ -1,8 +1,13 @@
-command-not-found (0.2.8) gutsy; urgency=low
+command-not-found (0.2.8ubuntu1) gutsy; urgency=low
 
+  [ Michael Vogt ]
   * added missing pyhton-apt dependency (LP: #138842)
 
- --
+  [ Niklas Klein ]
+  * CommandNotFound/CommandNotFound.py added test for propper set PATH variable.
+    Backport from version 0.3 (LP: #111255).
+
+ -- Niklas Klein <kleinernik@gmail.com>  Fri, 24 Sep 2007 09:33:22 +0200
 
 command-not-found (0.2.7) gutsy; urgency=low
 

@@ -66,6 +66,7 @@ class ProgramDatabase:
 
 class CommandNotFound:
     programs_dir = "programs.d"
+    prefixes = ("/bin", "/usr/bin", "/usr/local/bin", "/sbin", "/usr/sbin", "/usr/local/sbin", "/usr/games")
     def __init__(self, data_dir=os.sep.join(('/','usr','share','command-not-found'))):
         self.programs = []
         self.sources_list = self._getSourcesList()
@@ -97,6 +98,26 @@ class CommandNotFound:
                      sources_list.add(component)
         return sources_list
     def advise(self, command):
+        if command.startswith("/"):
+            if os.path.exists(command):
+                prefixes = [os.path.dirname(command)]
+            else:
+                prefixes = []
+        else:
+            prefixes = [prefix for prefix in self.prefixes if os.path.exists(os.path.join(prefix, command))]
+        if prefixes:
+            if len(prefixes) == 1:
+                print _("Command '%(command)s' is available in '%(place)s'") % {"command": command, "place": os.path.join(prefixes[0], command)}
+            else:
+                print _("Command '%(command)s' is available in the following places") % {"command": command}
+                for prefix in prefixes:
+                    print " * %s" % os.path.join(prefix, command)
+            missing = list(set(prefixes) - set(os.getenv("PATH").split(":")))
+            if len(missing) > 0:
+                print _("The command could not be located because '%s' is not included in the PATH environment variable.") % ":".join(missing)
+                if "sbin" in ":".join(missing):
+                    print _("This is most likely caused by the lack of administrative priviledges associated with your user account.")
+            return False
         if command in self.getBlacklist():
             return False
         packages = self.getPackages(command)
