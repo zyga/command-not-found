@@ -1,3 +1,11 @@
+command-not-found (0.2.8ubuntu2) gutsy; urgency=low
+
+  * debian/control:
+    - fix command not found description
+  * scan.data updated to current gutsy
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Sat, 06 Oct 2007 13:06:23 +0200
+
 command-not-found (0.2.8ubuntu1) gutsy; urgency=low
 
   [ Michael Vogt ]
