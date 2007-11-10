@@ -4,7 +4,7 @@
 
 import os
 import os.path
-import dbm
+import gdbm
 import subprocess
 
 class ProgramGroup(object):
@@ -18,7 +18,7 @@ class ProgramGroup(object):
                 self.programs[user_visible_program_name] = set()
             self.programs[user_visible_program_name].add(package_name)
     def write_database(self):
-        db = dbm.open("%s-%s" % (self.arch, self.repo), "n")
+        db = gdbm.open("%s-%s.db" % (self.arch, self.repo), "n")
         for program_name, packages in self.programs.items():
             db[program_name] = "|".join(packages)
         db.close()

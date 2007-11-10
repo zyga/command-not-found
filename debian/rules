@@ -54,7 +54,7 @@ clean:
 	find . -name "*.pyc" -exec rm {} \;
 
 	# clean the database files as well
-	find . -name "*.db" -exec rm {} \;
+	find . -name "*.gdb" -exec rm {} \;
 
 	dh_clean 
 

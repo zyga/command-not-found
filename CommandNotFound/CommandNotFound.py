@@ -1,7 +1,7 @@
 # (c) Zygmunt Krynicki 2005, 2006
 # Licensed under GPL, see COPYING for the whole text
 
-import sys, os, os.path, dbm, posix, grp
+import sys, os, os.path, gdbm, posix, grp
 from gettext import gettext as _
 
 import apt_pkg
@@ -19,8 +19,8 @@ class BinaryDatabase:
         self.db = None
         if filename.endswith(".db"):
             try:
-                self.db = dbm.open(filename[:-3], "r")
-            except dbm.error, err:
+                self.db = gdbm.open(filename, "r")
+            except gdbm.error, err:
                 print >>sys.stderr, "Unable to open binary database %s: %s" % (filename, err)
     def lookup(self, key):
         if self.db and self.db.has_key(key):
