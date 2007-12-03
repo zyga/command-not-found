@@ -1,3 +1,11 @@
+command-not-found (0.2.10ubuntu1) hardy; urgency=low
+
+  * command-not-found:
+    - add --ignore-installed parameter to display the packages
+      that have the given command even if the command is installed
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 03 Dec 2007 16:00:29 +0100
+
 command-not-found (0.2.9ubuntu1) hardy; urgency=low
 
   * switch from dbm to gdbm

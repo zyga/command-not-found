@@ -17,11 +17,15 @@ try:
         gettext.textdomain("command-not-found")
         gettext.install("command-not-found", unicode=True)
         parser = OptionParser(version = __version__, usage=_("%prog [options] <command-name>"))
-        parser.add_option('-d', '--data-dir', action='store', default="/usr/share/command-not-found",
-                help=_("use this path to locate data fields"))
+        parser.add_option('-d', '--data-dir', action='store', 
+                          default="/usr/share/command-not-found",
+                          help=_("use this path to locate data fields"))
+        parser.add_option('--ignore-installed', '--ignore-installed', 
+                          action='store_true',  default=False,
+                          help=_("ignore local binaries and display the available packages"))
         (options, args) = parser.parse_args()
         if len(args) == 1:
-            CommandNotFound(options.data_dir).advise(args[0])
+            CommandNotFound(options.data_dir).advise(args[0], options.ignore_installed)
 except Exception, ex:
     print
     print _("KABOOOM!!!")

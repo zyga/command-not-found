@@ -97,7 +97,7 @@ class CommandNotFound:
                  for component in source.comps:
                      sources_list.add(component)
         return sources_list
-    def advise(self, command):
+    def advise(self, command, ignore_installed=False):
         if command.startswith("/"):
             if os.path.exists(command):
                 prefixes = [os.path.dirname(command)]
@@ -105,7 +105,7 @@ class CommandNotFound:
                 prefixes = []
         else:
             prefixes = [prefix for prefix in self.prefixes if os.path.exists(os.path.join(prefix, command))]
-        if prefixes:
+        if prefixes and not ignore_installed:
             if len(prefixes) == 1:
                 print _("Command '%(command)s' is available in '%(place)s'") % {"command": command, "place": os.path.join(prefixes[0], command)}
             else:
