@@ -1,3 +1,10 @@
+command-not-found (0.2.11ubuntu1) hardy; urgency=low
+
+  * fix FTBFS by adding missing b-d on python-gdbm (thanks to
+    Michael Bienia)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 04 Dec 2007 10:52:32 +0100
+
 command-not-found (0.2.10ubuntu1) hardy; urgency=low
 
   * command-not-found:
