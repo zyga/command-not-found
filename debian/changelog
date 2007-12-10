@@ -1,3 +1,9 @@
+command-not-found (0.2.11ubuntu2) hardy; urgency=low
+
+  * python-gdbm added to Depends, not just b-d 
+
+ -- Rick Clark <rick.clark@ubuntu.com>  Sun, 09 Dec 2007 15:51:19 -0500
+
 command-not-found (0.2.11ubuntu1) hardy; urgency=low
 
   * fix FTBFS by adding missing b-d on python-gdbm (thanks to
