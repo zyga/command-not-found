@@ -1,4 +1,4 @@
-command-not-found (0.2.11ubuntu3) UNRELEASED; urgency=low
+command-not-found (0.2.11ubuntu3) hardy; urgency=low
 
   * CommandNotFound/CommandNotFound.py: When $HOME is not set, fall back to
     /root instead of crashing with a type error. (LP: #177934)
