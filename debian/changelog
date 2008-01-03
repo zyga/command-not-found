@@ -1,3 +1,10 @@
+command-not-found (0.2.11ubuntu3) UNRELEASED; urgency=low
+
+  * CommandNotFound/CommandNotFound.py: When $HOME is not set, fall back to
+    /root instead of crashing with a type error. (LP: #177934)
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Thu, 03 Jan 2008 15:57:51 +0100
+
 command-not-found (0.2.11ubuntu2) hardy; urgency=low
 
   * python-gdbm added to Depends, not just b-d 

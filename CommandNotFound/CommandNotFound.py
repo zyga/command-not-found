@@ -83,7 +83,7 @@ class CommandNotFound:
         return list(result)
     def getBlacklist(self):
         try:
-            blacklist = file(os.sep.join((os.getenv("HOME"), ".command-not-found.blacklist")))
+            blacklist = file(os.sep.join((os.getenv("HOME", "/root"), ".command-not-found.blacklist")))
             return [line.strip() for line in blacklist if line.strip() != ""]
         except IOError:
             return []
