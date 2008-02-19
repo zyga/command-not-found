@@ -1,3 +1,9 @@
+command-not-found (0.2.13ubuntu1) hardy; urgency=low
+
+  * updated data for alpha-5
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 19 Feb 2008 19:24:40 +0100
+
 command-not-found (0.2.12ubuntu1) hardy; urgency=low
 
   * updated data for alpha-3
