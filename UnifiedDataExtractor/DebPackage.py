@@ -102,7 +102,7 @@ class SymbolicLinkInfo(LinkInfo):
 
 class HardLinkInfo(LinkInfo):
     def __init__(self, name, target, mode, uid, gid, size, mtime):
-        LinkInfo.__init__(self, target, name, mode, uid, gid, size, mtime)
+        LinkInfo.__init__(self, name, target, mode, uid, gid, size, mtime)
     def get_link_type(self):
         return self.HARD
 

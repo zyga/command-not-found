@@ -1,3 +1,11 @@
+command-not-found (0.2.14ubuntu1) hardy; urgency=low
+
+  * updated data for alpha-6
+  * fixed bug in data extraction code for hardlinks 
+    (git-diff and friends was not in the index because of this)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 04 Mar 2008 17:00:42 +0100
+
 command-not-found (0.2.13ubuntu1) hardy; urgency=low
 
   * updated data for alpha-5
