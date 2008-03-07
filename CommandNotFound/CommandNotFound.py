@@ -4,9 +4,6 @@
 import sys, os, os.path, gdbm, posix, grp
 from gettext import lgettext as _
 
-import apt_pkg
-from aptsources.sourceslist import SourcesList
-
 def _guessUserLocale():
     msg = os.getenv("LC_MESSAGES") or os.getenv("LANG")
     if msg:
@@ -91,9 +88,10 @@ class CommandNotFound:
             blacklist.close()
     def _getSourcesList(self):
         try:
-            # can raise on e.g. permission denied on /etc/apt/sources.list
+            import apt_pkg
+            from aptsources.sourceslist import SourcesList
             apt_pkg.init()
-        except SystemError:
+        except (SystemError, ImportError), e:
             return []
         sources_list = set([])
         for source in SourcesList():
