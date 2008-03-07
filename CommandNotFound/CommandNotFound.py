@@ -90,7 +90,11 @@ class CommandNotFound:
         else:
             blacklist.close()
     def _getSourcesList(self):
-        apt_pkg.init()
+        try:
+            # can raise on e.g. permission denied on /etc/apt/sources.list
+            apt_pkg.init()
+        except SystemError:
+            return []
         sources_list = set([])
         for source in SourcesList():
              if not source.disabled and not source.invalid:

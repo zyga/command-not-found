@@ -7,6 +7,7 @@ command-not-found (0.2.15ubuntu1) hardy; urgency=low
   [ Michael Vogt ]
   * CommandNotFound/CommandNotFound.py:
     - do not advise on ".." (LP: # 195090) - thanks to Thomas Perl
+    - do not crash if /etc/apt/sources.list can not be read (LP: #161804)
   * debian/control:
     - improve description (LP: #144153)
   * command-not-found:
