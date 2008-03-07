@@ -7,6 +7,10 @@ command-not-found (0.2.15ubuntu1) hardy; urgency=low
   [ Michael Vogt ]
   * CommandNotFound/CommandNotFound.py:
     - do not advise on ".." (LP: # 195090) - thanks to Thomas Perl
+  * debian/control:
+    - improve description (LP: #144153)
+  * command-not-found:
+    - make the crash message a bit more friendly
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 07 Mar 2008 10:01:20 +0100
 

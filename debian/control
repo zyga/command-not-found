@@ -19,5 +19,5 @@ Description: Suggest installation of packages in interactive bash sessions
 Package: command-not-found-data
 Architecture: any
 Description: Set of data files for command-not-found.
- The required data for the command-not-found application.
-
+ This package provides the required data used by the command-not-found 
+ application.

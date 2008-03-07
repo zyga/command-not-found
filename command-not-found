@@ -27,10 +27,7 @@ try:
         if len(args) == 1:
             CommandNotFound(options.data_dir).advise(args[0], options.ignore_installed)
 except Exception, ex:
-    print
-    print _("KABOOOM!!!")
-    print        
-    print _("Whoops, command-not-found has crashed! Please file a bug report at:")
+    print _("Sorry, command-not-found has crashed! Please file a bug report at:")
     print BUG_REPORT_URL
     print _("Please include the following information with the report:")
     print ex
