@@ -2,7 +2,7 @@
 # Licensed under GPL, see COPYING for the whole text
 
 import sys, os, os.path, gdbm, posix, grp
-from gettext import gettext as _
+from gettext import lgettext as _
 
 import apt_pkg
 from aptsources.sourceslist import SourcesList

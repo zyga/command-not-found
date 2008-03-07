@@ -11,6 +11,7 @@ command-not-found (0.2.15ubuntu1) hardy; urgency=low
     - improve description (LP: #144153)
   * command-not-found:
     - make the crash message a bit more friendly
+  * use lgettext() instead of gettext() (LP: #161159)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 07 Mar 2008 10:01:20 +0100
 

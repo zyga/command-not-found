@@ -6,7 +6,7 @@ BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/+source/command-not-found"
 try:
     import gettext
     import sys
-    from gettext import gettext as _
+    from gettext import lgettext as _
     from CommandNotFound import CommandNotFound
     from optparse import OptionParser
     
