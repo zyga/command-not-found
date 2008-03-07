@@ -98,7 +98,9 @@ class CommandNotFound:
                      sources_list.add(component)
         return sources_list
     def advise(self, command, ignore_installed=False):
-        if command.startswith("/"):
+        if command == "..":
+            return False
+        elif command.startswith("/"):
             if os.path.exists(command):
                 prefixes = [os.path.dirname(command)]
             else:
