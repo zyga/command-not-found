@@ -1,7 +1,12 @@
 command-not-found (0.2.15ubuntu1) hardy; urgency=low
 
+  [ Kjell Braden ]
+   * Don't run command-not-found from the shell scripts when it has been
+     removed in the meantime (LP: #194939)
+ 
+  [ Michael Vogt ]
   * CommandNotFound/CommandNotFound.py:
-    - do not advise on ".." (LP: # 195090)
+    - do not advise on ".." (LP: # 195090) - thanks to Thomas Perl
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 07 Mar 2008 10:01:20 +0100
 

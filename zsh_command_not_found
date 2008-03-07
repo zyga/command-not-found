@@ -9,7 +9,7 @@ function preexec() {
 }
 
 function precmd() {
-	(($?)) && [ -n "$command" ] && {
+	(($?)) && [ -n "$command" ] && [ -x /usr/lib/command-not-found ] && {
 		whence -- "$command" >& /dev/null ||
 			/usr/bin/python /usr/lib/command-not-found -- "$command"
 		unset command
