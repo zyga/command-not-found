@@ -139,7 +139,7 @@ class CommandNotFound:
             else:
                 print >>sys.stderr, _("To run '%(command)s' please ask your administrator to install the package '%(package)s'") % {'command': command, 'package': packages[0][0]}
             if not packages[0][1] in self.sources_list:
-                print >>sys.stderr, _("You will have to enable component called '%s'") % packages[0][1]
+                print >>sys.stderr, _("You will have to enable the component called '%s'") % packages[0][1]
         elif len(packages) > 1:
             print >>sys.stderr, _("The program '%s' can be found in the following packages:") % command
             for package in packages:
