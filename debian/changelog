@@ -1,3 +1,9 @@
+command-not-found (0.2.16ubuntu1) hardy; urgency=low
+
+  * updated to latest hardy 
+
+ -- Michael Vogt <egon@localhost.localdomain>  Thu, 03 Apr 2008 22:26:20 +0200
+
 command-not-found (0.2.15ubuntu1) hardy; urgency=low
 
   [ Kjell Braden ]

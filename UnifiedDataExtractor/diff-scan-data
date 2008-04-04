@@ -2,6 +2,7 @@
 
 import sys
 import string
+import apt
 
 def normalize_line(line):
     line = line.strip()
@@ -9,6 +10,10 @@ def normalize_line(line):
     bins = bins.split(",")
     bins.sort()
     return "%s|%s|%s|%s" % (arch, comp, pkg, ",".join(bins))
+
+def pkg_only(line):
+    (arch,comp,pkg,bins) = line.split("|")
+    return "||%s|" % pkg
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
@@ -18,9 +23,12 @@ if __name__ == "__main__":
     old = set()
     new = set()
 
-    for l in map(normalize_line, open(sys.argv[1])):
+    #func = normalize_line
+    func = pkg_only
+
+    for l in map(func, open(sys.argv[1])):
         old.add(l)
-    for l in map(normalize_line, open(sys.argv[2])):
+    for l in map(func, open(sys.argv[2])):
         new.add(l)
 
     print "new:"
@@ -28,5 +36,9 @@ if __name__ == "__main__":
         print line
 
     print "\nremoved:"
+    cache = apt.Cache()
     for line in set(old - new):
+        if not line.split("|")[2] in cache:
+            print "demoted: ", line.split("|")[2] 
+            continue
         print line
