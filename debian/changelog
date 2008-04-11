@@ -1,3 +1,10 @@
+command-not-found (0.2.17ubuntu1) hardy; urgency=low
+
+  * scan.data:
+    - upated for RC
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 11 Apr 2008 10:59:54 +0200
+
 command-not-found (0.2.16ubuntu1) hardy; urgency=low
 
   * updated to latest hardy 
