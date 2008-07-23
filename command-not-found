@@ -1,42 +1,27 @@
-#!/usr/bin/env python
-# (c) Zygmunt Krynicki 2005, 2006, 2007
+#!/usr/bin/python -S
+# (c) Zygmunt Krynicki 2005, 2006, 2007, 2008
 # Licensed under GPL, see COPYING for the whole text
 
+__version__ = "0.2.21"
 BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/+source/command-not-found"
-try:
-    import gettext
-    import sys
-    from gettext import lgettext as _
-    from CommandNotFound import CommandNotFound
-    from optparse import OptionParser
-    
-    __version__ = "0.2"
-           
-    if __name__ == "__main__":
-        gettext.bindtextdomain("command-not-found", "/usr/share/locale")
-        gettext.textdomain("command-not-found")
-        gettext.install("command-not-found", unicode=True)
-        parser = OptionParser(version = __version__, usage=_("%prog [options] <command-name>"))
-        parser.add_option('-d', '--data-dir', action='store', 
-                          default="/usr/share/command-not-found",
-                          help=_("use this path to locate data fields"))
-        parser.add_option('--ignore-installed', '--ignore-installed', 
-                          action='store_true',  default=False,
-                          help=_("ignore local binaries and display the available packages"))
-        (options, args) = parser.parse_args()
-        if len(args) == 1:
-            CommandNotFound(options.data_dir).advise(args[0], options.ignore_installed)
-except Exception, ex:
-    print _("Sorry, command-not-found has crashed! Please file a bug report at:")
-    print BUG_REPORT_URL
-    print _("Please include the following information with the report:")
-    print ex
-    try:
-        import traceback
-        traceback.print_exc()
-    except ImportError:
-        pass
-    print _("Python version: %d.%d.%d %s %d") % sys.version_info
-finally:
-    import sys
-    sys.exit(127)
+
+import CommandNotFound
+import sys
+from CommandNotFound.util import crash_guard, gettext_wrapper as _
+from CommandNotFound import CommandNotFound
+from optparse import OptionParser
+
+def main():
+    parser = OptionParser(version = __version__, usage=_("%prog [options] <command-name>"))
+    parser.add_option('-d', '--data-dir', action='store',
+                      default="/usr/share/command-not-found",
+                      help=_("use this path to locate data fields"))
+    parser.add_option('--ignore-installed', '--ignore-installed',
+                      action='store_true',  default=False,
+                      help=_("ignore local binaries and display the available packages"))
+    (options, args) = parser.parse_args()
+    if len(args) == 1:
+        CommandNotFound(options.data_dir).advise(args[0], options.ignore_installed)
+
+if __name__ == "__main__":
+    crash_guard(main, BUG_REPORT_URL)

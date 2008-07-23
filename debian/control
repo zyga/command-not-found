@@ -10,7 +10,7 @@ XS-Vcs-Bzr: http://launchpad.net/~ubuntu-core-dev/command-not-found/ubuntu
 
 Package: command-not-found
 Architecture: all
-Depends: ${python:Depends}, python-apt, command-not-found-data, python-gdbm
+Depends: ${python:Depends}, python-apt, command-not-found-data, python-gdbm, lsb-release
 XB-Python-Version: ${python:Versions}
 Description: Suggest installation of packages in interactive bash sessions
  This package will install handler for command_not_found that lookups

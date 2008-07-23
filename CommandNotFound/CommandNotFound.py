@@ -1,15 +1,8 @@
-# (c) Zygmunt Krynicki 2005, 2006
+# (c) Zygmunt Krynicki 2005, 2006, 2007, 2008
 # Licensed under GPL, see COPYING for the whole text
 
 import sys, os, os.path, gdbm, posix, grp
-from gettext import lgettext as _
-
-def _guessUserLocale():
-    msg = os.getenv("LC_MESSAGES") or os.getenv("LANG")
-    if msg:
-        return msg.split("_", 1)[0]
-    else:
-        return None
+from util import gettext_wrapper as _
 
 class BinaryDatabase:
     def __init__(self, filename):
