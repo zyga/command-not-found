@@ -1,15 +1,13 @@
-command-not-found (0.2.23ubuntu1) intrepid; urgency=low
+command-not-found (0.2.22ubuntu1) intrepid; urgency=low
 
+  [ Zygmunt Krynicki ]
+  * Fixed some locale issues and enchanced error reporting 
+
+  [ Michael Vogt ]
   * scan.data:
     - updated to current intrepid
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 11 Aug 2008 18:24:21 +0200
-
-command-not-found (0.2.22ubuntu1) intrepid; urgency=low
-
-  * Fixed some locale issues and enchanced error reporting 
-
- -- Zygmunt Krynicki <zkynicki@gmail.com>  Wed, 23 Jul 2008 14:41:50 +0200
 
 command-not-found (0.2.21ubuntu1) intrepid; urgency=low
 
