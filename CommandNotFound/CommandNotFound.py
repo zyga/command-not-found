@@ -112,7 +112,7 @@ class CommandNotFound:
                 print _("Command '%(command)s' is available in the following places") % {"command": command}
                 for prefix in prefixes:
                     print " * %s" % os.path.join(prefix, command)
-            missing = list(set(prefixes) - set(os.getenv("PATH").split(":")))
+            missing = list(set(prefixes) - set(os.getenv("PATH", "").split(":")))
             if len(missing) > 0:
                 print _("The command could not be located because '%s' is not included in the PATH environment variable.") % ":".join(missing)
                 if "sbin" in ":".join(missing):
