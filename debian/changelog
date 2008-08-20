@@ -1,9 +1,13 @@
-command-not-found (0.2.22ubuntu2) UNRELEASED; urgency=low
+command-not-found (0.2.23ubuntu1) intrepid; urgency=low
 
   [ Zygmunt Krynicki ]
   * fix crash when PATH is unset (LP: #258572)
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 19 Aug 2008 09:49:10 +0200
+  [ Michael Vogt ]
+  * scan.data:
+    - updated to current intrepid
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 20 Aug 2008 15:57:14 +0200
 
 command-not-found (0.2.22ubuntu1) intrepid; urgency=low
 
