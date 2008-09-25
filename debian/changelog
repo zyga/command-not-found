@@ -1,3 +1,9 @@
+command-not-found (0.2.25ubuntu1) intrepid; urgency=low
+
+  * command-not-found data updated for beta
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 25 Sep 2008 20:43:10 +0200
+
 command-not-found (0.2.24ubuntu1) intrepid; urgency=low
 
   * updated scan.data for alpha-6
