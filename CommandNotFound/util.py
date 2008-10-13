@@ -30,20 +30,20 @@ def crash_guard(callback, bug_report_url):
     try:
         callback()
     except Exception, ex:
-        print _("Sorry, command-not-found has crashed! Please file a bug report at:")
-        print BUG_REPORT_URL
-        print _("Please include the following information with the report:")
-        print 
-        print _("command-not-found version: %s") % __version__
-        print _("Python version: %d.%d.%d %s %d") % sys.version_info
+        print >>sys.stderr, _("Sorry, command-not-found has crashed! Please file a bug report at:")
+        print >>sys.stderr, BUG_REPORT_URL
+        print >>sys.stderr, _("Please include the following information with the report:")
+        print >>sys.stderr
+        print >>sys.stderr, _("command-not-found version: %s") % __version__
+        print >>sys.stderr, _("Python version: %d.%d.%d %s %d") % sys.version_info
         try:
             import subprocess
             subprocess.call(["lsb_release", "-i", "-d", "-r", "-c"])
         except ImportError:
             pass
-        print _("Exception information:")
-        print
-        print ex
+        print >>sys.stderr, _("Exception information:")
+        print >>sys.stderr
+        print >>sys.stderr, ex
         try:
             import traceback
             traceback.print_exc()

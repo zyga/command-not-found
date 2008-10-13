@@ -1,3 +1,11 @@
+command-not-found (0.2.25ubuntu2) UNRELEASED; urgency=low
+
+  [ Era Eriksson ]
+  * Print incorrect-PATH and crash-guard messages to stderr rather than
+    stdout (LP: #212723).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 13 Oct 2008 20:57:41 +0100
+
 command-not-found (0.2.25ubuntu1) intrepid; urgency=low
 
   * command-not-found data updated for beta

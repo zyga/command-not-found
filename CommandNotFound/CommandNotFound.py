@@ -107,16 +107,16 @@ class CommandNotFound:
             prefixes = [prefix for prefix in self.prefixes if _in_prefix(prefix, command)]
         if prefixes and not ignore_installed:
             if len(prefixes) == 1:
-                print _("Command '%(command)s' is available in '%(place)s'") % {"command": command, "place": os.path.join(prefixes[0], command)}
+                print >>sys.stderr, _("Command '%(command)s' is available in '%(place)s'") % {"command": command, "place": os.path.join(prefixes[0], command)}
             else:
-                print _("Command '%(command)s' is available in the following places") % {"command": command}
+                print >>sys.stderr, _("Command '%(command)s' is available in the following places") % {"command": command}
                 for prefix in prefixes:
-                    print " * %s" % os.path.join(prefix, command)
+                    print >>sys.stderr, " * %s" % os.path.join(prefix, command)
             missing = list(set(prefixes) - set(os.getenv("PATH", "").split(":")))
             if len(missing) > 0:
-                print _("The command could not be located because '%s' is not included in the PATH environment variable.") % ":".join(missing)
+                print >>sys.stderr, _("The command could not be located because '%s' is not included in the PATH environment variable.") % ":".join(missing)
                 if "sbin" in ":".join(missing):
-                    print _("This is most likely caused by the lack of administrative priviledges associated with your user account.")
+                    print >>sys.stderr, _("This is most likely caused by the lack of administrative priviledges associated with your user account.")
             return False
         if command in self.getBlacklist():
             return False
