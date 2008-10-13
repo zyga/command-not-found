@@ -6,6 +6,7 @@ command-not-found (0.2.25ubuntu2) UNRELEASED; urgency=low
 
   [ Colin Watson ]
   * Fix various crash bugs in the crash handler (LP: #269821).
+  * Adjust crash handler syntax to be friendly to Python 2.4 (LP: #234540).
 
  -- Colin Watson <cjwatson@ubuntu.com>  Mon, 13 Oct 2008 20:57:41 +0100
 
