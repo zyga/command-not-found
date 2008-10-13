@@ -38,7 +38,7 @@ def crash_guard(callback, bug_report_url, version):
         print >>sys.stderr, _("Python version: %d.%d.%d %s %d") % sys.version_info
         try:
             import subprocess
-            subprocess.call(["lsb_release", "-i", "-d", "-r", "-c"])
+            subprocess.call(["lsb_release", "-i", "-d", "-r", "-c"], stdout=sys.stderr)
         except (ImportError, OSError):
             pass
         print >>sys.stderr, _("Exception information:")
