@@ -4,6 +4,9 @@ command-not-found (0.2.25ubuntu2) UNRELEASED; urgency=low
   * Print where-to-find-command, incorrect-PATH, and crash-guard messages to
     stderr rather than stdout (LP: #212723).
 
+  [ Colin Watson ]
+  * Fix various crash bugs in the crash handler (LP: #269821).
+
  -- Colin Watson <cjwatson@ubuntu.com>  Mon, 13 Oct 2008 20:57:41 +0100
 
 command-not-found (0.2.25ubuntu1) intrepid; urgency=low

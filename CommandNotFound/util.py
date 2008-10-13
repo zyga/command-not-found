@@ -8,8 +8,8 @@ def no_gettext_for_you(message):
     return message
 
 def setup_locale():
+    import locale
     try:
-        import locale
         import gettext
         locale.getpreferredencoding()
         gettext.bindtextdomain("command-not-found", "/usr/share/locale")
@@ -23,7 +23,7 @@ def setup_locale():
 
 _ = gettext_wrapper = setup_locale()
 
-def crash_guard(callback, bug_report_url):
+def crash_guard(callback, bug_report_url, version):
     """ Calls callback and catches all exceptions.
     When something bad happens prints a long error message
     with bug report information and exits the program"""
@@ -31,15 +31,15 @@ def crash_guard(callback, bug_report_url):
         callback()
     except Exception, ex:
         print >>sys.stderr, _("Sorry, command-not-found has crashed! Please file a bug report at:")
-        print >>sys.stderr, BUG_REPORT_URL
+        print >>sys.stderr, bug_report_url
         print >>sys.stderr, _("Please include the following information with the report:")
         print >>sys.stderr
-        print >>sys.stderr, _("command-not-found version: %s") % __version__
+        print >>sys.stderr, _("command-not-found version: %s") % version
         print >>sys.stderr, _("Python version: %d.%d.%d %s %d") % sys.version_info
         try:
             import subprocess
             subprocess.call(["lsb_release", "-i", "-d", "-r", "-c"])
-        except ImportError:
+        except (ImportError, OSError):
             pass
         print >>sys.stderr, _("Exception information:")
         print >>sys.stderr

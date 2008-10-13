@@ -24,4 +24,4 @@ def main():
         CommandNotFound(options.data_dir).advise(args[0], options.ignore_installed)
 
 if __name__ == "__main__":
-    crash_guard(main, BUG_REPORT_URL)
+    crash_guard(main, BUG_REPORT_URL, __version__)
