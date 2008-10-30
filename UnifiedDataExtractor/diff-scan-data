@@ -11,49 +11,69 @@ def normalize_line(line):
     bins.sort()
     return "%s|%s|%s|%s" % (arch, comp, pkg, ",".join(bins))
 
-def pkg_only(line):
-    (arch,comp,pkg,bins) = line.split("|")
-    #return "||%s|" % pkg
-    return pkg
-
-def pkg_and_comp(line):
-    (arch,comp,pkg,bins) = line.split("|")
-    return "%s|%s" % (comp,pkg)
-
-if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print "need two files"
-        sys.exit(1)
+def get_new_and_removed_packages(old_scan_data, new_scan_data):
+    
+    def pkg_only(line):
+        (arch,comp,pkg,bins) = line.split("|")
+        return pkg
 
     old = set()
     new = set()
     #func = normalize_line
     func = pkg_only
-    for l in map(func, open(sys.argv[1])):
+    for l in map(func, open(old_scan_data)):
         old.add(l)
-    for l in map(func, open(sys.argv[2])):
+    for l in map(func, open(new_scan_data)):
         new.add(l)
+    return (set(new - old), set(old - new))
 
-    print "== new =="
-    for line in set(new - old):
-        print line
+def get_comp_changes(oldf, newf):
+    def pkg_and_comp(line):
+        (arch,comp,pkg,bins) = line.split("|")
+        return "%s|%s" % (comp,pkg)
 
-    print "\n\n"
-    print "== removed =="
-    for line in set(old - new):
-        print line
-
-    # now do the demotions
     func = pkg_and_comp
     old = {}
     new = {}
-    for l in map(func, open(sys.argv[1])):
+    comp_changes = {}
+    for l in map(func, open(oldf)):
         (comp, pkg) = l.split("|")
         old[pkg] = comp
-    for l in map(func, open(sys.argv[2])):
+    for l in map(func, open(newf)):
         (comp, pkg) = l.split("|")
         new[pkg] = comp
-    print "== changed component =="
     for (pkg,comp) in old.items():
         if pkg in new and new[pkg] != comp:
-            print "%s changed from '%s' to '%s'" % (pkg, comp, new[pkg])
+            comp_changes[pkg] = (comp, new[pkg])
+    return comp_changes
+
+if __name__ == "__main__":
+    if len(sys.argv) < 3:
+        print "need two files"
+        sys.exit(1)
+    
+    # oldfile, newfile given from commandline
+    oldf=sys.argv[1]
+    newf=sys.argv[2]
+   
+    # first check for additions and removals
+    (new_pkgs, removed_pkgs) = get_new_and_removed_packages(oldf, newf)
+    
+    print "== new packages =="
+    for line in new_pkgs:
+        print line
+
+    print "\n\n"
+    print "== removed packages =="
+    for line in removed_pkgs:
+        print line
+    
+    # now do the component changes
+    print "\n\n"
+    print "== changed component =="
+    changes = get_comp_changes(oldf, newf)
+    for (pkg, change) in changes.items():
+        # change is a tuple with (old_comp, new_comp)
+        print "%s changed from '%s' to '%s'" % (pkg, change[0], change[1])
+
+
