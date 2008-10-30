@@ -13,7 +13,12 @@ def normalize_line(line):
 
 def pkg_only(line):
     (arch,comp,pkg,bins) = line.split("|")
-    return "||%s|" % pkg
+    #return "||%s|" % pkg
+    return pkg
+
+def pkg_and_comp(line):
+    (arch,comp,pkg,bins) = line.split("|")
+    return "%s|%s" % (comp,pkg)
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
@@ -22,23 +27,33 @@ if __name__ == "__main__":
 
     old = set()
     new = set()
-
     #func = normalize_line
     func = pkg_only
-
     for l in map(func, open(sys.argv[1])):
         old.add(l)
     for l in map(func, open(sys.argv[2])):
         new.add(l)
 
-    print "new:"
+    print "== new =="
     for line in set(new - old):
         print line
 
-    print "\nremoved:"
-    cache = apt.Cache()
+    print "\n\n"
+    print "== removed =="
     for line in set(old - new):
-        if not line.split("|")[2] in cache:
-            print "demoted: ", line.split("|")[2] 
-            continue
         print line
+
+    # now do the demotions
+    func = pkg_and_comp
+    old = {}
+    new = {}
+    for l in map(func, open(sys.argv[1])):
+        (comp, pkg) = l.split("|")
+        old[pkg] = comp
+    for l in map(func, open(sys.argv[2])):
+        (comp, pkg) = l.split("|")
+        new[pkg] = comp
+    print "== changed component =="
+    for (pkg,comp) in old.items():
+        if pkg in new and new[pkg] != comp:
+            print "%s changed from '%s' to '%s'" % (pkg, comp, new[pkg])
