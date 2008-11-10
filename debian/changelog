@@ -1,6 +1,12 @@
 command-not-found (0.2.30ubuntu1) jaunty; urgency=low
 
+  [ Nick Ellery ]
   * Fixed spelling errors in package description (LP: #285631).
+
+  [ Michael Vogt ]
+  * add verify_scan_data.py to check against component mismatches
+    and incorrect architecture fields
+  * improve diff-scan-data.py
 
  -- Nick Ellery <nick.ellery@ubuntu.com>  Tue, 04 Nov 2008 17:13:45 -0800
 
