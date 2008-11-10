@@ -1,3 +1,15 @@
+command-not-found (0.2.30ubuntu1) jaunty; urgency=low
+
+  * Fixed spelling errors in package description (LP: #285631).
+
+ -- Nick Ellery <nick.ellery@ubuntu.com>  Tue, 04 Nov 2008 17:13:45 -0800
+
+command-not-found (0.2.26ubuntu1) intrepid; urgency=low
+
+  * scan.data updated to current intrepid
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 15 Oct 2008 17:45:26 +0200
+
 command-not-found (0.2.25ubuntu2) intrepid; urgency=low
 
   [ Era Eriksson ]

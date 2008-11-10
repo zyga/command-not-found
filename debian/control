@@ -13,8 +13,8 @@ Architecture: all
 Depends: ${python:Depends}, python-apt, command-not-found-data, python-gdbm, lsb-release
 XB-Python-Version: ${python:Versions}
 Description: Suggest installation of packages in interactive bash sessions
- This package will install handler for command_not_found that lookups
- programs not currently installed but available from the repositiories.
+ This package will install handler for command_not_found that looks up
+ programs not currently installed but available from the repositories.
 
 Package: command-not-found-data
 Architecture: any
