@@ -1,3 +1,9 @@
+command-not-found (0.2.31ubuntu1) jaunty; urgency=low
+
+  * scan.data: updated for jaunty alpha3
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 12 Jan 2009 21:08:22 +0100
+
 command-not-found (0.2.30ubuntu1) jaunty; urgency=low
 
   [ Nick Ellery ]
