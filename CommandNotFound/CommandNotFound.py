@@ -99,11 +99,11 @@ class CommandNotFound:
         try:
             xidx = self.components.index(x[1])
         except:
-            pass
+            xidx = -1
         try:
             yidx = self.components.index(y[1])
         except:
-            pass
+            xidx = -1
         return (yidx-xidx) or cmp(x,y)
     def advise(self, command, ignore_installed=False):
         def _in_prefix(prefix, command):
