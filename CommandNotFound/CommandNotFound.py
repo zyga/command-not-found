@@ -59,6 +59,9 @@ class CommandNotFound:
     prefixes = ("/bin", "/usr/bin", "/usr/local/bin", "/sbin", "/usr/sbin", "/usr/local/sbin", "/usr/games")
     def __init__(self, data_dir=os.sep.join(('/','usr','share','command-not-found'))):
         self.programs = []
+        self.components = ['main','universe','contrib','restricted','non-free',
+                           'multiverse']
+        self.components.reverse()
         self.sources_list = self._getSourcesList()
         for filename in os.listdir(os.path.sep.join([data_dir, self.programs_dir])):
             self.programs.append(ProgramDatabase(os.path.sep.join([data_dir, self.programs_dir, filename])))
@@ -92,6 +95,16 @@ class CommandNotFound:
                  for component in source.comps:
                      sources_list.add(component)
         return sources_list
+    def sortByComponent(self, x, y):
+        try:
+            xidx = self.components.index(x[1])
+        except:
+            pass
+        try:
+            yidx = self.components.index(y[1])
+        except:
+            pass
+        return (yidx-xidx) or cmp(x,y)
     def advise(self, command, ignore_installed=False):
         def _in_prefix(prefix, command):
             " helper that returns if a command is found in the given prefix "
@@ -134,6 +147,7 @@ class CommandNotFound:
             if not packages[0][1] in self.sources_list:
                 print >>sys.stderr, _("You will have to enable the component called '%s'") % packages[0][1]
         elif len(packages) > 1:
+            packages.sort(self.sortByComponent)
             print >>sys.stderr, _("The program '%s' can be found in the following packages:") % command
             for package in packages:
                 if package[1] in self.sources_list:
