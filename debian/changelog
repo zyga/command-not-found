@@ -1,3 +1,10 @@
+command-not-found (0.2.31ubuntu2) jaunty; urgency=low
+
+  * scan.data: fix git data (LP: #318433) by updating
+    to the latest data
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 22 Jan 2009 08:53:25 +0100
+
 command-not-found (0.2.31ubuntu1) jaunty; urgency=low
 
   * scan.data: updated for jaunty alpha3
