@@ -3,8 +3,11 @@ command-not-found (0.2.32ubuntu1) jaunty; urgency=low
   [ Steve Langasek ]
   * CommandNotFound/CommandNotFound.py:
     - add support for sorting by components
+  
+  [ Michael Vogt ]
+  * scan.data: updated
 
- --
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 26 Feb 2009 16:34:20 +0100
 
 command-not-found (0.2.31ubuntu2) jaunty; urgency=low
 
