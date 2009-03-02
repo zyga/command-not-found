@@ -1,3 +1,13 @@
+command-not-found (0.2.33ubuntu1) jaunty; urgency=low
+
+  * debian/rules:
+    - update debian/rules to the new python way of installing
+      packages 
+  * command-not-found:
+    - remove "-S" from "#!/usr/bin/python"
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 02 Mar 2009 09:15:48 +0100
+
 command-not-found (0.2.32ubuntu1) jaunty; urgency=low
 
   [ Steve Langasek ]

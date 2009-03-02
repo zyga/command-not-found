@@ -70,7 +70,7 @@ install: build
 	  mv *.db ../data/programs.d/)
 
 	# Add here commands to install the package into debian/$(PKGNAME).
-	./setup.py install --prefix=$(CURDIR)/debian/$(PKGNAME)/usr
+	./setup.py install --prefix=$(CURDIR)/debian/$(PKGNAME)/usr --install-layout=deb
 	# Move our script from /usr/bin to /usr/lib (not meant for end-users)
 	install -d $(CURDIR)/debian/command-not-found/usr/lib
 	mv $(CURDIR)/debian/command-not-found/usr/bin/command-not-found $(CURDIR)/debian/command-not-found/usr/lib/command-not-found
