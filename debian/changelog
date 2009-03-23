@@ -1,3 +1,18 @@
+command-not-found (0.2.33ubuntu3) jaunty; urgency=low
+
+  * scan.data:
+    - updated for jaunty beta
+  * suggest pythonX.Y instead of pythonX.Y-minimal when
+    "pythonX.Y" is not found
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 23 Mar 2009 11:07:26 +0100
+
+command-not-found (0.2.33ubuntu2) jaunty; urgency=low
+
+  * scan.data: updated to current jaunty
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 16 Mar 2009 09:21:37 +0100
+
 command-not-found (0.2.33ubuntu1) jaunty; urgency=low
 
   * debian/rules:
