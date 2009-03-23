@@ -1,3 +1,13 @@
+command-not-found (0.2.34ubuntu1) jaunty; urgency=low
+
+  * CommandNotFound/CommandNotFound.py:
+    - support "priority.txt" file that allows basic priority
+      ordering in the output
+  * data/priority.txt:
+    - add initial version with "openjdk-6-jdk" (LP: #318442)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 23 Mar 2009 13:45:26 +0100
+
 command-not-found (0.2.33ubuntu3) jaunty; urgency=low
 
   * scan.data:

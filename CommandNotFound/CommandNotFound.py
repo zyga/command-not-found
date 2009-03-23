@@ -1,7 +1,7 @@
 # (c) Zygmunt Krynicki 2005, 2006, 2007, 2008
 # Licensed under GPL, see COPYING for the whole text
 
-import sys, os, os.path, gdbm, posix, grp
+import sys, os, os.path, gdbm, posix, grp, string
 from util import gettext_wrapper as _
 
 class BinaryDatabase:
@@ -59,6 +59,9 @@ class CommandNotFound:
     prefixes = ("/bin", "/usr/bin", "/usr/local/bin", "/sbin", "/usr/sbin", "/usr/local/sbin", "/usr/games")
     def __init__(self, data_dir=os.sep.join(('/','usr','share','command-not-found'))):
         self.programs = []
+        p = os.path.join(data_dir, "priority.txt")
+        if os.path.exists(p):
+            self.priority_overrides = map(string.strip, open(p).readlines())
         self.components = ['main','universe','contrib','restricted','non-free',
                            'multiverse']
         self.components.reverse()
@@ -96,6 +99,16 @@ class CommandNotFound:
                      sources_list.add(component)
         return sources_list
     def sortByComponent(self, x, y):
+        # check overrides
+        if (x[0] in self.priority_overrides and
+            y[0] in self.priority_overrides):
+            # both have priority, do normal sorting
+            pass
+        elif x[0] in self.priority_overrides:
+            return -1
+        elif y[0] in self.priority_overrides:
+            return 1
+        # component sorting
         try:
             xidx = self.components.index(x[1])
         except:
