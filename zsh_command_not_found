@@ -4,15 +4,22 @@
 # This script will look-up command in the database and suggest
 # installation of packages available from the repository
 
-function preexec() {
-	command="${1%% *}"
+# Pseudo-namespace cnf_
+
+function cnf_preexec() {
+	typeset -g cnf_command="${1%% *}"
 }
 
-function precmd() {
-	(($?)) && [ -n "$command" ] && [ -x /usr/lib/command-not-found ] && {
-		whence -- "$command" >& /dev/null ||
-			/usr/bin/python /usr/lib/command-not-found -- "$command"
-		unset command
+function cnf_precmd() {
+	(($?)) && [ -n "$cnf_command" ] && [ -x /usr/lib/command-not-found ] && {
+		whence -- "$cnf_command" >& /dev/null ||
+			/usr/bin/python /usr/lib/command-not-found -- "$cnf_command"
+		unset cnf_command
 	}
 }
+
+typeset -ga preexec_functions
+typeset -ga precmd_functions
+preexec_functions+=cnf_preexec
+precmd_functions+=cnf_precmd
 

@@ -1,3 +1,12 @@
+command-not-found (0.2.34ubuntu4) karmic; urgency=low
+
+  * zsh_command_not_found:
+    - Use the pseudo-namespace prefix cnf_ for everything.
+    - Append the preexec/precmd functions to zsh’s pre*_functions arrays,
+      allowing other pre* functions to be used simultaneously.
+
+ -- Johan Kiviniemi <debian@johan.kiviniemi.name>  Fri, 15 May 2009 22:13:00 +0300
+
 command-not-found (0.2.34ubuntu1) jaunty; urgency=low
 
   * CommandNotFound/CommandNotFound.py:
