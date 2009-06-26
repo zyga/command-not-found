@@ -1,3 +1,18 @@
+command-not-found (0.2.35ubuntu3) karmic; urgency=low
+
+  * scan.data: updatedt to current karmic
+  * debian/postinst:
+    - if old/leftover /etc/bash_command_found_found is there,
+      remove it (LP: #379851)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 26 Jun 2009 08:33:13 +0200
+
+command-not-found (0.2.35ubuntu2) karmic; urgency=low
+
+  * scan.data: updated for alpha-2
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 08 Jun 2009 11:58:06 +0200
+
 command-not-found (0.2.35ubuntu1) karmic; urgency=low
 
   * zsh_command_not_found:
