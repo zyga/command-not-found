@@ -7,6 +7,8 @@ command-not-found (0.2.35ubuntu3) karmic; urgency=low
       remove it (LP: #379851)
   * debian/rules:
     - build with DH_PYCENTRAL=include-links 
+  * CommandNotFound/util.py:
+    - use try gettext if lgettext fails (LP: #282446)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 26 Jun 2009 08:33:13 +0200
 

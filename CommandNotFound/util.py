@@ -2,20 +2,31 @@
 # Licensed under GPL, see COPYING for the whole text
 
 import sys
+import gettext
 
 def no_gettext_for_you(message):
     """This function is used instead of gettext when there are some locale problems"""
     return message
 
+def gettext_not_crashy(s):
+    """ The getext handling is confusing:
+        - gettext.gettext caused LP: #161159
+        - getext.lgettext causes LP: #282446
+        Here we just try both :(
+    """
+    try:
+        return gettext.lgettext(s)
+    except UnicodeEncodeError, e:
+        return gettext.gettext(s)
+
 def setup_locale():
     import locale
     try:
-        import gettext
         locale.getpreferredencoding()
         gettext.bindtextdomain("command-not-found", "/usr/share/locale")
         gettext.textdomain("command-not-found")
         gettext.install("command-not-found", unicode=True)
-        return gettext.lgettext
+        return gettext_not_crashy
     except locale.Error:
         #print "Warning: python was unable to setup locale!"
         #print "Internationalizatio features will not be enabled."
