@@ -109,7 +109,7 @@ binary-arch: build install
 	dh_strip
 	dh_compress
 	dh_fixperms
-	dh_pycentral
+	DH_PYCENTRAL=include-links dh_pycentral
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol
