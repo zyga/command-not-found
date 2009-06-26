@@ -54,10 +54,28 @@ class ProgramDatabase:
         else:
             return []
 
+def similar_words(word):
+    """ return a set with spelling1 distance alternative spellings
+
+        based on http://norvig.com/spell-correct.html"""
+    alphabet = 'abcdefghijklmnopqrstuvwxyz-_'
+    s = [(word[:i], word[i:]) for i in range(len(word) + 1)]
+    deletes    = [a + b[1:] for a, b in s if b]
+    transposes = [a + b[1] + b[0] + b[2:] for a, b in s if len(b)>1]
+    replaces   = [a + c + b[1:] for a, b in s for c in alphabet if b]
+    inserts    = [a + c + b     for a, b in s for c in alphabet]
+    return set(deletes + transposes + replaces + inserts)
+
 class CommandNotFound:
     programs_dir = "programs.d"
-    prefixes = ("/bin", "/usr/bin", "/usr/local/bin", "/sbin", "/usr/sbin", "/usr/local/sbin", "/usr/games")
-    def __init__(self, data_dir=os.sep.join(('/','usr','share','command-not-found'))):
+    prefixes = ("/bin", 
+                "/usr/bin", 
+                "/usr/local/bin", 
+                "/sbin", "/usr/sbin",
+                "/usr/local/sbin", 
+                "/usr/games")
+    def __init__(self, data_dir=os.sep.join(
+            ('/','usr','share','command-not-found'))):
         self.programs = []
         self.priority_overrides = []
         p = os.path.join(data_dir, "priority.txt")
@@ -73,6 +91,19 @@ class CommandNotFound:
             self.user_can_sudo = grp.getgrnam("admin")[2] in posix.getgroups()
         except KeyError:
             self.user_can_sudo = False
+
+    def print_spelling_suggestion(self, word):
+        " try to correct the spelling "
+        possible_alternatives = []
+        for w in similar_words(word):
+            packages = self.getPackages(w)
+            for (package, comp) in packages:
+                possible_alternatives.append((w, package, comp))
+        if len(possible_alternatives) > 0:
+            print >>sys.stderr, _("No command '%s' found, did you mean:") % word
+            for (w, p, c) in possible_alternatives:
+                print >>sys.stderr, _(" Command '%s' from package '%s' (%s)") % (w, p, c)
+
     def getPackages(self, command):
         result = set()
         for db in self.programs:
@@ -148,7 +179,9 @@ class CommandNotFound:
         if command in self.getBlacklist():
             return False
         packages = self.getPackages(command)
-        if len(packages) == 1:
+        if len(packages) == 0:
+            self.print_spelling_suggestion(command)
+        elif len(packages) == 1:
             print >>sys.stderr, _("The program '%s' is currently not installed. ") % command,
             if posix.geteuid() == 0:
                 print >>sys.stderr, _("You can install it by typing:")

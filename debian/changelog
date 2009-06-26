@@ -13,6 +13,7 @@ command-not-found (0.2.35ubuntu3) karmic; urgency=low
     - fix location (LP: #314478)
   * CommandNotFound/CommandNotFound.py:
     - be more robust about missing priority.txt (LP: #359784)
+    - add simple spelling correction (LP: #314486)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 26 Jun 2009 08:33:13 +0200
 
