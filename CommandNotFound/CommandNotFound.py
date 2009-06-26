@@ -59,6 +59,7 @@ class CommandNotFound:
     prefixes = ("/bin", "/usr/bin", "/usr/local/bin", "/sbin", "/usr/sbin", "/usr/local/sbin", "/usr/games")
     def __init__(self, data_dir=os.sep.join(('/','usr','share','command-not-found'))):
         self.programs = []
+        self.priority_overrides = []
         p = os.path.join(data_dir, "priority.txt")
         if os.path.exists(p):
             self.priority_overrides = map(string.strip, open(p).readlines())

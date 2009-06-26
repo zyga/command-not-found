@@ -9,6 +9,10 @@ command-not-found (0.2.35ubuntu3) karmic; urgency=low
     - build with DH_PYCENTRAL=include-links 
   * CommandNotFound/util.py:
     - use try gettext if lgettext fails (LP: #282446)
+  * debian/copyright: 
+    - fix location (LP: #314478)
+  * CommandNotFound/CommandNotFound.py:
+    - be more robust about missing priority.txt (LP: #359784)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 26 Jun 2009 08:33:13 +0200
 
