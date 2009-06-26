@@ -1,6 +1,7 @@
 command-not-found (0.2.35ubuntu3) karmic; urgency=low
 
-  * scan.data: updatedt to current karmic
+  * scan.data: updated to current karmic
+  * scan.data: add exception for gftp (LP: #99708)
   * debian/postinst:
     - if old/leftover /etc/bash_command_found_found is there,
       remove it (LP: #379851)
