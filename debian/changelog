@@ -1,4 +1,4 @@
-command-not-found (0.2.35ubuntu3) karmic; urgency=low
+command-not-found (0.2.36ubuntu1) karmic; urgency=low
 
   * scan.data: updated to current karmic
   * scan.data: add exception for gftp (LP: #99708)
@@ -17,7 +17,7 @@ command-not-found (0.2.35ubuntu3) karmic; urgency=low
   * debian/control:
     - build for all python versions (LP: #366096)
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 26 Jun 2009 08:33:13 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 26 Jun 2009 13:58:24 +0200
 
 command-not-found (0.2.35ubuntu2) karmic; urgency=low
 
