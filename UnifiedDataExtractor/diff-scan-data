@@ -59,18 +59,18 @@ if __name__ == "__main__":
     # first check for additions and removals
     (new_pkgs, removed_pkgs) = get_new_and_removed_packages(oldf, newf)
     
-    print "== new packages =="
+    print "--- new packages ---"
     for line in new_pkgs:
         print line
 
     print "\n\n"
-    print "== removed packages =="
+    print "--- removed packages ---"
     for line in removed_pkgs:
         print line
     
     # now do the component changes
     print "\n\n"
-    print "== changed component =="
+    print "--- changed component ---"
     changes = get_comp_changes(oldf, newf)
     for (pkg, change) in changes.items():
         # change is a tuple with (old_comp, new_comp)
