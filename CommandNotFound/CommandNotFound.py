@@ -92,8 +92,10 @@ class CommandNotFound:
         except KeyError:
             self.user_can_sudo = False
 
-    def print_spelling_suggestion(self, word):
+    def print_spelling_suggestion(self, word, min_len=2):
         " try to correct the spelling "
+        if len(word) < min_len:
+            return
         possible_alternatives = []
         for w in similar_words(word):
             packages = self.getPackages(w)
