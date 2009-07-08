@@ -92,7 +92,7 @@ class CommandNotFound:
         except KeyError:
             self.user_can_sudo = False
 
-    def print_spelling_suggestion(self, word, min_len=2):
+    def print_spelling_suggestion(self, word, min_len=3, max_len=15):
         " try to correct the spelling "
         if len(word) < min_len:
             return
@@ -101,7 +101,9 @@ class CommandNotFound:
             packages = self.getPackages(w)
             for (package, comp) in packages:
                 possible_alternatives.append((w, package, comp))
-        if len(possible_alternatives) > 0:
+        if len(possible_alternatives) > max_len:
+            print >>sys.stderr, _("No command '%s' found, but there are %s similar ones") % (word, len(possible_alternatives))
+        elif len(possible_alternatives) > 0:
             print >>sys.stderr, _("No command '%s' found, did you mean:") % word
             for (w, p, c) in possible_alternatives:
                 print >>sys.stderr, _(" Command '%s' from package '%s' (%s)") % (w, p, c)
