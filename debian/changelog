@@ -1,11 +1,11 @@
-command-not-found (0.2.37ubuntu1) UNRELEASEDkarmic; urgency=low
+command-not-found (0.2.37ubuntu1) karmic; urgency=low
 
   * CommandNotFound/CommandNotFound.py:
     - set min_length for mispelling suggestion to 3 (LP: #396829)
     - set max_length for mispelling suggestion to 15, if there
       are more, just a summary is printed
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 08 Jul 2009 08:52:26 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 10 Jul 2009 10:44:00 +0200
 
 command-not-found (0.2.36ubuntu1) karmic; urgency=low
 
