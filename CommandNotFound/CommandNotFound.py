@@ -155,6 +155,7 @@ class CommandNotFound:
             xidx = -1
         return (yidx-xidx) or cmp(x,y)
     def advise(self, command, ignore_installed=False):
+        " give advice where to find the given command to stderr "
         def _in_prefix(prefix, command):
             " helper that returns if a command is found in the given prefix "
             return (os.path.exists(os.path.join(prefix, command)) and 
@@ -167,6 +168,8 @@ class CommandNotFound:
                 prefixes = []
         else:
             prefixes = [prefix for prefix in self.prefixes if _in_prefix(prefix, command)]
+
+        # check if we have it in a common prefix that may not be in the PATH
         if prefixes and not ignore_installed:
             if len(prefixes) == 1:
                 print >>sys.stderr, _("Command '%(command)s' is available in '%(place)s'") % {"command": command, "place": os.path.join(prefixes[0], command)}
@@ -180,6 +183,13 @@ class CommandNotFound:
                 if "sbin" in ":".join(missing):
                     print >>sys.stderr, _("This is most likely caused by the lack of administrative priviledges associated with your user account.")
             return False
+
+        # do not give advice if we are in a situation where apt-get
+        # or aptitude are not available (LP: #394843)
+        if not (os.path.exists("/usr/bin/apt-get") or
+                os.path.exists("/usr/bin/aptitude")):
+            return False
+
         if command in self.getBlacklist():
             return False
         packages = self.getPackages(command)

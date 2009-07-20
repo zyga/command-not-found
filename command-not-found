@@ -21,7 +21,8 @@ def main():
                       help=_("ignore local binaries and display the available packages"))
     (options, args) = parser.parse_args()
     if len(args) == 1:
-        CommandNotFound(options.data_dir).advise(args[0], options.ignore_installed)
+        cnf = CommandNotFound(options.data_dir)
+        cnf.advise(args[0], options.ignore_installed)
 
 if __name__ == "__main__":
     crash_guard(main, BUG_REPORT_URL, __version__)

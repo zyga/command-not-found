@@ -1,3 +1,13 @@
+command-not-found (0.2.37ubuntu2) karmic; urgency=low
+
+  * scan.data:
+    - updated for alpha-3
+  * CommandNotFound/CommandNotFound.py:
+    - do not give advice if apt-get is not installed 
+      (LP: #394842)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 20 Jul 2009 13:17:27 +0200
+
 command-not-found (0.2.37ubuntu1) karmic; urgency=low
 
   * CommandNotFound/CommandNotFound.py:
