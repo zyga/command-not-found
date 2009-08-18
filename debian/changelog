@@ -1,3 +1,9 @@
+command-not-found (0.2.37ubuntu3) karmic; urgency=low
+
+  * updated data to current karmic
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 18 Aug 2009 09:08:51 +0200
+
 command-not-found (0.2.37ubuntu2) karmic; urgency=low
 
   * scan.data:
