@@ -23,6 +23,7 @@ def main():
     if len(args) == 1:
         cnf = CommandNotFound(options.data_dir)
         cnf.advise(args[0], options.ignore_installed)
+        print >>sys.stderr, _("%s: command not found") % args[0]
 
 if __name__ == "__main__":
     crash_guard(main, BUG_REPORT_URL, __version__)

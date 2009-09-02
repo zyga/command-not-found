@@ -1,3 +1,11 @@
+command-not-found (0.2.38ubuntu1) karmic; urgency=low
+
+  * updated data to current karmic
+  * print error if a command is not found (bash used to do that
+    but with bash-4.0 it does no longer) LP: #420161
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 02 Sep 2009 16:13:17 +0200
+
 command-not-found (0.2.37ubuntu3) karmic; urgency=low
 
   * updated data to current karmic
