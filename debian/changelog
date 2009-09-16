@@ -1,3 +1,9 @@
+command-not-found (0.2.38ubuntu2) karmic; urgency=low
+
+  * updated for alpha6
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 16 Sep 2009 11:02:39 +0200
+
 command-not-found (0.2.38ubuntu1) karmic; urgency=low
 
   * updated data to current karmic
