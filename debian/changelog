@@ -1,3 +1,10 @@
+command-not-found (0.2.38ubuntu4) karmic; urgency=low
+
+  * updated to current karmic
+  * fix pacakge suggestion for "tex" (LP: #427850)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 13 Oct 2009 09:19:23 +0200
+
 command-not-found (0.2.38ubuntu3) karmic; urgency=low
 
   * updated for BETA
