@@ -5,11 +5,14 @@
 __version__ = "0.2.21"
 BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/+source/command-not-found"
 
-import CommandNotFound
-import sys
-from CommandNotFound.util import crash_guard, gettext_wrapper as _
-from CommandNotFound import CommandNotFound
-from optparse import OptionParser
+try:
+    import sys
+    import CommandNotFound
+    from CommandNotFound.util import crash_guard, gettext_wrapper as _
+    from CommandNotFound import CommandNotFound
+    from optparse import OptionParser
+except KeyboardInterrupt:
+    sys.exit(127)
 
 def main():
     parser = OptionParser(version = __version__, usage=_("%prog [options] <command-name>"))

@@ -1,3 +1,13 @@
+command-not-found (0.2.40ubuntu1) lucid; urgency=low
+
+  * scan.data:
+    - updated to current lucid
+  * command-not-found:
+    - catch KeyboardInterrupt during initial import as
+      well (LP: #479716)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 11 Jan 2010 09:30:41 +0100
+
 command-not-found (0.2.38ubuntu4) karmic; urgency=low
 
   * updated to current karmic
