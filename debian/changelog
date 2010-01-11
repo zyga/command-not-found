@@ -5,6 +5,8 @@ command-not-found (0.2.40ubuntu1) lucid; urgency=low
   * command-not-found:
     - catch KeyboardInterrupt during initial import as
       well (LP: #479716)
+    - show "command not found" string only when no command
+      was found (LP: #408020)
 
  -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 11 Jan 2010 09:30:41 +0100
 
