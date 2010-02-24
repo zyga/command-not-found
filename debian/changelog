@@ -1,3 +1,10 @@
+command-not-found (0.2.40ubuntu2) lucid; urgency=low
+
+  * scan.data:
+    - updated to current lucid
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 24 Feb 2010 13:40:40 +0100
+
 command-not-found (0.2.40ubuntu1) lucid; urgency=low
 
   * scan.data:
