@@ -58,7 +58,7 @@ def similar_words(word):
     """ return a set with spelling1 distance alternative spellings
 
         based on http://norvig.com/spell-correct.html"""
-    alphabet = 'abcdefghijklmnopqrstuvwxyz-_'
+    alphabet = 'abcdefghijklmnopqrstuvwxyz-_0123456789'
     s = [(word[:i], word[i:]) for i in range(len(word) + 1)]
     deletes    = [a + b[1:] for a, b in s if b]
     transposes = [a + b[1] + b[0] + b[2:] for a, b in s if len(b)>1]

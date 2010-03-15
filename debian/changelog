@@ -1,3 +1,11 @@
+command-not-found (0.2.40ubuntu3) lucid; urgency=low
+
+  * CommandNotFound/CommandNotFound.py:
+    - cherry pick "add numbers to the alphabet used for suggestions "
+      from trunk (r116) (LP: #507760)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 15 Mar 2010 09:22:47 +0100
+
 command-not-found (0.2.40ubuntu2) lucid; urgency=low
 
   * scan.data:
