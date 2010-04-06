@@ -1,3 +1,9 @@
+command-not-found (0.2.40ubuntu4) lucid; urgency=low
+
+  * updated for beta2
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 06 Apr 2010 08:45:24 +0200
+
 command-not-found (0.2.40ubuntu3) lucid; urgency=low
 
   * CommandNotFound/CommandNotFound.py:
