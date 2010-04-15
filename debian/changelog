@@ -1,3 +1,10 @@
+command-not-found (0.2.40ubuntu5) lucid; urgency=low
+
+  * scan.data:
+    - updated for RC
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 15 Apr 2010 09:59:35 +0200
+
 command-not-found (0.2.40ubuntu4) lucid; urgency=low
 
   * updated for beta2
