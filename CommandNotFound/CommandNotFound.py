@@ -181,7 +181,7 @@ class CommandNotFound:
             if len(missing) > 0:
                 print >>sys.stderr, _("The command could not be located because '%s' is not included in the PATH environment variable.") % ":".join(missing)
                 if "sbin" in ":".join(missing):
-                    print >>sys.stderr, _("This is most likely caused by the lack of administrative priviledges associated with your user account.")
+                    print >>sys.stderr, _("This is most likely caused by the lack of administrative privileges associated with your user account.")
             return False
 
         # do not give advice if we are in a situation where apt-get

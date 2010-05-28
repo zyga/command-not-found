@@ -1,3 +1,9 @@
+command-not-found (0.2.40ubuntu6) UNRELEASEDmaverick; urgency=low
+
+  * fix spelling error s/priviledge/privilege/. LP: #574577
+
+ -- Rolf Leggewie <foss@rolf.leggewie.biz>  Tue, 04 May 2010 01:04:17 +0900
+
 command-not-found (0.2.40ubuntu5) lucid; urgency=low
 
   * scan.data:
