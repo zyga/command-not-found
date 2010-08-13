@@ -38,7 +38,7 @@ build-stamp: configure-stamp
 	# Add here commands to compile the package.
 	#$(MAKE)
 	./setup.py build
-
+	(cd po; intltool-update -p -g command-not-found)
 	touch build-stamp
 
 clean: 
@@ -55,7 +55,7 @@ clean:
 
 	# clean the database files as well
 	find . -name "*.gdb" -exec rm {} \;
-
+	find . -name "*.pot" -exec rm {} \;
 	dh_clean 
 
 install: build
