@@ -1,3 +1,10 @@
+command-not-found (0.2.40ubuntu14) maverick; urgency=low
+
+  * scan.data: 
+    - updated for maverick beta
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 27 Aug 2010 17:15:58 +0200
+
 command-not-found (0.2.40ubuntu13) maverick; urgency=low
 
   * debian/rules:
