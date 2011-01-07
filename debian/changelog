@@ -1,4 +1,4 @@
-command-not-found (0.2.40ubuntu17) naty; urgency=low
+command-not-found (0.2.40ubuntu17) natty; urgency=low
 
   * scan.data:
     - updated to current natty
