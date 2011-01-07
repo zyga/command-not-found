@@ -1,3 +1,10 @@
+command-not-found (0.2.40ubuntu17) naty; urgency=low
+
+  * scan.data:
+    - updated to current natty
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 07 Jan 2011 11:06:41 +0100
+
 command-not-found (0.2.40ubuntu16) natty; urgency=low
 
   * scan.data:
