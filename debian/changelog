@@ -1,3 +1,9 @@
+command-not-found (0.2.41ubuntu2) natty; urgency=low
+
+  * updated for final natty
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 19 Apr 2011 13:07:19 +0200
+
 command-not-found (0.2.41ubuntu1) natty; urgency=low
 
   * updated to current natty
