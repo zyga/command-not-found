@@ -1,9 +1,14 @@
-command-not-found (0.2.41ubuntu3) UNRELEASED; urgency=low
+command-not-found (0.2.41ubuntu3) UNRELEASEDoneiric; urgency=low
 
   [ Steve Langasek ]
   * Migrate to dh_python2.  LP: #788514.
   
- -- Steve Langasek <steve.langasek@ubuntu.com>  Fri, 10 Jun 2011 02:58:39 +0000
+  [ Michael Vogt ]
+  * automatically update the scan.data in the pre-build.sh hook
+    (thanks to Steve Langasek for this suggestion)
+  * updated to oneiric
+  
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 10 Jun 2011 08:44:38 +0200
 
 command-not-found (0.2.41ubuntu2) natty; urgency=low
 

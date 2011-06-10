@@ -1,10 +1,13 @@
 #!/bin/sh
 
+set -e
 
 cd UnifiedDataExtractor
 
 # backup copy 
-cp scan.data scan.data-old
+if [ -e scan.data ]; then
+    cp scan.data scan.data-old
+fi
 
 # rookery has the normal archive
 wget -O scan.1 http://rookery.ubuntu.com/~mvo/command-not-found/scan.data-latest 
@@ -12,4 +15,7 @@ wget -O scan.1 http://rookery.ubuntu.com/~mvo/command-not-found/scan.data-latest
 wget -O scan.2 http://rookery.ubuntu.com/~mvo/command-not-found-ports/scan.data-latest 
 # concat
 cat scan.1 scan.2 > scan.data
-./diff-scan-data scan.data-old scan.data|less
+
+if [ -e scan.data-old ]; then
+    ./diff-scan-data scan.data-old scan.data|less
+fi
