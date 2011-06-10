@@ -1,4 +1,4 @@
-command-not-found (0.2.41ubuntu3) UNRELEASEDoneiric; urgency=low
+command-not-found (0.2.41ubuntu3) oneiric; urgency=low
 
   [ Steve Langasek ]
   * Migrate to dh_python2.  LP: #788514.
@@ -8,7 +8,7 @@ command-not-found (0.2.41ubuntu3) UNRELEASEDoneiric; urgency=low
     (thanks to Steve Langasek for this suggestion)
   * updated to oneiric
   
- -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 10 Jun 2011 08:44:38 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 10 Jun 2011 08:56:44 +0200
 
 command-not-found (0.2.41ubuntu2) natty; urgency=low
 
