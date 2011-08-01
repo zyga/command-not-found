@@ -1,3 +1,9 @@
+command-not-found (0.2.41ubuntu5) oneiric; urgency=low
+
+  * updated for alpha3
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 01 Aug 2011 20:08:36 +0200
+
 command-not-found (0.2.41ubuntu4) oneiric; urgency=low
 
   * updated to current oneiric
