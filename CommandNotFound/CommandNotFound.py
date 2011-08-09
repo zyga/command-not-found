@@ -129,7 +129,8 @@ class CommandNotFound:
         except (SystemError, ImportError), e:
             return []
         sources_list = set([])
-        for source in SourcesList(False):
+        # We don't use the data calculated by the matcher, skip it
+        for source in SourcesList(withMatcher=False):
              if not source.disabled and not source.invalid:
                  for component in source.comps:
                      sources_list.add(component)
