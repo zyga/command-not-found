@@ -126,7 +126,7 @@ class CommandNotFound:
             import apt_pkg
             from aptsources.sourceslist import SourcesList
             apt_pkg.init()
-        except (SystemError, ImportError), e:
+        except (SystemError, ImportError):
             return []
         sources_list = set([])
         # The matcher parses info files from

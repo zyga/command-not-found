@@ -3,9 +3,10 @@
 
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
-import apt, apt_inst, apt_pkg
-import sys, os, subprocess
-from gettext import gettext as _
+
+import apt
+import apt_inst
+import apt_pkg
 
 class GenericFileInfo(object):
     BASE_STICKY  = 8

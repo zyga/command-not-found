@@ -16,7 +16,7 @@ def gettext_not_crashy(s):
     """
     try:
         return gettext.lgettext(s)
-    except UnicodeEncodeError, e:
+    except UnicodeEncodeError:
         return gettext.gettext(s)
 
 def setup_locale():
