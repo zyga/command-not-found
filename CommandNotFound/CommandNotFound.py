@@ -129,7 +129,10 @@ class CommandNotFound:
         except (SystemError, ImportError), e:
             return []
         sources_list = set([])
-        for source in SourcesList():
+        # The matcher parses info files from
+        # /usr/share/python-apt/templates/
+        # But we don't use the calculated data, skip it
+        for source in SourcesList(withMatcher=False):
              if not source.disabled and not source.invalid:
                  for component in source.comps:
                      sources_list.add(component)
