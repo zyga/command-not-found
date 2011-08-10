@@ -4,9 +4,11 @@
 import sys
 import gettext
 
+
 def no_gettext_for_you(message):
     """This function is used instead of gettext when there are some locale problems"""
     return message
+
 
 def gettext_not_crashy(s):
     """ The getext handling is confusing:
@@ -18,6 +20,7 @@ def gettext_not_crashy(s):
         return gettext.lgettext(s)
     except UnicodeEncodeError:
         return gettext.gettext(s)
+
 
 def setup_locale():
     import locale
@@ -32,7 +35,9 @@ def setup_locale():
         #print "Internationalizatio features will not be enabled."
         return no_gettext_for_you
 
+
 _ = gettext_wrapper = setup_locale()
+
 
 def crash_guard(callback, bug_report_url, version):
     """ Calls callback and catches all exceptions.
@@ -63,5 +68,6 @@ def crash_guard(callback, bug_report_url, version):
                 pass
     finally:
         sys.exit(127)
+
 
 __all__ = ["gettext_wrapper", "crash_guard"]

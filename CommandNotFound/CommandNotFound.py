@@ -21,28 +21,34 @@ class BinaryDatabase:
                 self.db = gdbm.open(filename, "r")
             except gdbm.error, err:
                 print >>sys.stderr, "Unable to open binary database %s: %s" % (filename, err)
+
     def lookup(self, key):
         if self.db and self.db.has_key(key):
             return self.db[key]
         else:
             return None
 
+
 class FlatDatabase:
+
     def __init__(self, filename):
         self.rows = []
         dbfile = file(filename)
         for line in (line.strip() for line in dbfile):
             self.rows.append(line.split("|"))
         dbfile.close()
+
     def lookup(self, column, text):
         result = []
         for row in self.rows:
             if row[column] == text:
                 result.append(row)
         return result
+
     def createColumnByCallback(self, cb, column):
         for row in self.rows:
             row.append(cb(row[column]))
+
     def lookupWithCallback(self, column, cb, text):
         result = []
         for row in self.rows:
@@ -50,12 +56,16 @@ class FlatDatabase:
                 result.append(row)
         return result
 
+
 class ProgramDatabase:
+
     (PACKAGE, BASENAME_PATH) = range(2)
+
     def __init__(self, filename):
         basename = os.path.basename(filename)
         (self.arch, self.component) = basename.split(".")[0].split("-")
         self.db = BinaryDatabase(filename)
+
     def lookup(self, command):
         result = self.db.lookup(command)
         if result:
@@ -63,10 +73,13 @@ class ProgramDatabase:
         else:
             return []
 
-def similar_words(word):
-    """ return a set with spelling1 distance alternative spellings
 
-        based on http://norvig.com/spell-correct.html"""
+def similar_words(word):
+    """
+    return a set with spelling1 distance alternative spellings
+
+    based on http://norvig.com/spell-correct.html
+    """
     alphabet = 'abcdefghijklmnopqrstuvwxyz-_0123456789'
     s = [(word[:i], word[i:]) for i in range(len(word) + 1)]
     deletes    = [a + b[1:] for a, b in s if b]
@@ -75,14 +88,18 @@ def similar_words(word):
     inserts    = [a + c + b     for a, b in s for c in alphabet]
     return set(deletes + transposes + replaces + inserts)
 
+
 class CommandNotFound:
+
     programs_dir = "programs.d"
+
     prefixes = ("/bin", 
                 "/usr/bin", 
                 "/usr/local/bin", 
                 "/sbin", "/usr/sbin",
                 "/usr/local/sbin", 
                 "/usr/games")
+
     def __init__(self, data_dir=os.sep.join(
             ('/','usr','share','command-not-found'))):
         self.programs = []
@@ -122,6 +139,7 @@ class CommandNotFound:
         for db in self.programs:
             result.update([(pkg,db.component) for pkg in db.lookup(command)])
         return list(result)
+
     def getBlacklist(self):
         try:
             blacklist = file(os.sep.join((os.getenv("HOME", "/root"), ".command-not-found.blacklist")))
@@ -130,6 +148,7 @@ class CommandNotFound:
             return []
         else:
             blacklist.close()
+
     def _getSourcesList(self):
         try:
             import apt_pkg
@@ -146,6 +165,7 @@ class CommandNotFound:
                  for component in source.comps:
                      sources_list.add(component)
         return sources_list
+
     def sortByComponent(self, x, y):
         # check overrides
         if (x[0] in self.priority_overrides and
@@ -166,6 +186,7 @@ class CommandNotFound:
         except:
             xidx = -1
         return (yidx-xidx) or cmp(x,y)
+
     def advise(self, command, ignore_installed=False):
         " give advice where to find the given command to stderr "
         def _in_prefix(prefix, command):
