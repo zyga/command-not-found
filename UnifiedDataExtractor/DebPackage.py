@@ -56,27 +56,30 @@ class GenericFileInfo(object):
         def mode_str(mode):
             out = ""
             if mode & self.BASE_EXEC:
-	            out += 'x'
+                out += 'x'
             else:
-	            out += '-'
+                out += '-'
             if mode & self.BASE_READ:
-	            out += 'r'
+                out += 'r'
             else:
-	            out += '-'
+                out += '-'
             if mode & self.BASE_WRITE:
-	            out += 'w'
+                out += 'w'
             else:
-	            out += '-'
+                out += '-'
             return out
-    def kind_str(self):
-        if isinstance(self, FileInfo) or isinstance(self, HardLinkInfo):
-	        return '-'
-        elif isinstance(self, DirectoryInfo):
-	        return 'd'
-        elif isinstance(self, SymbolicLinkInfo):
-	        return 'l'
-        else:
-	        return '?'
+
+        def kind_str():
+            if isinstance(self, FileInfo) or isinstance(self, HardLinkInfo):
+                return '-'
+            elif isinstance(self, DirectoryInfo):
+                return 'd'
+            elif isinstance(self, SymbolicLinkInfo):
+                return 'l'
+            else:
+                return '?'
+
+
         return "%s%s%s%s" % (kind_str(self), mode_str(self.mode >> 6 & 7), mode_str(self.mode >> 3 & 7), mode_str(self.mode & 7))
 
 class FileInfo(GenericFileInfo):
@@ -160,7 +163,7 @@ class DebPackage:
             elif kind == "FIFO":
                 items.append(FifoInfo(name, mode, uid, gid, size, mtime))
             else:
-	            print "unsupported kind: %s" % kind
+                print "unsupported kind: %s" % kind
         try:
             apt_inst.debExtract(open(self.filename), extract_cb, "data.tar.gz")
         except:
