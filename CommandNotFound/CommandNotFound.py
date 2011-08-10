@@ -52,7 +52,7 @@ class FlatDatabase:
     def lookupWithCallback(self, column, cb, text):
         result = []
         for row in self.rows:
-            if cb(row[column],text):
+            if cb(row[column], text):
                 result.append(row)
         return result
 
@@ -82,10 +82,10 @@ def similar_words(word):
     """
     alphabet = 'abcdefghijklmnopqrstuvwxyz-_0123456789'
     s = [(word[:i], word[i:]) for i in range(len(word) + 1)]
-    deletes    = [a + b[1:] for a, b in s if b]
-    transposes = [a + b[1] + b[0] + b[2:] for a, b in s if len(b)>1]
-    replaces   = [a + c + b[1:] for a, b in s for c in alphabet if b]
-    inserts    = [a + c + b     for a, b in s for c in alphabet]
+    deletes = [a + b[1:] for a, b in s if b]
+    transposes = [a + b[1] + b[0] + b[2:] for a, b in s if len(b) > 1]
+    replaces = [a + c + b[1:] for a, b in s for c in alphabet if b]
+    inserts = [a + c + b     for a, b in s for c in alphabet]
     return set(deletes + transposes + replaces + inserts)
 
 
@@ -93,22 +93,23 @@ class CommandNotFound:
 
     programs_dir = "programs.d"
 
-    prefixes = ("/bin", 
-                "/usr/bin", 
-                "/usr/local/bin", 
-                "/sbin", "/usr/sbin",
-                "/usr/local/sbin", 
-                "/usr/games")
+    prefixes = (
+        "/bin",
+        "/usr/bin",
+        "/usr/local/bin",
+        "/sbin",
+        "/usr/sbin",
+        "/usr/local/sbin",
+        "/usr/games")
 
-    def __init__(self, data_dir=os.sep.join(
-            ('/','usr','share','command-not-found'))):
+    def __init__(self, data_dir="/usr/share/command-not-found"):
         self.programs = []
         self.priority_overrides = []
         p = os.path.join(data_dir, "priority.txt")
         if os.path.exists(p):
             self.priority_overrides = map(string.strip, open(p).readlines())
-        self.components = ['main','universe','contrib','restricted','non-free',
-                           'multiverse']
+        self.components = ['main', 'universe', 'contrib', 'restricted',
+                           'non-free', 'multiverse']
         self.components.reverse()
         self.sources_list = self._getSourcesList()
         for filename in os.listdir(os.path.sep.join([data_dir, self.programs_dir])):
@@ -137,7 +138,7 @@ class CommandNotFound:
     def getPackages(self, command):
         result = set()
         for db in self.programs:
-            result.update([(pkg,db.component) for pkg in db.lookup(command)])
+            result.update([(pkg, db.component) for pkg in db.lookup(command)])
         return list(result)
 
     def getBlacklist(self):
@@ -161,9 +162,9 @@ class CommandNotFound:
         # /usr/share/python-apt/templates/
         # But we don't use the calculated data, skip it
         for source in SourcesList(withMatcher=False):
-             if not source.disabled and not source.invalid:
-                 for component in source.comps:
-                     sources_list.add(component)
+            if not source.disabled and not source.invalid:
+                for component in source.comps:
+                    sources_list.add(component)
         return sources_list
 
     def sortByComponent(self, x, y):
@@ -185,14 +186,14 @@ class CommandNotFound:
             yidx = self.components.index(y[1])
         except:
             xidx = -1
-        return (yidx-xidx) or cmp(x,y)
+        return (yidx - xidx) or cmp(x, y)
 
     def advise(self, command, ignore_installed=False):
         " give advice where to find the given command to stderr "
         def _in_prefix(prefix, command):
             " helper that returns if a command is found in the given prefix "
-            return (os.path.exists(os.path.join(prefix, command)) and 
-                    not os.path.isdir(os.path.join(prefix, command)))
+            return (os.path.exists(os.path.join(prefix, command))
+                    and not os.path.isdir(os.path.join(prefix, command)))
 
         if command.startswith("/"):
             if os.path.exists(command):
@@ -232,10 +233,10 @@ class CommandNotFound:
             print >> sys.stderr, _("The program '%s' is currently not installed. ") % command,
             if posix.geteuid() == 0:
                 print >> sys.stderr, _("You can install it by typing:")
-                print >> sys.stderr, "apt-get install %s" %  packages[0][0]
+                print >> sys.stderr, "apt-get install %s" % packages[0][0]
             elif self.user_can_sudo:
                 print >> sys.stderr, _("You can install it by typing:")
-                print >> sys.stderr, "sudo apt-get install %s" %  packages[0][0]
+                print >> sys.stderr, "sudo apt-get install %s" % packages[0][0]
             else:
                 print >> sys.stderr, _("To run '%(command)s' please ask your administrator to install the package '%(package)s'") % {'command': command, 'package': packages[0][0]}
             if not packages[0][1] in self.sources_list:

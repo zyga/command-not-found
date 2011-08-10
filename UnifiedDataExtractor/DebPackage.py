@@ -8,32 +8,34 @@ import apt
 import apt_inst
 import apt_pkg
 
+
 class GenericFileInfo(object):
-    BASE_STICKY  = 8
-    BASE_READ    = 4
-    BASE_WRITE   = 2
-    BASE_EXEC    = 1
 
-    O_STICKY= BASE_STICKY << 0
-    O_READ  = BASE_READ   << 0
-    O_WRITE = BASE_WRITE  << 0
-    O_EXEC  = BASE_EXEC   << 0
-  
-    G_STICKY= BASE_STICKY << 3
-    G_READ  = BASE_READ   << 3
-    G_WRITE = BASE_WRITE  << 3
-    G_EXEC  = BASE_EXEC   << 3
-  
-    U_STICKY= BASE_STICKY << 6
-    U_READ  = BASE_READ   << 6
-    U_WRITE = BASE_WRITE  << 6
-    U_EXEC  = BASE_EXEC   << 6
+    BASE_STICKY = 8
+    BASE_READ = 4
+    BASE_WRITE = 2
+    BASE_EXEC = 1
 
-    STICKY = O_STICKY  | G_STICKY | U_STICKY
-    READ   = O_READ    | G_READ   | U_READ
-    WRITE  = O_WRITE   | G_WRITE  | U_WRITE
-    EXEC   = O_EXEC    | G_EXEC   | U_EXEC
-  
+    O_STICKY = BASE_STICKY << 0
+    O_READ = BASE_READ << 0
+    O_WRITE = BASE_WRITE << 0
+    O_EXEC = BASE_EXEC << 0
+
+    G_STICKY = BASE_STICKY << 3
+    G_READ = BASE_READ << 3
+    G_WRITE = BASE_WRITE << 3
+    G_EXEC = BASE_EXEC << 3
+
+    U_STICKY = BASE_STICKY << 6
+    U_READ = BASE_READ << 6
+    U_WRITE = BASE_WRITE << 6
+    U_EXEC = BASE_EXEC << 6
+
+    STICKY = O_STICKY | G_STICKY | U_STICKY
+    READ = O_READ | G_READ | U_READ
+    WRITE = O_WRITE | G_WRITE | U_WRITE
+    EXEC = O_EXEC | G_EXEC | U_EXEC
+
     def __init__(self, name, mode, uid, gid, size, mtime):
         self.name = name
         self.mode = mode
@@ -50,7 +52,7 @@ class GenericFileInfo(object):
 
     def is_writable(self):
         return self.mode & self.WRITE
-  
+
     def unix_mode(self):
         """ Returns a ls -l like mode string. """
         def mode_str(mode):
