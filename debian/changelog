@@ -1,3 +1,14 @@
+command-not-found (0.2.42ubuntu1) oneiric; urgency=low
+
+  [ Michael Vogt ]
+  * updated data to current oneiric
+  
+  [ Zygmunt Krynicki ]
+  * merged lp:~fahlgren/command-not-found/speedup thanks to
+    Daniel Fahlgren
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 10 Aug 2011 15:09:19 +0200
+
 command-not-found (0.2.41ubuntu5) oneiric; urgency=low
 
   * updated for alpha3
