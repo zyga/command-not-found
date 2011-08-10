@@ -1,10 +1,19 @@
 # (c) Zygmunt Krynicki 2005, 2006, 2007, 2008
 # Licensed under GPL, see COPYING for the whole text
 
-import sys, os, os.path, gdbm, posix, grp, string
-from util import gettext_wrapper as _
+import gdbm
+import grp
+import os
+import os.path
+import posix
+import string
+import sys
+
+from CommandNotFound.util import gettext_wrapper as _
+
 
 class BinaryDatabase:
+
     def __init__(self, filename):
         self.db = None
         if filename.endswith(".db"):
