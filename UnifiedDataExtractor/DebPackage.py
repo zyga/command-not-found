@@ -81,78 +81,111 @@ class GenericFileInfo(object):
             else:
                 return '?'
 
-
         return "%s%s%s%s" % (kind_str(self), mode_str(self.mode >> 6 & 7), mode_str(self.mode >> 3 & 7), mode_str(self.mode & 7))
 
+
 class FileInfo(GenericFileInfo):
+
     def __init__(self, name, mode, uid, gid, size, mtime):
         GenericFileInfo.__init__(self, name, mode, uid, gid, size, mtime)
+
 
 class DirectoryInfo(GenericFileInfo):
+
     def __init__(self, name, mode, uid, gid, size, mtime):
         GenericFileInfo.__init__(self, name, mode, uid, gid, size, mtime)
 
+
 class LinkInfo(GenericFileInfo):
-    (SOFT,HARD) = range(2)
+
+    (SOFT, HARD) = range(2)
+
     def __init__(self, name, target, mode, uid, gid, size, mtime):
         GenericFileInfo.__init__(self, name, mode, uid, gid, size, mtime)
         self.target = target
+
     def get_link_type(self):
         raise NotImplemented
 
+
 class SymbolicLinkInfo(LinkInfo):
+
     def __init__(self, name, target, mode, uid, gid, size, mtime):
         LinkInfo.__init__(self, name, target, mode, uid, gid, size, mtime)
+
     def get_link_type(self):
         return self.SOFT
 
+
 class HardLinkInfo(LinkInfo):
+
     def __init__(self, name, target, mode, uid, gid, size, mtime):
         LinkInfo.__init__(self, name, target, mode, uid, gid, size, mtime)
+
     def get_link_type(self):
         return self.HARD
 
+
 class DeviceInfo(GenericFileInfo):
-    (CHAR,BLOCK) = range(2)
+
+    (CHAR, BLOCK) = range(2)
+
     def __init__(self, name, mode, uid, gid, size, mtime, major, minor):
         GenericFileInfo.__init__(self, name, mode, uid, gid, size, mtime)
         self.major = major
         self.minor = minor
+
     def get_device_type(self):
         pass
 
+
 class CharDeviceInfo(DeviceInfo):
+
     def __init__(self, name, mode, uid, gid, size, mtime, major, minor):
         DeviceInfo.__init__(self, name, mode, uid, gid, size, mtime, major, minor)
+
     def get_device_type(self):
         return self.CHAR
 
+
 class BlockDeviceInfo(DeviceInfo):
+
     def __init__(self, name, mode, uid, gid, size, mtime, major, minor):
         DeviceInfo.__init__(self, name, mode, uid, gid, size, mtime, major, minor)
+
     def get_device_type(self):
         return self.BLOCK
+
 
 class FifoInfo(GenericFileInfo):
     def __init__(self, name, mode, uid, gid, size, mtime):
         GenericFileInfo.__init__(self, name, mode, uid, gid, size, mtime)
 
+
 def load(filename):
     return DebPackage(filename)
 
+
 class DebPackage:
+
     def __init__(self, filename):
         self.filename = filename
         self._sections = apt_pkg.ParseSection(self.getControlFile("control"))
+
     arch = property(lambda self: self._sections["Architecture"], None, None, "Architecture the package is compiled for")
+
     name = property(lambda self: self._sections["Package"], None, None, "Cannonical package name")
+
     def getControlFile(self, name):
         """ Returns the contents of given file in debian/ or None if it does not exits """
         return apt_inst.debExtractControl(file(self.filename), name)
-    def __get_items(self):
+
+    @property
+    def items(self):
         """ Return the list of items in the package.
         Each file is represented by an instance of  FileInfo """
         items = []
+
         def extract_cb(kind, name, target, mode, uid, gid, size, mtime, major, minor):
             if kind == "FILE":
                 items.append(FileInfo(name, mode, uid, gid, size, mtime))
@@ -171,4 +204,3 @@ class DebPackage:
         except:
             apt_inst.debExtract(open(self.filename), extract_cb, "data.tar.bz2")
         return items
-    items = property(__get_items)
