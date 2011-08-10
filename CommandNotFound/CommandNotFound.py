@@ -12,7 +12,7 @@ import sys
 from CommandNotFound.util import gettext_wrapper as _
 
 
-class BinaryDatabase:
+class BinaryDatabase(object):
 
     def __init__(self, filename):
         self.db = None
@@ -29,7 +29,7 @@ class BinaryDatabase:
             return None
 
 
-class FlatDatabase:
+class FlatDatabase(object):
 
     def __init__(self, filename):
         self.rows = []
@@ -57,7 +57,7 @@ class FlatDatabase:
         return result
 
 
-class ProgramDatabase:
+class ProgramDatabase(object):
 
     (PACKAGE, BASENAME_PATH) = range(2)
 
@@ -89,7 +89,7 @@ def similar_words(word):
     return set(deletes + transposes + replaces + inserts)
 
 
-class CommandNotFound:
+class CommandNotFound(object):
 
     programs_dir = "programs.d"
 

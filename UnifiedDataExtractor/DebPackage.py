@@ -166,7 +166,7 @@ def load(filename):
     return DebPackage(filename)
 
 
-class DebPackage:
+class DebPackage(object):
 
     def __init__(self, filename):
         self.filename = filename
