@@ -3,7 +3,7 @@
 # Licensed under GPL, see COPYING for the whole text
 
 __version__ = "0.2.21"
-BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/+source/command-not-found"
+BUG_REPORT_URL = "https://bugs.launchpad.net/command-not-found/+filebug"
 
 try:
     import sys
