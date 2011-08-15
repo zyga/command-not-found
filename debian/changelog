@@ -1,3 +1,11 @@
+command-not-found (0.2.41ubuntu6) UNRELEASED; urgency=low
+
+  * merged lp:~julien-nicoulaud/command-not-found/fix-zsh-hook,
+    many thanks to Julien Nicoulaud (LP: #624565)
+ents
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Mon, 15 Aug 2011 16:56:18 +0200
+
 command-not-found (0.2.41ubuntu5) oneiric; urgency=low
 
   * updated for alpha3
