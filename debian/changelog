@@ -1,3 +1,11 @@
+command-not-found (0.2.42ubuntu2) oneiric; urgency=low
+
+  * update to curernt oneiric, this includes the new data
+    from http://ports.ubuntu.com/~mvo/command-not-found/ to
+    get more up-to-date data for the ports
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 25 Aug 2011 10:12:59 +0200
+
 command-not-found (0.2.42ubuntu1) oneiric; urgency=low
 
   [ Michael Vogt ]
