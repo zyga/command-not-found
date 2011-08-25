@@ -16,9 +16,9 @@ if __name__ == "__main__":
 
     scandata = sys.argv[1]
     apt_pkg.Config.Set("APT::Get::List-Cleanup", "false")
-    for arch in ("i386","amd64"):
+    for arch in ("i386", "amd64"):
         print "Starting verification for '%s'" % arch
-        apt_pkg.Config.Set("APT::Architecture",arch)
+        apt_pkg.Config.Set("APT::Architecture", arch)
         cache = apt.Cache(rootdir="./apt/")
         cache.update()
         cache.open(apt.progress.OpProgress())
