@@ -49,10 +49,13 @@ def main():
     parser.add_option('--ignore-installed', '--ignore-installed',
                       action='store_true',  default=False,
                       help=_("ignore local binaries and display the available packages"))
+    parser.add_option('--no-failure-msg',
+                      action='store_true', default=False,
+                      help=_("don't print '<command-name>: command not found'"))
     (options, args) = parser.parse_args()
     if len(args) == 1:
         cnf = CommandNotFound(options.data_dir)
-        if not cnf.advise(args[0], options.ignore_installed):
+        if not cnf.advise(args[0], options.ignore_installed) and not options.no_failure_msg:
             print >>sys.stderr, _("%s: command not found") % args[0]
 
 if __name__ == "__main__":
