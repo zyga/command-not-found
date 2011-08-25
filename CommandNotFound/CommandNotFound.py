@@ -2,6 +2,7 @@
 # Licensed under GPL, see COPYING for the whole text
 
 import gdbm
+import gettext
 import grp
 import os
 import os.path
@@ -9,7 +10,7 @@ import posix
 import string
 import sys
 
-from CommandNotFound.util import gettext_wrapper as _
+_ = gettext.translation("command-not-found", fallback=True).ugettext
 
 
 class BinaryDatabase(object):
