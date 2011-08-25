@@ -1,3 +1,11 @@
+command-not-found (0.2.43ubuntu1) oneiric; urgency=low
+
+  [ Zygmunt Krynicki ]
+  * lp:~zkrynicki/command-not-found/rework-locale-support:
+    - improved gettext handling
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 25 Aug 2011 15:15:50 +0200
+
 command-not-found (0.2.42ubuntu2) oneiric; urgency=low
 
   * update to curernt oneiric, this includes the new data
