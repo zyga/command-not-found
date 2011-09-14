@@ -5,12 +5,13 @@
 from __future__ import absolute_import
 
 
-__version__ = "0.2.21"
+__version__ = "0.2.43"
 BUG_REPORT_URL = "https://bugs.launchpad.net/command-not-found/+filebug"
 
 try:
-    import sys
     import gettext
+    import locale
+    import sys
     from optparse import OptionParser
 
     from CommandNotFound.util import crash_guard
@@ -22,6 +23,17 @@ except KeyboardInterrupt:
 def enable_i18n():
     cnf = gettext.translation("command-not-found", fallback=True)
     cnf.install(unicode=True)
+
+
+def fix_sys_argv(encoding=None):
+    """
+    Fix sys.argv to have only unicode strings, not binary strings.
+    This is required by various places where such argument might be
+    automatically coerced to unicode string for formatting
+    """
+    if encoding is None:
+        encoding = locale.getpreferredencoding()
+    sys.argv = [arg.decode(encoding) for arg in sys.argv]
 
 
 class LocaleOptionParser(OptionParser):
@@ -40,6 +52,7 @@ class LocaleOptionParser(OptionParser):
 
 def main():
     enable_i18n()
+    fix_sys_argv()
     parser = LocaleOptionParser(
         version=__version__,
         usage=_("%prog [options] <command-name>"))
@@ -52,7 +65,9 @@ def main():
     (options, args) = parser.parse_args()
     if len(args) == 1:
         cnf = CommandNotFound(options.data_dir)
-        if not cnf.advise(args[0], options.ignore_installed):
+        # Note: we need to encode program name to utf-8 as gdbm does not seem
+        # to handle unicode strings.
+        if not cnf.advise(args[0].encode('utf-8'), options.ignore_installed):
             print >>sys.stderr, _("%s: command not found") % args[0]
 
 if __name__ == "__main__":
