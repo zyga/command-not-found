@@ -16,7 +16,7 @@ for filepath in glob.glob("po/mo/*/LC_MESSAGES/*.mo"):
 
 setup(
     name='command-not-found',
-    version='0.1',
+    version='0.2.43',
     packages=['CommandNotFound'],
     scripts=['command-not-found'],
     data_files=[
