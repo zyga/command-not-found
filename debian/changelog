@@ -5,7 +5,7 @@ command-not-found (0.2.44ubuntu1) oneiric; urgency=low
   * scan.data:
     - updated to current oneiric
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 20 Sep 2011 15:35:16 +0200
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 20 Sep 2011 15:48:12 +0200
 
 command-not-found (0.2.43ubuntu1) oneiric; urgency=low
 
