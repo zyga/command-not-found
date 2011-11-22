@@ -1,3 +1,9 @@
+command-not-found (0.2.44.1ubuntu1) oneiric-proposed; urgency=low
+
+  * updated to the latest data from oneiric (LP: #882276)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 22 Nov 2011 09:13:22 +0100
+
 command-not-found (0.2.44ubuntu1) oneiric; urgency=low
 
   * merged lp:~zkrynicki/command-not-found/fix-839609 
