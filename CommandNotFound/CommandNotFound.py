@@ -195,9 +195,8 @@ class CommandNotFound(object):
     def install_prompt(self, package_name):
         #TODO: root installation
         if package_name:
-            locale.setlocale(locale.LC_ALL, '')
-            pattern = re.compile(locale.nl_langinfo(locale.YESEXPR))
-            answer = raw_input(_("Do you want to install it? (y/N)"))
+            pattern = re.compile(locale.nl_langinfo(locale.YESEXPR).decode('utf-8'))
+            answer = raw_input(_("Do you want to install it? (y/N)")).decode('utf-8')
             if re.match(pattern, answer):
                 install_command = "sudo apt-get install %s" % package_name
                 print >> sys.stdout, "%s" % install_command
