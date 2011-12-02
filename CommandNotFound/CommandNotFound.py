@@ -195,12 +195,12 @@ class CommandNotFound(object):
     def install_prompt(self, package_name):
         #TODO: root installation
         if package_name:
-            pattern = re.compile(locale.nl_langinfo(locale.YESEXPR).decode('utf-8'))
-            answer = raw_input(_("Do you want to install it? (y/N)")).decode('utf-8')
+            pattern = re.compile(locale.nl_langinfo(locale.YESEXPR).decode(locale.getlocale(locale.LC_CTYPE)[1]))
+            answer = raw_input(_("Do you want to install it? (y/N)")).decode(locale.getlocale(locale.LC_CTYPE)[1])
             if re.match(pattern, answer):
                 install_command = "sudo apt-get install %s" % package_name
                 print >> sys.stdout, "%s" % install_command
-                subprocess.call(install_command.split(),shell=False)
+                subprocess.call(install_command.split(), shell=False)
 
     def advise(self, command, ignore_installed=False):
         " give advice where to find the given command to stderr "
