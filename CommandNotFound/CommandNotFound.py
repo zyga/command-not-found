@@ -193,7 +193,6 @@ class CommandNotFound(object):
         return (yidx - xidx) or cmp(x, y)
 
     def install_prompt(self, package_name):
-        #TODO: root installation
         if package_name:
             pattern = re.compile(locale.nl_langinfo(locale.YESEXPR).decode(locale.getlocale(locale.LC_CTYPE)[1]))
             answer = raw_input(_("Do you want to install it? (y/N)")).decode(locale.getlocale(locale.LC_CTYPE)[1])
