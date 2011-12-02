@@ -200,9 +200,7 @@ class CommandNotFound(object):
             if re.match(pattern, answer):
                 install_command = "sudo apt-get install %s" % package_name
                 print >> sys.stdout, "%s" % install_command
-                return_code = subprocess.call(install_command.split(),shell=False)
-                if return_code not in (0,256): #256 = user rejected installation
-                    print >> sys.stderr, _("A problem occured during installation. apt-get returned %d") % return_code
+                subprocess.call(install_command.split(),shell=False)
 
     def advise(self, command, ignore_installed=False):
         " give advice where to find the given command to stderr "
