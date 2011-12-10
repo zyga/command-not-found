@@ -10,7 +10,6 @@ import posix
 import string
 import sys
 import subprocess
-import re
 
 _ = gettext.translation("command-not-found", fallback=True).ugettext
 
@@ -198,7 +197,11 @@ class CommandNotFound(object):
                 # Decode the answer so that we get an unicode value
                 answer = answer.decode(sys.stdin.encoding)
             if answer.lower() == _("y"):
-                install_command = "sudo apt-get install %s" % package_name
+                if posix.geteuid() == 0:
+                    command_prefix = ""
+                else:
+                    command_prefix = "sudo "
+                install_command = "%sapt-get install %s" % (command_prefix, package_name)
                 print >> sys.stdout, "%s" % install_command
                 subprocess.call(install_command.split(), shell=False)
 
@@ -248,6 +251,7 @@ class CommandNotFound(object):
             if posix.geteuid() == 0:
                 print >> sys.stderr, _("You can install it by typing:")
                 print >> sys.stderr, "apt-get install %s" % packages[0][0]
+                self.install_prompt(packages[0][0])
             elif self.user_can_sudo:
                 print >> sys.stderr, _("You can install it by typing:")
                 print >> sys.stderr, "sudo apt-get install %s" % packages[0][0]
