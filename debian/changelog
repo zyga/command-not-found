@@ -1,10 +1,10 @@
-command-not-found (0.2.43ubuntu3) UNRELEASED; urgency=low
+command-not-found (0.2.43ubuntu3) precise; urgency=low
 
   * Recognize the 'sudo' group as a valid admin group as well, so that we
     return the correct error message for those with admin access.
     LP: #893842.
 
- -- Steve Langasek <steve.langasek@ubuntu.com>  Mon, 02 Jan 2012 14:46:50 -0800
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Mon, 02 Jan 2012 14:47:43 -0800
 
 command-not-found (0.2.43ubuntu2) oneiric; urgency=low
 
