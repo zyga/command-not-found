@@ -1,3 +1,11 @@
+command-not-found (0.2.44.1ubuntu3) precise; urgency=low
+
+  * Recognize the 'sudo' group as a valid admin group as well, so that we
+    return the correct error message for those with admin access.
+    LP: #893842.
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Mon, 02 Jan 2012 14:47:43 -0800
+
 command-not-found (0.2.44.1ubuntu2) precise; urgency=low
 
   * Rebuild to drop python2.6 dependencies.
