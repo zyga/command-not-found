@@ -1,0 +1,3 @@
+# fixes bug #853688
+all|main|default-jre|java,jexec
+all|main|default-jdk|javac,javadoc,jar

@@ -1,3 +1,9 @@
+command-not-found (0.2.45ubuntu1) UNRELEASED; urgency=low
+
+  * fix java recommends (LP: #853688)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 11 Jan 2012 14:44:04 +0100
+
 command-not-found (0.2.44.1ubuntu1) oneiric-proposed; urgency=low
 
   * updated to the latest data from oneiric (LP: #882276)

@@ -2,9 +2,11 @@
 # (c) Zygmunt Krynicki 2005,
 # Licensed under GPL, see COPYING for the whole text
 
+import glob
 import os
 import os.path
 import gdbm
+import string
 import subprocess
 
 class ProgramGroup(object):
@@ -23,20 +25,30 @@ class ProgramGroup(object):
             db[program_name] = "|".join(packages)
         db.close()
 
-def build_binary_databases(scan_data="scan.data",currentArchOnly=False):
-    myarch = subprocess.Popen(["dpkg","--print-architecture"], stdout=subprocess.PIPE).communicate()[0].strip()
+def build_binary_databases(basedir=".", currentArchOnly=False):
+    myarch = subprocess.Popen(
+        ["dpkg","--print-architecture"],
+        stdout=subprocess.PIPE).communicate()[0].strip()
     groups = dict()
-    for arch, repo, package_name, executables in (line.strip().split('|') for line in file(scan_data)):
-        if (currentArchOnly and arch != "all" and arch != myarch):
-            #print "skipping ",package_name
-            continue
-        group_name = "%s-%s" % (arch, repo)
-        if not groups.has_key(group_name):
-            groups[group_name] = ProgramGroup(arch, repo)
-        user_visible_program_names = [os.path.basename(executable) for executable in executables.split(',')]
-        groups[group_name].notice_package(package_name, user_visible_program_names) 
+    for data_file in glob.glob("%s/*.data" % basedir):
+        for line in map(string.strip, open(data_file)):
+            if not line or line.startswith("#"):
+                continue
+            arch, repo, package_name, executables = line.split('|')
+            if (currentArchOnly and arch != "all" and arch != myarch):
+                continue
+            group_name = "%s-%s" % (arch, repo)
+            if not groups.has_key(group_name):
+                groups[group_name] = ProgramGroup(arch, repo)
+            user_visible_program_names = [
+                os.path.basename(executable)
+                for executable in executables.split(',')]
+            groups[group_name].notice_package(
+                package_name, user_visible_program_names)
+    # write it out
     for group in groups.values():
         group.write_database()
 
 if __name__ == "__main__":
     build_binary_databases(currentArchOnly=True)
+    
