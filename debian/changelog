@@ -4,6 +4,13 @@ command-not-found (0.2.44.1ubuntu4) precise; urgency=low
 
  -- Steve Langasek <steve.langasek@ubuntu.com>  Thu, 12 Jan 2012 09:40:24 +0100
 
+command-not-found (0.2.45ubuntu2) precise; urgency=low
+
+  * scan.data:
+    - updated to current precise
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 06 Jan 2012 11:53:21 +0100
+
 command-not-found (0.2.44.1ubuntu3) precise; urgency=low
 
   * Recognize the 'sudo' group as a valid admin group as well, so that we
