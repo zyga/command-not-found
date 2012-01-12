@@ -1,3 +1,9 @@
+command-not-found (0.2.44.1ubuntu4) UNRELEASED; urgency=low
+
+  * Use the right group name ('sudo', not 'sudoers').  LP: #893842.
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Thu, 12 Jan 2012 09:39:30 +0100
+
 command-not-found (0.2.44.1ubuntu3) precise; urgency=low
 
   * Recognize the 'sudo' group as a valid admin group as well, so that we

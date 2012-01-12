@@ -116,7 +116,7 @@ class CommandNotFound(object):
         for filename in os.listdir(os.path.sep.join([data_dir, self.programs_dir])):
             self.programs.append(ProgramDatabase(os.path.sep.join([data_dir, self.programs_dir, filename])))
         try:
-            self.user_can_sudo = grp.getgrnam("admin")[2] in posix.getgroups() or grp.getgrnam("sudoers")[2] in posix.getgroups()
+            self.user_can_sudo = grp.getgrnam("admin")[2] in posix.getgroups() or grp.getgrnam("sudo")[2] in posix.getgroups()
         except KeyError:
             self.user_can_sudo = False
 
