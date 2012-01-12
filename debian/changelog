@@ -1,8 +1,8 @@
-command-not-found (0.2.44.1ubuntu4) precise; urgency=low
+command-not-found (0.2.45ubuntu3) precise; urgency=low
 
   * Use the right group name ('sudo', not 'sudoers').  LP: #893842.
 
- -- Steve Langasek <steve.langasek@ubuntu.com>  Thu, 12 Jan 2012 09:40:24 +0100
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Thu, 12 Jan 2012 14:21:01 +0100
 
 command-not-found (0.2.45ubuntu2) precise; urgency=low
 
