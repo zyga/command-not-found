@@ -9,6 +9,7 @@ import os.path
 import posix
 import string
 import sys
+import subprocess
 
 _ = gettext.translation("command-not-found", fallback=True).ugettext
 
@@ -189,6 +190,23 @@ class CommandNotFound(object):
             xidx = -1
         return (yidx - xidx) or cmp(x, y)
 
+    def install_prompt(self, package_name):
+        if not "COMMAND_NOT_FOUND_INSTALL_PROMPT" in os.environ:
+            return
+        if package_name:
+            answer = raw_input(_("Do you want to install it? (N/y)"))
+            if sys.stdin.encoding and isinstance(answer, str):
+                # Decode the answer so that we get an unicode value
+                answer = answer.decode(sys.stdin.encoding)
+            if answer.lower() == _("y"):
+                if posix.geteuid() == 0:
+                    command_prefix = ""
+                else:
+                    command_prefix = "sudo "
+                install_command = "%sapt-get install %s" % (command_prefix, package_name)
+                print >> sys.stdout, "%s" % install_command
+                subprocess.call(install_command.split(), shell=False)
+
     def advise(self, command, ignore_installed=False):
         " give advice where to find the given command to stderr "
         def _in_prefix(prefix, command):
@@ -235,9 +253,11 @@ class CommandNotFound(object):
             if posix.geteuid() == 0:
                 print >> sys.stderr, _("You can install it by typing:")
                 print >> sys.stderr, "apt-get install %s" % packages[0][0]
+                self.install_prompt(packages[0][0])
             elif self.user_can_sudo:
                 print >> sys.stderr, _("You can install it by typing:")
                 print >> sys.stderr, "sudo apt-get install %s" % packages[0][0]
+                self.install_prompt(packages[0][0])
             else:
                 print >> sys.stderr, _("To run '%(command)s' please ask your administrator to install the package '%(package)s'") % {'command': command, 'package': packages[0][0]}
             if not packages[0][1] in self.sources_list:
