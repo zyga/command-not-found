@@ -1,6 +1,9 @@
 This application implements the command-not-found spec at:
 https://wiki.ubuntu.com/CommandNotFoundMagic
 
+If you want automatic prompts to install the package, set
+COMMAND_NOT_FOUND_INSTALL_PROMPT in your environment.
+
 To use it in bash, please add the following line to your .bashrc file:
 . /etc/bash_command_not_found
 

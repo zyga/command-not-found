@@ -191,6 +191,8 @@ class CommandNotFound(object):
         return (yidx - xidx) or cmp(x, y)
 
     def install_prompt(self, package_name):
+        if not "COMMAND_NOT_FOUND_INSTALL_PROMPT" in os.environ:
+            return
         if package_name:
             answer = raw_input(_("Do you want to install it? (N/y)"))
             if sys.stdin.encoding and isinstance(answer, str):
