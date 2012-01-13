@@ -1,4 +1,4 @@
-command-not-found (0.2.46ubuntu1) UNRELEASED; urgency=low
+command-not-found (0.2.46ubuntu1) precise; urgency=low
 
   * merged from lp:command-not-found trunk:
     - add support for automatic install prompt (enable via the 
@@ -8,7 +8,7 @@ command-not-found (0.2.46ubuntu1) UNRELEASED; urgency=low
     - improved zsh support from Alex Jurkiewicz
     - auto-installation support for root users from Serhiy Zahoriya
 
- -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 11 Jan 2012 14:44:04 +0100
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Fri, 13 Jan 2012 10:39:15 +0100
 
 command-not-found (0.2.45ubuntu3) precise; urgency=low
 
