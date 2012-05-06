@@ -2,6 +2,8 @@
 # (c) Zygmunt Krynicki 2005,
 # Licensed under GPL, see COPYING for the whole text
 
+from __future__ import print_function
+
 import os
 import os.path
 import sys
@@ -23,8 +25,8 @@ class PackageInfo(object):
     def __str__(self):
         return "%s|%s|%s|%s" % (self.arch, self.repo, self.name, ",".join(self.executables))
     def display(self):
-        print "Package: %s for arch %s in repo %s" % (self.name, self.arch, self.repo)
-        print "Executables: ", self.executables
+        print("Package: %s for arch %s in repo %s" % (self.name, self.arch, self.repo))
+        print("Executables: ", self.executables)
 
 def strip_comment(line):
     i = line.find('#')
@@ -224,7 +226,7 @@ def dir_walk(output, dirname, names):
             if package_info is None:
                 continue
             #package_info.display()
-            print >> output, package_info
+            print(package_info, file=output)
 
 def scan(dir_path, output):
     os.path.walk(dir_path, dir_walk, output)

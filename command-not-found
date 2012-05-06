@@ -2,7 +2,7 @@
 # (c) Zygmunt Krynicki 2005, 2006, 2007, 2008
 # Licensed under GPL, see COPYING for the whole text
 
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
 
 __version__ = "0.2.44"
@@ -72,7 +72,7 @@ def main():
         # Note: we need to encode program name to utf-8 as gdbm does not seem
         # to handle unicode strings.
         if not cnf.advise(args[0].encode('utf-8'), options.ignore_installed) and not options.no_failure_msg:
-            print >>sys.stderr, _("%s: command not found") % args[0]
+            print(_("%s: command not found") % args[0], file=sys.stderr)
 
 if __name__ == "__main__":
     crash_guard(main, BUG_REPORT_URL, __version__)

@@ -1,6 +1,8 @@
 # (c) Zygmunt Krynicki 2005,
 # Licensed under GPL, see COPYING for the whole text
 
+from __future__ import print_function
+
 import warnings
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 
@@ -198,7 +200,7 @@ class DebPackage(object):
             elif kind == "FIFO":
                 items.append(FifoInfo(name, mode, uid, gid, size, mtime))
             else:
-                print "unsupported kind: %s" % kind
+                print("unsupported kind: %s" % kind)
         try:
             apt_inst.debExtract(open(self.filename), extract_cb, "data.tar.gz")
         except:

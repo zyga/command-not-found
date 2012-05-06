@@ -1,6 +1,8 @@
 # (c) Zygmunt Krynicki 2005, 2006, 2007, 2008
 # Licensed under GPL, see COPYING for the whole text
 
+from __future__ import print_function
+
 import gdbm
 import gettext
 import grp
@@ -22,7 +24,7 @@ class BinaryDatabase(object):
             try:
                 self.db = gdbm.open(filename, "r")
             except gdbm.error, err:
-                print >> sys.stderr, "Unable to open binary database %s: %s" % (filename, err)
+                print("Unable to open binary database %s: %s" % (filename, err), file=sys.stderr)
 
     def lookup(self, key):
         if self.db and self.db.has_key(key):
@@ -131,11 +133,11 @@ class CommandNotFound(object):
             for (package, comp) in packages:
                 possible_alternatives.append((w, package, comp))
         if len(possible_alternatives) > max_len:
-            print >> sys.stderr, _("No command '%s' found, but there are %s similar ones") % (word, len(possible_alternatives))
+            print(_("No command '%s' found, but there are %s similar ones") % (word, len(possible_alternatives)), file=sys.stderr)
         elif len(possible_alternatives) > 0:
-            print >> sys.stderr, _("No command '%s' found, did you mean:") % word
+            print(_("No command '%s' found, did you mean:") % word, file=sys.stderr)
             for (w, p, c) in possible_alternatives:
-                print >> sys.stderr, _(" Command '%s' from package '%s' (%s)") % (w, p, c)
+                print(_(" Command '%s' from package '%s' (%s)") % (w, p, c), file=sys.stderr)
 
     def getPackages(self, command):
         result = set()
@@ -204,7 +206,7 @@ class CommandNotFound(object):
                 else:
                     command_prefix = "sudo "
                 install_command = "%sapt-get install %s" % (command_prefix, package_name)
-                print >> sys.stdout, "%s" % install_command
+                print("%s" % install_command, file=sys.stdout)
                 subprocess.call(install_command.split(), shell=False)
 
     def advise(self, command, ignore_installed=False):
@@ -225,16 +227,16 @@ class CommandNotFound(object):
         # check if we have it in a common prefix that may not be in the PATH
         if prefixes and not ignore_installed:
             if len(prefixes) == 1:
-                print >> sys.stderr, _("Command '%(command)s' is available in '%(place)s'") % {"command": command, "place": os.path.join(prefixes[0], command)}
+                print(_("Command '%(command)s' is available in '%(place)s'") % {"command": command, "place": os.path.join(prefixes[0], command)}, file=sys.stderr)
             else:
-                print >> sys.stderr, _("Command '%(command)s' is available in the following places") % {"command": command}
+                print(_("Command '%(command)s' is available in the following places") % {"command": command}, file=sys.stderr)
                 for prefix in prefixes:
-                    print >> sys.stderr, " * %s" % os.path.join(prefix, command)
+                    print(" * %s" % os.path.join(prefix, command), file=sys.stderr)
             missing = list(set(prefixes) - set(os.getenv("PATH", "").split(":")))
             if len(missing) > 0:
-                print >> sys.stderr, _("The command could not be located because '%s' is not included in the PATH environment variable.") % ":".join(missing)
+                print(_("The command could not be located because '%s' is not included in the PATH environment variable.") % ":".join(missing), file=sys.stderr)
                 if "sbin" in ":".join(missing):
-                    print >> sys.stderr, _("This is most likely caused by the lack of administrative privileges associated with your user account.")
+                    print(_("This is most likely caused by the lack of administrative privileges associated with your user account."), file=sys.stderr)
             return False
 
         # do not give advice if we are in a situation where apt-get
@@ -249,31 +251,31 @@ class CommandNotFound(object):
         if len(packages) == 0:
             self.print_spelling_suggestion(command)
         elif len(packages) == 1:
-            print >> sys.stderr, _("The program '%s' is currently not installed. ") % command,
+            print(_("The program '%s' is currently not installed. ") % command, end="", file=sys.stderr)
             if posix.geteuid() == 0:
-                print >> sys.stderr, _("You can install it by typing:")
-                print >> sys.stderr, "apt-get install %s" % packages[0][0]
+                print(_("You can install it by typing:"), file=sys.stderr)
+                print("apt-get install %s" % packages[0][0], file=sys.stderr)
                 self.install_prompt(packages[0][0])
             elif self.user_can_sudo:
-                print >> sys.stderr, _("You can install it by typing:")
-                print >> sys.stderr, "sudo apt-get install %s" % packages[0][0]
+                print(_("You can install it by typing:"), file=sys.stderr)
+                print("sudo apt-get install %s" % packages[0][0], file=sys.stderr)
                 self.install_prompt(packages[0][0])
             else:
-                print >> sys.stderr, _("To run '%(command)s' please ask your administrator to install the package '%(package)s'") % {'command': command, 'package': packages[0][0]}
+                print(_("To run '%(command)s' please ask your administrator to install the package '%(package)s'") % {'command': command, 'package': packages[0][0]}, file=sys.stderr)
             if not packages[0][1] in self.sources_list:
-                print >> sys.stderr, _("You will have to enable the component called '%s'") % packages[0][1]
+                print(_("You will have to enable the component called '%s'") % packages[0][1], file=sys.stderr)
         elif len(packages) > 1:
             packages.sort(self.sortByComponent)
-            print >> sys.stderr, _("The program '%s' can be found in the following packages:") % command
+            print(_("The program '%s' can be found in the following packages:") % command, file=sys.stderr)
             for package in packages:
                 if package[1] in self.sources_list:
-                    print >> sys.stderr, " * %s" % package[0]
+                    print(" * %s" % package[0], file=sys.stderr)
                 else:
-                    print >> sys.stderr, " * %s" % package[0] + " (" + _("You will have to enable component called '%s'") % package[1] + ")"
+                    print(" * %s" % package[0] + " (" + _("You will have to enable component called '%s'") % package[1] + ")", file=sys.stderr)
             if posix.geteuid() == 0:
-                print >> sys.stderr, _("Try: %s <selected package>") % "apt-get install"
+                print(_("Try: %s <selected package>") % "apt-get install", file=sys.stderr)
             elif self.user_can_sudo:
-                print >> sys.stderr, _("Try: %s <selected package>") % "sudo apt-get install"
+                print(_("Try: %s <selected package>") % "sudo apt-get install", file=sys.stderr)
             else:
-                print >> sys.stderr, _("Ask your administrator to install one of them")
+                print(_("Ask your administrator to install one of them"), file=sys.stderr)
         return len(packages) > 0

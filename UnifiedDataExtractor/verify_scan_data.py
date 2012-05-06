@@ -4,6 +4,8 @@
 # Authors:
 #  Michael Vogt
 
+from __future__ import print_function
+
 import apt
 import apt_pkg
 import sys
@@ -11,13 +13,13 @@ import sys
 if __name__ == "__main__":
 
     if len(sys.argv) < 2:
-        print "need scan.data argument"
+        print("need scan.data argument")
         sys.exit(1)
 
     scandata = sys.argv[1]
     apt_pkg.Config.Set("APT::Get::List-Cleanup", "false")
     for arch in ("i386", "amd64"):
-        print "Starting verification for '%s'" % arch
+        print("Starting verification for '%s'" % arch)
         apt_pkg.Config.Set("APT::Architecture", arch)
         cache = apt.Cache(rootdir="./apt/")
         cache.update()
@@ -28,7 +30,7 @@ if __name__ == "__main__":
                 continue
             # check if package is in cache
             if not pkg in cache:
-                print "ERROR: '%s' is not in cache" % pkg
+                print("ERROR: '%s' is not in cache" % pkg)
                 continue
             # check if the component is correct
             if not "/" in cache[pkg].section:
@@ -36,5 +38,5 @@ if __name__ == "__main__":
             else:
                 realcomp = cache[pkg].section.split("/")[0]
             if comp != realcomp:
-                print "ERROR: '%s' is in wrong component (claims '%s' but is in '%s'" % (pkg, comp, realcomp)
-        print "done\n"
+                print("ERROR: '%s' is in wrong component (claims '%s' but is in '%s'" % (pkg, comp, realcomp))
+        print("done\n")
