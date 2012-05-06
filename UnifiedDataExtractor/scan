@@ -232,7 +232,8 @@ def dir_walk(output, dirname, names):
             print(package_info, file=output)
 
 def scan(dir_path, output):
-    os.path.walk(dir_path, dir_walk, output)
+    for dirpath, dirnames, filenames in os.walk(dir_path):
+        dir_walk(output, dirpath, filenames)
     
 if __name__ == "__main__":
     global arch, cache
