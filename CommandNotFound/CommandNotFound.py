@@ -3,7 +3,10 @@
 
 from __future__ import print_function
 
-import gdbm
+try:
+    import dbm.gnu as gdbm
+except ImportError:
+    import gdbm
 import gettext
 import grp
 import os
