@@ -100,7 +100,7 @@ class DirectoryInfo(GenericFileInfo):
 
 class LinkInfo(GenericFileInfo):
 
-    (SOFT, HARD) = range(2)
+    (SOFT, HARD) = list(range(2))
 
     def __init__(self, name, target, mode, uid, gid, size, mtime):
         GenericFileInfo.__init__(self, name, mode, uid, gid, size, mtime)
@@ -130,7 +130,7 @@ class HardLinkInfo(LinkInfo):
 
 class DeviceInfo(GenericFileInfo):
 
-    (CHAR, BLOCK) = range(2)
+    (CHAR, BLOCK) = list(range(2))
 
     def __init__(self, name, mode, uid, gid, size, mtime, major, minor):
         GenericFileInfo.__init__(self, name, mode, uid, gid, size, mtime)
