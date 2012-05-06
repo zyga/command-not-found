@@ -22,7 +22,10 @@ except KeyboardInterrupt:
 
 def enable_i18n():
     cnf = gettext.translation("command-not-found", fallback=True)
-    cnf.install(unicode=True)
+    kwargs = {}
+    if sys.version < '3':
+        kwargs["unicode"] = True
+    cnf.install(**kwargs)
     locale.setlocale(locale.LC_ALL, '')
 
 
