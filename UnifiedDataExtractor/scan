@@ -65,7 +65,7 @@ def get_alternatives(package):
     def nice_expand(*text_list):
         return set(one_element_tuple_to_value(expand_values(*text_list)))
     if contents != None:
-        for line in contents.replace("\\\n","").splitlines():
+        for line in contents.decode(errors='replace').replace("\\\n","").splitlines():
             line = strip_comment(line).strip()
             if line == "":
                 continue
