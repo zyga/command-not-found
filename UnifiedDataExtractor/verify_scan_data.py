@@ -24,19 +24,20 @@ if __name__ == "__main__":
         cache = apt.Cache(rootdir="./apt/")
         cache.update()
         cache.open(apt.progress.OpProgress())
-        for line in open(scandata):
-            (march, comp, pkg, bin) = line.split("|")
-            if march != arch:
-                continue
-            # check if package is in cache
-            if not pkg in cache:
-                print("ERROR: '%s' is not in cache" % pkg)
-                continue
-            # check if the component is correct
-            if not "/" in cache[pkg].section:
-                realcomp = "main"
-            else:
-                realcomp = cache[pkg].section.split("/")[0]
-            if comp != realcomp:
-                print("ERROR: '%s' is in wrong component (claims '%s' but is in '%s'" % (pkg, comp, realcomp))
+        with open(scandata) as scanfile:
+            for line in scanfile:
+                (march, comp, pkg, bin) = line.split("|")
+                if march != arch:
+                    continue
+                # check if package is in cache
+                if not pkg in cache:
+                    print("ERROR: '%s' is not in cache" % pkg)
+                    continue
+                # check if the component is correct
+                if not "/" in cache[pkg].section:
+                    realcomp = "main"
+                else:
+                    realcomp = cache[pkg].section.split("/")[0]
+                if comp != realcomp:
+                    print("ERROR: '%s' is in wrong component (claims '%s' but is in '%s'" % (pkg, comp, realcomp))
         print("done\n")

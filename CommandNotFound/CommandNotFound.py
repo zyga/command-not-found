@@ -36,10 +36,9 @@ class FlatDatabase(object):
 
     def __init__(self, filename):
         self.rows = []
-        dbfile = open(filename)
-        for line in (line.strip() for line in dbfile):
-            self.rows.append(line.split("|"))
-        dbfile.close()
+        with open(filename) as dbfile:
+            for line in (line.strip() for line in dbfile):
+                self.rows.append(line.split("|"))
 
     def lookup(self, column, text):
         result = []
@@ -110,7 +109,8 @@ class CommandNotFound(object):
         self.priority_overrides = []
         p = os.path.join(data_dir, "priority.txt")
         if os.path.exists(p):
-            self.priority_overrides = [line.strip() for line in open(p).readlines()]
+            with open(p) as priority_file:
+                self.priority_overrides = [line.strip() for line in priority_file]
         self.components = ['main', 'universe', 'contrib', 'restricted',
                            'non-free', 'multiverse']
         self.components.reverse()
@@ -146,12 +146,10 @@ class CommandNotFound(object):
 
     def getBlacklist(self):
         try:
-            blacklist = open(os.sep.join((os.getenv("HOME", "/root"), ".command-not-found.blacklist")))
-            return [line.strip() for line in blacklist if line.strip() != ""]
+            with open(os.sep.join((os.getenv("HOME", "/root"), ".command-not-found.blacklist"))) as blacklist:
+                return [line.strip() for line in blacklist if line.strip() != ""]
         except IOError:
             return []
-        else:
-            blacklist.close()
 
     def _getSourcesList(self):
         try:

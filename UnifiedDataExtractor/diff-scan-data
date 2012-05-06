@@ -22,10 +22,12 @@ def get_new_and_removed_packages(old_scan_data, new_scan_data):
     new = set()
     #func = normalize_line
     func = pkg_only
-    for l in map(func, open(old_scan_data)):
-        old.add(l)
-    for l in map(func, open(new_scan_data)):
-        new.add(l)
+    with open(old_scan_data) as old_scan_file:
+        for l in map(func, old_scan_file):
+            old.add(l)
+    with open(new_scan_data) as new_scan_file:
+        for l in map(func, new_scan_file):
+            new.add(l)
     return (set(new - old), set(old - new))
 
 def get_comp_changes(oldf, newf):
@@ -37,12 +39,14 @@ def get_comp_changes(oldf, newf):
     old = {}
     new = {}
     comp_changes = {}
-    for l in map(func, open(oldf)):
-        (comp, pkg) = l.split("|")
-        old[pkg] = comp
-    for l in map(func, open(newf)):
-        (comp, pkg) = l.split("|")
-        new[pkg] = comp
+    with open(oldf) as oldfile:
+        for l in map(func, oldfile):
+            (comp, pkg) = l.split("|")
+            old[pkg] = comp
+    with open(newf) as newfile:
+        for l in map(func, newfile):
+            (comp, pkg) = l.split("|")
+            new[pkg] = comp
     for (pkg,comp) in old.items():
         if pkg in new and new[pkg] != comp:
             comp_changes[pkg] = (comp, new[pkg])

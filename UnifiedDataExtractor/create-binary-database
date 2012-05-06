@@ -31,21 +31,22 @@ def build_binary_databases(basedir=".", currentArchOnly=False):
         universal_newlines=True).communicate()[0].strip()
     groups = dict()
     for data_file in glob.glob("%s/*.data" % basedir):
-        for line in open(data_file):
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            arch, repo, package_name, executables = line.split('|')
-            if (currentArchOnly and arch != "all" and arch != myarch):
-                continue
-            group_name = "%s-%s" % (arch, repo)
-            if not groups.has_key(group_name):
-                groups[group_name] = ProgramGroup(arch, repo)
-            user_visible_program_names = [
-                os.path.basename(executable)
-                for executable in executables.split(',')]
-            groups[group_name].notice_package(
-                package_name, user_visible_program_names)
+        with open(data_file) as fd:
+            for line in fd:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                arch, repo, package_name, executables = line.split('|')
+                if (currentArchOnly and arch != "all" and arch != myarch):
+                    continue
+                group_name = "%s-%s" % (arch, repo)
+                if not groups.has_key(group_name):
+                    groups[group_name] = ProgramGroup(arch, repo)
+                user_visible_program_names = [
+                    os.path.basename(executable)
+                    for executable in executables.split(',')]
+                groups[group_name].notice_package(
+                    package_name, user_visible_program_names)
     # write it out
     for group in groups.values():
         group.write_database()

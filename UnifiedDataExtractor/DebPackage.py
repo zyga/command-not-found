@@ -180,7 +180,8 @@ class DebPackage(object):
 
     def getControlFile(self, name):
         """ Returns the contents of given file in debian/ or None if it does not exits """
-        return apt_inst.debExtractControl(open(self.filename), name)
+        with open(self.filename) as fd:
+            return apt_inst.debExtractControl(fd, name)
 
     @property
     def items(self):
@@ -202,7 +203,9 @@ class DebPackage(object):
             else:
                 print("unsupported kind: %s" % kind)
         try:
-            apt_inst.debExtract(open(self.filename), extract_cb, "data.tar.gz")
+            with open(self.filename) as fd:
+                apt_inst.debExtract(fd, extract_cb, "data.tar.gz")
         except:
-            apt_inst.debExtract(open(self.filename), extract_cb, "data.tar.bz2")
+            with open(self.filename) as fd:
+                apt_inst.debExtract(fd, extract_cb, "data.tar.bz2")
         return items

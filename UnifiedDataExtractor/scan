@@ -244,22 +244,22 @@ if __name__ == "__main__":
             filemode='w')
     # init output
     filename="scan.data"
-    out = open(filename, "w")
-    
-    for arch in ["i386","amd64","powerpc"]:
-        # init arch specific cache
-        apt_pkg.Config.Set("APT::Architecture",arch)
-        apt_pkg.Config.Set("Dir::state","./apt/")
-        apt_pkg.Config.Set("Dir::Etc","./apt")
-        cache = apt.Cache(apt.progress.OpProgress())
-        prog = apt.progress.FetchProgress()
-        cache.update(prog)
-        cache.open(apt.progress.OpProgress())
-        # now do the scan for this arch
-        if len(sys.argv) == 2:
-            scan(sys.argv[1],out)
-        else:
-            scan("mirror/archive.ubuntu.com/pool", out)
+
+    with open(filename, "w") as out:
+        for arch in ["i386","amd64","powerpc"]:
+            # init arch specific cache
+            apt_pkg.Config.Set("APT::Architecture",arch)
+            apt_pkg.Config.Set("Dir::state","./apt/")
+            apt_pkg.Config.Set("Dir::Etc","./apt")
+            cache = apt.Cache(apt.progress.OpProgress())
+            prog = apt.progress.FetchProgress()
+            cache.update(prog)
+            cache.open(apt.progress.OpProgress())
+            # now do the scan for this arch
+            if len(sys.argv) == 2:
+                scan(sys.argv[1],out)
+            else:
+                scan("mirror/archive.ubuntu.com/pool", out)
     #scan("mirror/archive.ubuntu.com/pool/main/a")
     #scan("mirror/archive.ubuntu.com/pool/universe/c/command-not-found")
     #scan("mirror/archive.ubuntu.com/pool/main/g/gksu")
