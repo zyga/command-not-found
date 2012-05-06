@@ -9,7 +9,6 @@ import grp
 import os
 import os.path
 import posix
-import string
 import sys
 import subprocess
 

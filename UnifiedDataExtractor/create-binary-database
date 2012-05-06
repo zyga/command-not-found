@@ -6,7 +6,6 @@ import glob
 import os
 import os.path
 import gdbm
-import string
 import subprocess
 
 class ProgramGroup(object):
@@ -32,7 +31,8 @@ def build_binary_databases(basedir=".", currentArchOnly=False):
         universal_newlines=True).communicate()[0].strip()
     groups = dict()
     for data_file in glob.glob("%s/*.data" % basedir):
-        for line in map(string.strip, open(data_file)):
+        for line in open(data_file):
+            line = line.strip()
             if not line or line.startswith("#"):
                 continue
             arch, repo, package_name, executables = line.split('|')
