@@ -23,7 +23,7 @@ class BinaryDatabase(object):
         if filename.endswith(".db"):
             try:
                 self.db = gdbm.open(filename, "r")
-            except gdbm.error, err:
+            except gdbm.error as err:
                 print("Unable to open binary database %s: %s" % (filename, err), file=sys.stderr)
 
     def lookup(self, key):

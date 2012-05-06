@@ -18,7 +18,7 @@ def crash_guard(callback, bug_report_url, version):
     try:
         try:
             callback()
-        except Exception, ex:
+        except Exception as ex:
             print(_("Sorry, command-not-found has crashed! Please file a bug report at:"), file=sys.stderr)
             print(bug_report_url, file=sys.stderr)
             print(_("Please include the following information with the report:"), file=sys.stderr)

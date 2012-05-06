@@ -166,7 +166,7 @@ def get_repo(package):
 def analyze_package(filename):
     try:
         package = DebPackage.load(filename)
-    except Exception, ex:
+    except Exception as ex:
         logging.error("Unable to process package %s: %s" % (filename, ex))
         return None
     logging.info("PACKAGE: %s" % package.filename)
