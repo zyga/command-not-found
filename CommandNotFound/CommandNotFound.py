@@ -111,7 +111,7 @@ class CommandNotFound(object):
         self.priority_overrides = []
         p = os.path.join(data_dir, "priority.txt")
         if os.path.exists(p):
-            self.priority_overrides = map(string.strip, open(p).readlines())
+            self.priority_overrides = [line.strip() for line in open(p).readlines()]
         self.components = ['main', 'universe', 'contrib', 'restricted',
                            'non-free', 'multiverse']
         self.components.reverse()
