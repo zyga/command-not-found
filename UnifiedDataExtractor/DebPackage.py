@@ -180,7 +180,7 @@ class DebPackage(object):
 
     def getControlFile(self, name):
         """ Returns the contents of given file in debian/ or None if it does not exits """
-        return apt_inst.debExtractControl(file(self.filename), name)
+        return apt_inst.debExtractControl(open(self.filename), name)
 
     @property
     def items(self):

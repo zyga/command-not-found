@@ -37,7 +37,7 @@ class FlatDatabase(object):
 
     def __init__(self, filename):
         self.rows = []
-        dbfile = file(filename)
+        dbfile = open(filename)
         for line in (line.strip() for line in dbfile):
             self.rows.append(line.split("|"))
         dbfile.close()
@@ -147,7 +147,7 @@ class CommandNotFound(object):
 
     def getBlacklist(self):
         try:
-            blacklist = file(os.sep.join((os.getenv("HOME", "/root"), ".command-not-found.blacklist")))
+            blacklist = open(os.sep.join((os.getenv("HOME", "/root"), ".command-not-found.blacklist")))
             return [line.strip() for line in blacklist if line.strip() != ""]
         except IOError:
             return []
