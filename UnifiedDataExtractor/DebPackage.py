@@ -172,16 +172,18 @@ class DebPackage(object):
 
     def __init__(self, filename):
         self.filename = filename
-        self._sections = apt_pkg.ParseSection(self.getControlFile("control"))
+        self._sections = apt_pkg.TagSection(self.getControlFile("control"))
 
     arch = property(lambda self: self._sections["Architecture"], None, None, "Architecture the package is compiled for")
 
     name = property(lambda self: self._sections["Package"], None, None, "Cannonical package name")
 
     def getControlFile(self, name):
-        """ Returns the contents of given file in debian/ or None if it does not exits """
-        with open(self.filename) as fd:
-            return apt_inst.debExtractControl(fd, name)
+        """ Returns the contents of given file in debian/ or None if it does not exist """
+        try:
+            return apt_inst.DebFile(self.filename).control.extractdata(name)
+        except LookupError:
+            return None
 
     @property
     def items(self):
@@ -189,23 +191,18 @@ class DebPackage(object):
         Each file is represented by an instance of  FileInfo """
         items = []
 
-        def extract_cb(kind, name, target, mode, uid, gid, size, mtime, major, minor):
-            if kind == "FILE":
-                items.append(FileInfo(name, mode, uid, gid, size, mtime))
-            elif kind == "DIR":
-                items.append(DirectoryInfo(name, mode, uid, gid, size, mtime))
-            elif kind == "SYMLINK":
-                items.append(SymbolicLinkInfo(name, target, mode, uid, gid, size, mtime))
-            elif kind == "HARDLINK":
-                items.append(HardLinkInfo(name, target, mode, uid, gid, size, mtime))
-            elif kind == "FIFO":
-                items.append(FifoInfo(name, mode, uid, gid, size, mtime))
+        def extract_cb(member, data):
+            if member.isfile():
+                items.append(FileInfo(member.name, member.mode, member.uid, member.gid, member.size, member.mtime))
+            elif member.isdir():
+                items.append(DirectoryInfo(member.name, member.mode, member.uid, member.gid, member.size, member.mtime))
+            elif member.issym():
+                items.append(SymbolicLinkInfo(member.name, member.linkname, member.mode, member.uid, member.gid, member.size, member.mtime))
+            elif member.islnk():
+                items.append(HardLinkInfo(member.name, member.linkname, member.mode, member.uid, member.gid, member.size, member.mtime))
+            elif member.isfifo():
+                items.append(FifoInfo(member.name, member.mode, member.uid, member.gid, member.size, member.mtime))
             else:
-                print("unsupported kind: %s" % kind)
-        try:
-            with open(self.filename) as fd:
-                apt_inst.debExtract(fd, extract_cb, "data.tar.gz")
-        except:
-            with open(self.filename) as fd:
-                apt_inst.debExtract(fd, extract_cb, "data.tar.bz2")
+                print("unsupported member type: %s" % member)
+        apt_inst.DebFile(self.filename).data.go(extract_cb)
         return items

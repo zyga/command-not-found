@@ -212,7 +212,7 @@ def verify_package(filename):
     # check distro
     candVer = "xxx"
     if pkgname in cache:
-        candVer = cache[pkgname].candidateVersion
+        candVer = getattr(cache[pkgname].candidate, "version", None)
         # strip the epoch
         if candVer and ":" in candVer:
             candVer = candVer.split(":")[1]
@@ -249,13 +249,13 @@ if __name__ == "__main__":
     with open(filename, "w") as out:
         for arch in ["i386","amd64","powerpc"]:
             # init arch specific cache
-            apt_pkg.Config.Set("APT::Architecture",arch)
-            apt_pkg.Config.Set("Dir::state","./apt/")
-            apt_pkg.Config.Set("Dir::Etc","./apt")
-            cache = apt.Cache(apt.progress.OpProgress())
-            prog = apt.progress.FetchProgress()
+            apt_pkg.config.set("APT::Architecture",arch)
+            apt_pkg.config.set("Dir::state","./apt/")
+            apt_pkg.config.set("Dir::Etc","./apt")
+            cache = apt.Cache(apt.progress.base.OpProgress())
+            prog = apt.progress.base.AcquireProgress()
             cache.update(prog)
-            cache.open(apt.progress.OpProgress())
+            cache.open(apt.progress.base.OpProgress())
             # now do the scan for this arch
             if len(sys.argv) == 2:
                 scan(sys.argv[1],out)

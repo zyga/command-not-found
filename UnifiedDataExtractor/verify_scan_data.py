@@ -17,13 +17,13 @@ if __name__ == "__main__":
         sys.exit(1)
 
     scandata = sys.argv[1]
-    apt_pkg.Config.Set("APT::Get::List-Cleanup", "false")
+    apt_pkg.config.set("APT::Get::List-Cleanup", "false")
     for arch in ("i386", "amd64"):
         print("Starting verification for '%s'" % arch)
-        apt_pkg.Config.Set("APT::Architecture", arch)
+        apt_pkg.config.set("APT::Architecture", arch)
         cache = apt.Cache(rootdir="./apt/")
         cache.update()
-        cache.open(apt.progress.OpProgress())
+        cache.open(apt.progress.base.OpProgress())
         with open(scandata) as scanfile:
             for line in scanfile:
                 (march, comp, pkg, bin) = line.split("|")
