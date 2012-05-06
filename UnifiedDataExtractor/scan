@@ -10,7 +10,10 @@ import sys
 import re
 import logging
 import DebPackage
-import urllib
+try:
+    from urllib.parse import unquote
+except ImportError:
+    from urllib import unquote
 import apt
 import apt_pkg
 
@@ -201,7 +204,7 @@ def verify_package(filename):
     pkgname = m.group(1)
     ver = m.group(2)
     # fix the quoting
-    ver = urllib.unquote(ver)
+    ver = unquote(ver)
     pkgarch = m.group(3)
     # check arch
     if pkgarch != "all" and arch != pkgarch:
