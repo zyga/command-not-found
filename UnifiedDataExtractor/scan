@@ -211,7 +211,7 @@ def verify_package(filename):
         return False
     # check distro
     candVer = "xxx"
-    if cache.has_key(pkgname):
+    if pkgname in cache:
         candVer = cache[pkgname].candidateVersion
         # strip the epoch
         if candVer and ":" in candVer:

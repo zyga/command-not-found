@@ -18,7 +18,7 @@ class ProgramGroup(object):
         self.programs = dict()
     def notice_package(self, package_name, user_visible_program_names):
         for user_visible_program_name in user_visible_program_names:
-            if not self.programs.has_key(user_visible_program_name):
+            if user_visible_program_name not in self.programs:
                 self.programs[user_visible_program_name] = set()
             self.programs[user_visible_program_name].add(package_name)
     def write_database(self):
@@ -43,7 +43,7 @@ def build_binary_databases(basedir=".", currentArchOnly=False):
                 if (currentArchOnly and arch != "all" and arch != myarch):
                     continue
                 group_name = "%s-%s" % (arch, repo)
-                if not groups.has_key(group_name):
+                if group_name not in groups:
                     groups[group_name] = ProgramGroup(arch, repo)
                 user_visible_program_names = [
                     os.path.basename(executable)

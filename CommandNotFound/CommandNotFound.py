@@ -29,7 +29,7 @@ class BinaryDatabase(object):
                 print("Unable to open binary database %s: %s" % (filename, err), file=sys.stderr)
 
     def lookup(self, key):
-        if self.db and self.db.has_key(key):
+        if self.db and key in self.db:
             return self.db[key]
         else:
             return None
