@@ -1,3 +1,4 @@
 [encoding: UTF-8]
 CommandNotFound/CommandNotFound.py
 command-not-found
+CommandNotFound/util.py
