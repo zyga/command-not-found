@@ -8,61 +8,143 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-20 18:10+0100\n"
+"POT-Creation-Date: 2012-05-31 20:07+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../CommandNotFound/CommandNotFound.py:135
-msgid "Ubuntu has the following similar programs"
+#: ../CommandNotFound/CommandNotFound.py:134
+#, python-format
+msgid "No command '%s' found, but there are %s similar ones"
 msgstr ""
 
-#: ../CommandNotFound/CommandNotFound.py:139
+#: ../CommandNotFound/CommandNotFound.py:136
+#, python-format
+msgid "No command '%s' found, did you mean:"
+msgstr ""
+
+#: ../CommandNotFound/CommandNotFound.py:138
+#, python-format
+msgid " Command '%s' from package '%s' (%s)"
+msgstr ""
+
+#: ../CommandNotFound/CommandNotFound.py:197
+msgid "Do you want to install it? (N/y)"
+msgstr ""
+
+#: ../CommandNotFound/CommandNotFound.py:201
+msgid "y"
+msgstr ""
+
+#: ../CommandNotFound/CommandNotFound.py:228
+#, python-format
+msgid "Command '%(command)s' is available in '%(place)s'"
+msgstr ""
+
+#: ../CommandNotFound/CommandNotFound.py:230
+#, python-format
+msgid "Command '%(command)s' is available in the following places"
+msgstr ""
+
+#: ../CommandNotFound/CommandNotFound.py:235
+#, python-format
+msgid ""
+"The command could not be located because '%s' is not included in the PATH "
+"environment variable."
+msgstr ""
+
+#: ../CommandNotFound/CommandNotFound.py:237
+msgid ""
+"This is most likely caused by the lack of administrative privileges "
+"associated with your user account."
+msgstr ""
+
+#: ../CommandNotFound/CommandNotFound.py:252
 #, python-format
 msgid "The program '%s' is currently not installed. "
 msgstr ""
 
-#: ../CommandNotFound/CommandNotFound.py:141
-#: ../CommandNotFound/CommandNotFound.py:144
+#: ../CommandNotFound/CommandNotFound.py:254
+#: ../CommandNotFound/CommandNotFound.py:258
 msgid "You can install it by typing:"
 msgstr ""
 
-#: ../CommandNotFound/CommandNotFound.py:147
+#: ../CommandNotFound/CommandNotFound.py:262
 #, python-format
 msgid ""
-"To run '%(command)s' please ask your administrator to install the package '%"
-"(package)s'"
+"To run '%(command)s' please ask your administrator to install the package "
+"'%(package)s'"
 msgstr ""
 
-#: ../CommandNotFound/CommandNotFound.py:149
-#: ../CommandNotFound/CommandNotFound.py:161
+#: ../CommandNotFound/CommandNotFound.py:264
 #, python-format
-msgid "Make sure you have the '%s' component enabled"
+msgid "You will have to enable the component called '%s'"
 msgstr ""
 
-#: ../CommandNotFound/CommandNotFound.py:151
+#: ../CommandNotFound/CommandNotFound.py:267
 #, python-format
 msgid "The program '%s' can be found in the following packages:"
 msgstr ""
 
-#: ../CommandNotFound/CommandNotFound.py:155
-#: ../CommandNotFound/CommandNotFound.py:157
+#: ../CommandNotFound/CommandNotFound.py:272
+#, python-format
+msgid "You will have to enable component called '%s'"
+msgstr ""
+
+#: ../CommandNotFound/CommandNotFound.py:274
+#: ../CommandNotFound/CommandNotFound.py:276
 #, python-format
 msgid "Try: %s <selected package>"
 msgstr ""
 
-#: ../CommandNotFound/CommandNotFound.py:159
+#: ../CommandNotFound/CommandNotFound.py:278
 msgid "Ask your administrator to install one of them"
 msgstr ""
 
-#: ../command-not-found:18
+#: ../command-not-found:59
 #, c-format
 msgid "%prog [options] <command-name>"
 msgstr ""
 
-#: ../command-not-found:20
+#: ../command-not-found:62
 msgid "use this path to locate data fields"
+msgstr ""
+
+#: ../command-not-found:65
+msgid "ignore local binaries and display the available packages"
+msgstr ""
+
+#: ../command-not-found:68
+msgid "don't print '<command-name>: command not found'"
+msgstr ""
+
+#: ../command-not-found:75
+#, c-format
+msgid "%s: command not found"
+msgstr ""
+
+#: ../CommandNotFound/util.py:20
+msgid "Sorry, command-not-found has crashed! Please file a bug report at:"
+msgstr ""
+
+#: ../CommandNotFound/util.py:22
+msgid "Please include the following information with the report:"
+msgstr ""
+
+#: ../CommandNotFound/util.py:24
+#, python-format
+msgid "command-not-found version: %s"
+msgstr ""
+
+#: ../CommandNotFound/util.py:25
+#, python-format
+msgid "Python version: %d.%d.%d %s %d"
+msgstr ""
+
+#: ../CommandNotFound/util.py:31
+msgid "Exception information:"
 msgstr ""
