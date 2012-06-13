@@ -1,1 +1,3 @@
-from CommandNotFound import CommandNotFound
+from __future__ import absolute_import
+
+from CommandNotFound.CommandNotFound import CommandNotFound
