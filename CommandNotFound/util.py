@@ -8,7 +8,11 @@ import locale
 import sys
 import gettext
 
-_ = gettext.translation("command-not-found", fallback=True).ugettext
+if sys.version >= "3":
+    _gettext_method = "gettext"
+else:
+    _gettext_method = "ugettext"
+_ = getattr(gettext.translation("command-not-found", fallback=True), _gettext_method)
 
 
 def crash_guard(callback, bug_report_url, version):

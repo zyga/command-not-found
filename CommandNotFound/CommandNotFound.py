@@ -15,7 +15,11 @@ import posix
 import sys
 import subprocess
 
-_ = gettext.translation("command-not-found", fallback=True).ugettext
+if sys.version >= "3":
+    _gettext_method = "gettext"
+else:
+    _gettext_method = "ugettext"
+_ = getattr(gettext.translation("command-not-found", fallback=True), _gettext_method)
 
 
 class BinaryDatabase(object):
