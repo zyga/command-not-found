@@ -73,9 +73,7 @@ def main():
     (options, args) = parser.parse_args()
     if len(args) == 1:
         cnf = CommandNotFound(options.data_dir)
-        # Note: we need to encode program name to utf-8 as gdbm does not seem
-        # to handle unicode strings.
-        if not cnf.advise(args[0].encode('utf-8'), options.ignore_installed) and not options.no_failure_msg:
+        if not cnf.advise(args[0], options.ignore_installed) and not options.no_failure_msg:
             print(_("%s: command not found") % args[0], file=sys.stderr)
 
 if __name__ == "__main__":

@@ -33,8 +33,12 @@ class BinaryDatabase(object):
                 print("Unable to open binary database %s: %s" % (filename, err), file=sys.stderr)
 
     def lookup(self, key):
+        if key is not bytes:
+            # gdbm does not entirely handle Unicode strings; "self.db[key]"
+            # works, but "key in self.db" does not.
+            key = key.encode('utf-8')
         if self.db and key in self.db:
-            return self.db[key]
+            return self.db[key].decode('utf-8')
         else:
             return None
 
