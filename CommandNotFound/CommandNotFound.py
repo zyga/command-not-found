@@ -15,6 +15,8 @@ import posix
 import sys
 import subprocess
 
+from functools import cmp_to_key
+
 if sys.version >= "3":
     _gettext_method = "gettext"
 else:
@@ -198,7 +200,8 @@ class CommandNotFound(object):
             yidx = self.components.index(y[1])
         except:
             xidx = -1
-        return (yidx - xidx) or cmp(x, y)
+        # http://python3porting.com/differences.html#comparisons
+        return (yidx - xidx) or ((x > y) - (x < y))
 
     def install_prompt(self, package_name):
         if not "COMMAND_NOT_FOUND_INSTALL_PROMPT" in os.environ:
@@ -277,7 +280,7 @@ class CommandNotFound(object):
             if not packages[0][1] in self.sources_list:
                 print(_("You will have to enable the component called '%s'") % packages[0][1], file=sys.stderr)
         elif len(packages) > 1:
-            packages.sort(self.sortByComponent)
+            packages.sort(key=cmp_to_key(self.sortByComponent))
             print(_("The program '%s' can be found in the following packages:") % command, file=sys.stderr)
             for package in packages:
                 if package[1] in self.sources_list:
