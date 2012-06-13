@@ -56,7 +56,8 @@ class LocaleOptionParser(OptionParser):
 
 def main():
     enable_i18n()
-    fix_sys_argv()
+    if sys.version < '3':
+        fix_sys_argv()
     parser = LocaleOptionParser(
         version=__version__,
         usage=_("%prog [options] <command-name>"))
