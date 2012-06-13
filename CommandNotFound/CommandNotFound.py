@@ -74,7 +74,7 @@ class FlatDatabase(object):
 
 class ProgramDatabase(object):
 
-    (PACKAGE, BASENAME_PATH) = list(range(2))
+    (PACKAGE, BASENAME_PATH) = range(2)
 
     def __init__(self, filename):
         basename = os.path.basename(filename)
