@@ -5,8 +5,10 @@
 import glob
 import os
 import os.path
-import gdbm
-import string
+try:
+    import dbm.gnu as gdbm
+except ImportError:
+    import gdbm
 import subprocess
 
 class ProgramGroup(object):
@@ -16,7 +18,7 @@ class ProgramGroup(object):
         self.programs = dict()
     def notice_package(self, package_name, user_visible_program_names):
         for user_visible_program_name in user_visible_program_names:
-            if not self.programs.has_key(user_visible_program_name):
+            if user_visible_program_name not in self.programs:
                 self.programs[user_visible_program_name] = set()
             self.programs[user_visible_program_name].add(package_name)
     def write_database(self):
@@ -28,23 +30,26 @@ class ProgramGroup(object):
 def build_binary_databases(basedir=".", currentArchOnly=False):
     myarch = subprocess.Popen(
         ["dpkg","--print-architecture"],
-        stdout=subprocess.PIPE).communicate()[0].strip()
+        stdout=subprocess.PIPE,
+        universal_newlines=True).communicate()[0].strip()
     groups = dict()
     for data_file in glob.glob("%s/*.data" % basedir):
-        for line in map(string.strip, open(data_file)):
-            if not line or line.startswith("#"):
-                continue
-            arch, repo, package_name, executables = line.split('|')
-            if (currentArchOnly and arch != "all" and arch != myarch):
-                continue
-            group_name = "%s-%s" % (arch, repo)
-            if not groups.has_key(group_name):
-                groups[group_name] = ProgramGroup(arch, repo)
-            user_visible_program_names = [
-                os.path.basename(executable)
-                for executable in executables.split(',')]
-            groups[group_name].notice_package(
-                package_name, user_visible_program_names)
+        with open(data_file) as fd:
+            for line in fd:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                arch, repo, package_name, executables = line.split('|')
+                if (currentArchOnly and arch != "all" and arch != myarch):
+                    continue
+                group_name = "%s-%s" % (arch, repo)
+                if group_name not in groups:
+                    groups[group_name] = ProgramGroup(arch, repo)
+                user_visible_program_names = [
+                    os.path.basename(executable)
+                    for executable in executables.split(',')]
+                groups[group_name].notice_package(
+                    package_name, user_visible_program_names)
     # write it out
     for group in groups.values():
         group.write_database()

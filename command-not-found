@@ -2,7 +2,7 @@
 # (c) Zygmunt Krynicki 2005, 2006, 2007, 2008
 # Licensed under GPL, see COPYING for the whole text
 
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
 
 __version__ = "0.2.44"
@@ -22,7 +22,10 @@ except KeyboardInterrupt:
 
 def enable_i18n():
     cnf = gettext.translation("command-not-found", fallback=True)
-    cnf.install(unicode=True)
+    kwargs = {}
+    if sys.version < '3':
+        kwargs["unicode"] = True
+    cnf.install(**kwargs)
     locale.setlocale(locale.LC_ALL, '')
 
 
@@ -53,7 +56,8 @@ class LocaleOptionParser(OptionParser):
 
 def main():
     enable_i18n()
-    fix_sys_argv()
+    if sys.version < '3':
+        fix_sys_argv()
     parser = LocaleOptionParser(
         version=__version__,
         usage=_("%prog [options] <command-name>"))
@@ -69,10 +73,8 @@ def main():
     (options, args) = parser.parse_args()
     if len(args) == 1:
         cnf = CommandNotFound(options.data_dir)
-        # Note: we need to encode program name to utf-8 as gdbm does not seem
-        # to handle unicode strings.
-        if not cnf.advise(args[0].encode('utf-8'), options.ignore_installed) and not options.no_failure_msg:
-            print >>sys.stderr, _("%s: command not found") % args[0]
+        if not cnf.advise(args[0], options.ignore_installed) and not options.no_failure_msg:
+            print(_("%s: command not found") % args[0], file=sys.stderr)
 
 if __name__ == "__main__":
     crash_guard(main, BUG_REPORT_URL, __version__)

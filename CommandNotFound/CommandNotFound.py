@@ -1,17 +1,27 @@
 # (c) Zygmunt Krynicki 2005, 2006, 2007, 2008
 # Licensed under GPL, see COPYING for the whole text
 
-import gdbm
+from __future__ import print_function
+
+try:
+    import dbm.gnu as gdbm
+except ImportError:
+    import gdbm
 import gettext
 import grp
 import os
 import os.path
 import posix
-import string
 import sys
 import subprocess
 
-_ = gettext.translation("command-not-found", fallback=True).ugettext
+from functools import cmp_to_key
+
+if sys.version >= "3":
+    _gettext_method = "gettext"
+else:
+    _gettext_method = "ugettext"
+_ = getattr(gettext.translation("command-not-found", fallback=True), _gettext_method)
 
 
 class BinaryDatabase(object):
@@ -21,12 +31,16 @@ class BinaryDatabase(object):
         if filename.endswith(".db"):
             try:
                 self.db = gdbm.open(filename, "r")
-            except gdbm.error, err:
-                print >> sys.stderr, "Unable to open binary database %s: %s" % (filename, err)
+            except gdbm.error as err:
+                print("Unable to open binary database %s: %s" % (filename, err), file=sys.stderr)
 
     def lookup(self, key):
-        if self.db and self.db.has_key(key):
-            return self.db[key]
+        if not isinstance(key, bytes):
+            # gdbm does not entirely handle Unicode strings; "self.db[key]"
+            # works, but "key in self.db" does not.
+            key = key.encode('utf-8')
+        if self.db and key in self.db:
+            return self.db[key].decode('utf-8')
         else:
             return None
 
@@ -35,10 +49,9 @@ class FlatDatabase(object):
 
     def __init__(self, filename):
         self.rows = []
-        dbfile = file(filename)
-        for line in (line.strip() for line in dbfile):
-            self.rows.append(line.split("|"))
-        dbfile.close()
+        with open(filename) as dbfile:
+            for line in (line.strip() for line in dbfile):
+                self.rows.append(line.split("|"))
 
     def lookup(self, column, text):
         result = []
@@ -109,7 +122,8 @@ class CommandNotFound(object):
         self.priority_overrides = []
         p = os.path.join(data_dir, "priority.txt")
         if os.path.exists(p):
-            self.priority_overrides = map(string.strip, open(p).readlines())
+            with open(p) as priority_file:
+                self.priority_overrides = [line.strip() for line in priority_file]
         self.components = ['main', 'universe', 'contrib', 'restricted',
                            'non-free', 'multiverse']
         self.components.reverse()
@@ -131,11 +145,11 @@ class CommandNotFound(object):
             for (package, comp) in packages:
                 possible_alternatives.append((w, package, comp))
         if len(possible_alternatives) > max_len:
-            print >> sys.stderr, _("No command '%s' found, but there are %s similar ones") % (word, len(possible_alternatives))
+            print(_("No command '%s' found, but there are %s similar ones") % (word, len(possible_alternatives)), file=sys.stderr)
         elif len(possible_alternatives) > 0:
-            print >> sys.stderr, _("No command '%s' found, did you mean:") % word
+            print(_("No command '%s' found, did you mean:") % word, file=sys.stderr)
             for (w, p, c) in possible_alternatives:
-                print >> sys.stderr, _(" Command '%s' from package '%s' (%s)") % (w, p, c)
+                print(_(" Command '%s' from package '%s' (%s)") % (w, p, c), file=sys.stderr)
 
     def getPackages(self, command):
         result = set()
@@ -145,12 +159,10 @@ class CommandNotFound(object):
 
     def getBlacklist(self):
         try:
-            blacklist = file(os.sep.join((os.getenv("HOME", "/root"), ".command-not-found.blacklist")))
-            return [line.strip() for line in blacklist if line.strip() != ""]
+            with open(os.sep.join((os.getenv("HOME", "/root"), ".command-not-found.blacklist"))) as blacklist:
+                return [line.strip() for line in blacklist if line.strip() != ""]
         except IOError:
             return []
-        else:
-            blacklist.close()
 
     def _getSourcesList(self):
         try:
@@ -188,13 +200,18 @@ class CommandNotFound(object):
             yidx = self.components.index(y[1])
         except:
             xidx = -1
-        return (yidx - xidx) or cmp(x, y)
+        # http://python3porting.com/differences.html#comparisons
+        return (yidx - xidx) or ((x > y) - (x < y))
 
     def install_prompt(self, package_name):
         if not "COMMAND_NOT_FOUND_INSTALL_PROMPT" in os.environ:
             return
         if package_name:
-            answer = raw_input(_("Do you want to install it? (N/y)"))
+            prompt = _("Do you want to install it? (N/y)")
+            if sys.version >= '3':
+                answer = input(prompt)
+            else:
+                answer = raw_input(prompt)
             if sys.stdin.encoding and isinstance(answer, str):
                 # Decode the answer so that we get an unicode value
                 answer = answer.decode(sys.stdin.encoding)
@@ -204,7 +221,7 @@ class CommandNotFound(object):
                 else:
                     command_prefix = "sudo "
                 install_command = "%sapt-get install %s" % (command_prefix, package_name)
-                print >> sys.stdout, "%s" % install_command
+                print("%s" % install_command, file=sys.stdout)
                 subprocess.call(install_command.split(), shell=False)
 
     def advise(self, command, ignore_installed=False):
@@ -225,16 +242,16 @@ class CommandNotFound(object):
         # check if we have it in a common prefix that may not be in the PATH
         if prefixes and not ignore_installed:
             if len(prefixes) == 1:
-                print >> sys.stderr, _("Command '%(command)s' is available in '%(place)s'") % {"command": command, "place": os.path.join(prefixes[0], command)}
+                print(_("Command '%(command)s' is available in '%(place)s'") % {"command": command, "place": os.path.join(prefixes[0], command)}, file=sys.stderr)
             else:
-                print >> sys.stderr, _("Command '%(command)s' is available in the following places") % {"command": command}
+                print(_("Command '%(command)s' is available in the following places") % {"command": command}, file=sys.stderr)
                 for prefix in prefixes:
-                    print >> sys.stderr, " * %s" % os.path.join(prefix, command)
+                    print(" * %s" % os.path.join(prefix, command), file=sys.stderr)
             missing = list(set(prefixes) - set(os.getenv("PATH", "").split(":")))
             if len(missing) > 0:
-                print >> sys.stderr, _("The command could not be located because '%s' is not included in the PATH environment variable.") % ":".join(missing)
+                print(_("The command could not be located because '%s' is not included in the PATH environment variable.") % ":".join(missing), file=sys.stderr)
                 if "sbin" in ":".join(missing):
-                    print >> sys.stderr, _("This is most likely caused by the lack of administrative privileges associated with your user account.")
+                    print(_("This is most likely caused by the lack of administrative privileges associated with your user account."), file=sys.stderr)
             return False
 
         # do not give advice if we are in a situation where apt-get
@@ -249,31 +266,31 @@ class CommandNotFound(object):
         if len(packages) == 0:
             self.print_spelling_suggestion(command)
         elif len(packages) == 1:
-            print >> sys.stderr, _("The program '%s' is currently not installed. ") % command,
+            print(_("The program '%s' is currently not installed. ") % command, end="", file=sys.stderr)
             if posix.geteuid() == 0:
-                print >> sys.stderr, _("You can install it by typing:")
-                print >> sys.stderr, "apt-get install %s" % packages[0][0]
+                print(_("You can install it by typing:"), file=sys.stderr)
+                print("apt-get install %s" % packages[0][0], file=sys.stderr)
                 self.install_prompt(packages[0][0])
             elif self.user_can_sudo:
-                print >> sys.stderr, _("You can install it by typing:")
-                print >> sys.stderr, "sudo apt-get install %s" % packages[0][0]
+                print(_("You can install it by typing:"), file=sys.stderr)
+                print("sudo apt-get install %s" % packages[0][0], file=sys.stderr)
                 self.install_prompt(packages[0][0])
             else:
-                print >> sys.stderr, _("To run '%(command)s' please ask your administrator to install the package '%(package)s'") % {'command': command, 'package': packages[0][0]}
+                print(_("To run '%(command)s' please ask your administrator to install the package '%(package)s'") % {'command': command, 'package': packages[0][0]}, file=sys.stderr)
             if not packages[0][1] in self.sources_list:
-                print >> sys.stderr, _("You will have to enable the component called '%s'") % packages[0][1]
+                print(_("You will have to enable the component called '%s'") % packages[0][1], file=sys.stderr)
         elif len(packages) > 1:
-            packages.sort(self.sortByComponent)
-            print >> sys.stderr, _("The program '%s' can be found in the following packages:") % command
+            packages.sort(key=cmp_to_key(self.sortByComponent))
+            print(_("The program '%s' can be found in the following packages:") % command, file=sys.stderr)
             for package in packages:
                 if package[1] in self.sources_list:
-                    print >> sys.stderr, " * %s" % package[0]
+                    print(" * %s" % package[0], file=sys.stderr)
                 else:
-                    print >> sys.stderr, " * %s" % package[0] + " (" + _("You will have to enable component called '%s'") % package[1] + ")"
+                    print(" * %s" % package[0] + " (" + _("You will have to enable component called '%s'") % package[1] + ")", file=sys.stderr)
             if posix.geteuid() == 0:
-                print >> sys.stderr, _("Try: %s <selected package>") % "apt-get install"
+                print(_("Try: %s <selected package>") % "apt-get install", file=sys.stderr)
             elif self.user_can_sudo:
-                print >> sys.stderr, _("Try: %s <selected package>") % "sudo apt-get install"
+                print(_("Try: %s <selected package>") % "sudo apt-get install", file=sys.stderr)
             else:
-                print >> sys.stderr, _("Ask your administrator to install one of them")
+                print(_("Ask your administrator to install one of them"), file=sys.stderr)
         return len(packages) > 0
