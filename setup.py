@@ -7,7 +7,7 @@ import os
 
 setup(
     name='command-not-found',
-    version='0.2.44',
+    version='0.3',
     packages=['CommandNotFound'],
     scripts=['command-not-found'],
     cmdclass={"build": build_extra.build_extra,
