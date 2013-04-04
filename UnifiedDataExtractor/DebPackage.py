@@ -198,8 +198,11 @@ class DebPackage(object):
 
     @property
     def items(self):
-        """ Return the list of items in the package.
-        Each file is represented by an instance of  FileInfo """
+        """
+        list of items in the package
+
+        Each item is represented by an instance of :class:`FileInfo`
+        """
         items = []
 
         def extract_cb(member, data):
