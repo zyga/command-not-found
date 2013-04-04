@@ -191,6 +191,10 @@ class DebPackage(object):
         """ Canonical package name """
         return self._sections["Package"]
 
+    @property
+    def version(self):
+        """ Package version """
+        return self._sections["Version"]
 
     @property
     def items(self):
