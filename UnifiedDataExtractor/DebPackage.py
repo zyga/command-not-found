@@ -180,6 +180,9 @@ class DebPackage(object):
         self.filename = filename
         self._sections = apt_pkg.TagSection(self.getControlFile("control"))
 
+    def __str__(self):
+        return "{name}-{version}".format(
+            name=self.name, version=self.version)
 
     @property
     def arch(self):
