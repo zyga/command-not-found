@@ -186,6 +186,9 @@ class DebPackage(object):
         return "{name}-{version}".format(
             name=self.name, version=self.version)
 
+    def __repr__(self):
+        "<DebPackage {0} filename:{1!r}>".format(self, self.filename)
+
     @property
     def arch(self):
         """ Architecture the package is compiled for """
