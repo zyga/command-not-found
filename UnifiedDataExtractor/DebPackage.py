@@ -180,9 +180,16 @@ class DebPackage(object):
         self.filename = filename
         self._sections = apt_pkg.TagSection(self.getControlFile("control"))
 
-    arch = property(lambda self: self._sections["Architecture"], None, None, "Architecture the package is compiled for")
 
-    name = property(lambda self: self._sections["Package"], None, None, "Cannonical package name")
+    @property
+    def arch(self):
+        """ Architecture the package is compiled for """
+        return self._sections["Architecture"]
+
+    @property
+    def name(self):
+        """ Canonical package name """
+        return self._sections["Package"]
 
 
     @property
