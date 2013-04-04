@@ -13,25 +13,30 @@ except ImportError:
     import gdbm
 import subprocess
 
+
 class ProgramGroup(object):
+
     def __init__(self, arch, repo):
         self.arch = arch
         self.repo = repo
         self.programs = dict()
+
     def notice_package(self, package_name, user_visible_program_names):
         for user_visible_program_name in user_visible_program_names:
             if user_visible_program_name not in self.programs:
                 self.programs[user_visible_program_name] = set()
             self.programs[user_visible_program_name].add(package_name)
+
     def write_database(self):
         db = gdbm.open("%s-%s.db" % (self.arch, self.repo), "n")
         for program_name, packages in self.programs.items():
             db[program_name] = "|".join(packages)
         db.close()
 
+
 def build_binary_databases(basedir=".", currentArchOnly=False):
     myarch = subprocess.Popen(
-        ["dpkg","--print-architecture"],
+        ["dpkg", "--print-architecture"],
         stdout=subprocess.PIPE,
         universal_newlines=True).communicate()[0].strip()
     groups = dict()
@@ -58,4 +63,3 @@ def build_binary_databases(basedir=".", currentArchOnly=False):
 
 if __name__ == "__main__":
     build_binary_databases(currentArchOnly=True)
-    
