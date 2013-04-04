@@ -83,7 +83,11 @@ class GenericFileInfo(object):
             else:
                 return '?'
 
-        return "%s%s%s%s" % (kind_str(self), mode_str(self.mode >> 6 & 7), mode_str(self.mode >> 3 & 7), mode_str(self.mode & 7))
+        return "%s%s%s%s" % (
+            kind_str(self),
+            mode_str(self.mode >> 6 & 7),
+            mode_str(self.mode >> 3 & 7),
+            mode_str(self.mode & 7))
 
 
 class FileInfo(GenericFileInfo):
@@ -144,7 +148,8 @@ class DeviceInfo(GenericFileInfo):
 class CharDeviceInfo(DeviceInfo):
 
     def __init__(self, name, mode, uid, gid, size, mtime, major, minor):
-        DeviceInfo.__init__(self, name, mode, uid, gid, size, mtime, major, minor)
+        DeviceInfo.__init__(
+            self, name, mode, uid, gid, size, mtime, major, minor)
 
     def get_device_type(self):
         return self.CHAR
@@ -153,7 +158,8 @@ class CharDeviceInfo(DeviceInfo):
 class BlockDeviceInfo(DeviceInfo):
 
     def __init__(self, name, mode, uid, gid, size, mtime, major, minor):
-        DeviceInfo.__init__(self, name, mode, uid, gid, size, mtime, major, minor)
+        DeviceInfo.__init__(
+            self, name, mode, uid, gid, size, mtime, major, minor)
 
     def get_device_type(self):
         return self.BLOCK
@@ -193,15 +199,30 @@ class DebPackage(object):
 
         def extract_cb(member, data):
             if member.isfile():
-                items.append(FileInfo(member.name, member.mode, member.uid, member.gid, member.size, member.mtime))
+                items.append(
+                    FileInfo(
+                        member.name, member.mode, member.uid, member.gid,
+                        member.size, member.mtime))
             elif member.isdir():
-                items.append(DirectoryInfo(member.name, member.mode, member.uid, member.gid, member.size, member.mtime))
+                items.append(
+                    DirectoryInfo(
+                        member.name, member.mode, member.uid, member.gid,
+                        member.size, member.mtime))
             elif member.issym():
-                items.append(SymbolicLinkInfo(member.name, member.linkname, member.mode, member.uid, member.gid, member.size, member.mtime))
+                items.append(
+                    SymbolicLinkInfo(
+                        member.name, member.linkname, member.mode, member.uid,
+                        member.gid, member.size, member.mtime))
             elif member.islnk():
-                items.append(HardLinkInfo(member.name, member.linkname, member.mode, member.uid, member.gid, member.size, member.mtime))
+                items.append(
+                    HardLinkInfo(
+                        member.name, member.linkname, member.mode, member.uid,
+                        member.gid, member.size, member.mtime))
             elif member.isfifo():
-                items.append(FifoInfo(member.name, member.mode, member.uid, member.gid, member.size, member.mtime))
+                items.append(
+                    FifoInfo(
+                        member.name, member.mode, member.uid, member.gid,
+                        member.size, member.mtime))
             else:
                 print("unsupported member type: %s" % member)
         apt_inst.DebFile(self.filename).data.go(extract_cb)
