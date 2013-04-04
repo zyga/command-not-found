@@ -35,10 +35,9 @@ class ProgramGroup(object):
 
 
 def build_binary_databases(basedir=".", currentArchOnly=False):
-    myarch = subprocess.Popen(
+    myarch = subprocess.check_output(
         ["dpkg", "--print-architecture"],
-        stdout=subprocess.PIPE,
-        universal_newlines=True).communicate()[0].strip()
+        universal_newlines=True)
     groups = dict()
     for data_file in glob.glob("%s/*.data" % basedir):
         with open(data_file) as fd:
