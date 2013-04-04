@@ -4,6 +4,8 @@
 from __future__ import print_function
 
 import warnings
+import logging
+
 warnings.filterwarnings("ignore", "apt API not stable yet", FutureWarning)
 
 import apt
@@ -235,7 +237,8 @@ class DebPackage(object):
                         member.name, member.mode, member.uid, member.gid,
                         member.size, member.mtime))
             else:
-                print("unsupported member type: %s" % member)
+                logging.warning(
+                    "%s: unsupported member type: %s", self, member)
         apt_inst.DebFile(self.filename).data.go(extract_cb)
         return items
 
