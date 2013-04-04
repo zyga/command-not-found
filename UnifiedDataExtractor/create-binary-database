@@ -4,14 +4,14 @@
 #
 # Licensed under GPL, see COPYING for the whole text
 
+import argparse
 import glob
 import os
-import os.path
+import subprocess
 try:
     import dbm.gnu as gdbm
 except ImportError:
     import gdbm
-import subprocess
 
 
 class ProgramGroup(object):
