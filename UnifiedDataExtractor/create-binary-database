@@ -60,5 +60,25 @@ def build_binary_databases(basedir=".", currentArchOnly=False):
     for group in groups.values():
         group.write_database()
 
+
+def main(args=None):
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-b', '--base-dir', default='.')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
+        '--current-arch-only',
+        default=False,
+        action='store_true',
+        help=("Consider packages only from the current architecture"))
+    group.add_argument(
+        '--any-arch',
+        action='store_false',
+        dest='current_arch_only',
+        help=("Consider packages from all architectures"))
+    ns = parser.parse_args(args)
+    build_binary_databases(ns.base_dir, ns.current_arch_only)
+
+
 if __name__ == "__main__":
-    build_binary_databases(currentArchOnly=True)
+    main()
