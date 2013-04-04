@@ -184,12 +184,6 @@ class DebPackage(object):
 
     name = property(lambda self: self._sections["Package"], None, None, "Cannonical package name")
 
-    def getControlFile(self, name):
-        """ Returns the contents of given file in debian/ or None if it does not exist """
-        try:
-            return apt_inst.DebFile(self.filename).control.extractdata(name)
-        except LookupError:
-            return None
 
     @property
     def items(self):
@@ -227,3 +221,14 @@ class DebPackage(object):
                 print("unsupported member type: %s" % member)
         apt_inst.DebFile(self.filename).data.go(extract_cb)
         return items
+
+    def getControlFile(self, name):
+        """
+        Get a control file from the debian/ directory.
+
+        :returns: content of the file or None
+        """
+        try:
+            return apt_inst.DebFile(self.filename).control.extractdata(name)
+        except LookupError:
+            return None
