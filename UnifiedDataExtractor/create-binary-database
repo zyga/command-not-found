@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-# (c) Zygmunt Krynicki 2005,
+# Copyright 2005 Zygmunt Krynicki
+# Copyright 2012 Canonical Ltd.
+#
 # Licensed under GPL, see COPYING for the whole text
 
 import glob
