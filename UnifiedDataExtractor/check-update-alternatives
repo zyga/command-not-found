@@ -231,8 +231,14 @@ class Scanner:
         This method generates pairs (link, path) for each possible candidate.
         """
         for line in join_line_continuations(script):
+            # Strip comments
+            try:
+                line = line[line.index("#")].rstrip()
+            except ValueError:
+                pass
             if wanted_token not in line:
                 continue
+            # Parse one of two ways update-alternatives gets called
             token_iter = iter(shlex.split(line))
             for token in token_iter:
                 if token == 'update-alternatives':
