@@ -99,8 +99,11 @@ class Scanner:
         # If the hint list is empty, mark this as broken
         if len(hint_list) == 0:
             logging.info("package %s got empty hints", package)
-            self.db.set(package_id, "manual-check", "yes")
+            # Indicate that the hint list was empty despite having seen
+            # update-alternatives in the script
             self.db.set(package_id, "empty-hints", "yes")
+            # Mark for manual inspection
+            self.db.set(package_id, "manual-check", "yes")
             print("h", end='')
             sys.stdout.flush()
             return
@@ -110,28 +113,38 @@ class Scanner:
             # Don't bother asking the user if we guessed right.
             if '$' in link or '$' in path:
                 logging.info("package %s uses variables", package)
-                self.db.set(package_id, "manual-check", "yes")
+                # Store the hash of the hint
+                self.db.set(package_id, "hint-hash", hashed_hint_list)
+                # Indicate that the hint contained variables
                 self.db.set(package_id, "uses-variables", "yes")
+                # Mark for manual inspection
+                self.db.set(package_id, "manual-check", "yes")
                 print("v", end='')
                 sys.stdout.flush()
                 return
         # Check if we got an answer for that hint list before
         older_answer = self._older_answer.get(hashed_hint_list)
         if older_answer == "yes":
-            # Use hints as the answer
+            # Store the hash of the hint
+            self.db.set(package_id, "hint-hash", hashed_hint_list)
+            # Use hints as the list of alternatives
             self.db.set(
                 package_id, "alternatives",
                 " ".join([
                     "{0}={1}".format(link, path)
                     for link, path in hint_list]))
+            # Indicate that we've reused previous answer for this hint
             self.db.set(package_id, "using-hint", "yes")
             print("a", end='')
             sys.stdout.flush()
             return
         # Check if we got an answer for that hint list before
         elif older_answer == "no":
+            # Store the hash of the hint
+            self.db.set(package_id, "hint-hash", hashed_hint_list)
             # Mark as needing manual checks
             self.db.set(package_id, "manual-check", "yes")
+            # Indicate that we've reused previous answer for this hint
             self.db.set(package_id, "using-hint", "yes")
             print("A", end='')
             sys.stdout.flush()
@@ -153,26 +166,24 @@ class Scanner:
                 answered = True
             elif choice in ('y', 'yes'):
                 answered = True
-                # Store the alternatives
+                # Store the list of alternatives
                 self.db.set(
                     package_id, "alternatives",
                     " ".join([
                         "{0}={1}".format(link, path)
                         for link, path in hint_list]))
-                # Mark this as automatic so that we can reuse hint-hash and
-                # hint-correct (guessed right)
-                self.db.set(package_id, "hint-hash",
-                            self._get_hint_list_hash(hint_list))
+                # Store the hash of the hint
+                self.db.set(package_id, "hint-hash", hashed_hint_list)
+                # Indicate that the hint was correct
                 self.db.set(package_id, "hint-correct", "yes")
                 self._older_answer[hashed_hint_list] = "yes"
             elif choice in ('n', 'no'):
                 answered = True
-                # Mark it as manual-check so that we don't get prompted again
+                # Mark for manual inspection
                 self.db.set(package_id, "manual-check", "yes")
-                # Mark this as automatic so that we can reuse hint-hash and
-                # hint-correct (guessed wrong)
-                self.db.set(package_id, "hint-hash",
-                            self._get_hint_list_hash(hint_list))
+                # Store the hash of the hint
+                self.db.set(package_id, "hint-hash", hashed_hint_list)
+                # Indicate that the hint was incorrect
                 self.db.set(package_id, "hint-correct", "no")
                 self._older_answer[hashed_hint_list] = "no"
 
