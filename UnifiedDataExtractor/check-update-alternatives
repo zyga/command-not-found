@@ -161,7 +161,6 @@ class Scanner:
                         for link, path in hint_list]))
                 # Mark this as automatic so that we can reuse hint-hash and
                 # hint-correct (guessed right)
-                self.db.set(package_id, "automatic", "yes")
                 self.db.set(package_id, "hint-hash",
                             self._get_hint_list_hash(hint_list))
                 self.db.set(package_id, "hint-correct", "yes")
@@ -172,7 +171,6 @@ class Scanner:
                 self.db.set(package_id, "manual-check", "yes")
                 # Mark this as automatic so that we can reuse hint-hash and
                 # hint-correct (guessed wrong)
-                self.db.set(package_id, "automatic", "yes")
                 self.db.set(package_id, "hint-hash",
                             self._get_hint_list_hash(hint_list))
                 self.db.set(package_id, "hint-correct", "no")
@@ -190,15 +188,11 @@ class Scanner:
         # Rebuild answers based on hint_hash and hint_answer key that were
         # tagged as automatic. This helps us not ask the same question twice.
         for package_id in self.db.sections():
-            automatic = self.db.get(
-                package_id, "automatic", fallback=None)
             hint_hash = self.db.get(
                 package_id, "hint-hash", fallback=None)
             hint_answer = self.db.get(
                 package_id, "hint-correct", fallback=None)
-            if (automatic == "yes"
-                    and hint_hash is not None
-                    and hint_answer in ("yes", "no")):
+            if hint_hash is not None and hint_answer in ("yes", "no"):
                 self._older_answer[hint_hash] = hint_answer
 
     def save_db(self, filename):
