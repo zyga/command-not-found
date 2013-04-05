@@ -1,0 +1,280 @@
+#!/usr/bin/env python3
+# Copyright 2013 Canonical Ltd.
+#
+# Written by:
+#   Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
+#
+# Licensed under GPL, see COPYING for the whole text
+
+from argparse import ArgumentParser
+from collections import OrderedDict
+from configparser import ConfigParser
+import hashlib
+import json
+import logging
+import os
+import shlex
+import sys
+
+import DebPackage
+
+
+def join_line_continuations(script):
+    """
+    Join shell-like line continuations
+
+    line \
+    rest
+
+    Gets joined to 'line rest'
+    """
+    full_line = None
+    for line in script.splitlines():
+        if full_line is None:
+            full_line = line
+        else:
+            full_line += ' '
+            full_line += line
+        if line.endswith("\\"):
+            full_line = full_line.rstrip('\\')
+            continue
+        yield full_line
+        full_line = None
+    if full_line is not None:
+        yield full_line
+
+
+class Scanner:
+
+    def __init__(self):
+        self.db = ConfigParser(dict_type=OrderedDict)
+        self._older_answer = {}  # hashed_hint_list -> yes|no
+
+    def scan_pkg(self, filename, wanted_token="update-alternatives"):
+        """
+        Scan the given debian binary package.
+
+        This scans the control file, looks for any mention of
+        update-alternatives and updates the database, if necessary.
+
+        Each package (identified uniquely as name and version) is either marked
+        as a TODO or is verified manually. If there is no manual verification
+        a TODO record is generated.
+        """
+        # Load the package
+        try:
+            package = DebPackage.load(filename)
+        except Exception:
+            logging.exception("unable to process package %s", filename)
+            return
+        else:
+            logging.info("processing package %s from %s", package, filename)
+        # Access the postinst script
+        postinst = package.getControlFile("postinst")
+        if postinst is None:
+            # Print a simple progress indicator for each file we scan
+            print(".", end='')
+            sys.stdout.flush()
+            return
+        postinst = postinst.decode(errors='replace')
+        # Skip packages that don't have the keyword we are looking for in the
+        # postinst script.
+        if wanted_token not in postinst:
+            print("o", end='')
+            sys.stdout.flush()
+            return
+        # Build an identifier for the package
+        package_id = str(package)
+        # If the package needs manual checks, skip it
+        if self.db.get(package_id, "manual-check", fallback=None) == "yes":
+            print("m", end='')
+            sys.stdout.flush()
+            return
+        # If the package does not have a section, add one
+        if not self.db.has_section(package_id):
+            self.db.add_section(package_id)
+        # Get possible hints
+        hint_list = list(self._get_hint_list(postinst, wanted_token))
+        hashed_hint_list = self._get_hint_list_hash(hint_list)
+        # If the hint list is empty, mark this as broken
+        if len(hint_list) == 0:
+            logging.info("package %s got empty hints", package)
+            self.db.set(package_id, "manual-check", "yes")
+            self.db.set(package_id, "empty-hints", "yes")
+            print("h", end='')
+            sys.stdout.flush()
+            return
+        # Check if any hints are using variables
+        for link, path in hint_list:
+            # If there are variables, mark as required manual work
+            # Don't bother asking the user if we guessed right.
+            if '$' in link or '$' in path:
+                logging.info("package %s uses variables", package)
+                self.db.set(package_id, "manual-check", "yes")
+                self.db.set(package_id, "uses-variables", "yes")
+                print("v", end='')
+                sys.stdout.flush()
+                return
+        # Check if we got an answer for that hint list before
+        older_answer = self._older_answer.get(hashed_hint_list)
+        if older_answer == "yes":
+            # Use hints as the answer
+            self.db.set(
+                package_id, "alternatives",
+                " ".join([
+                    "{0}={1}".format(link, path)
+                    for link, path in hint_list]))
+            self.db.set(package_id, "using-hint", hashed_hint_list)
+            print("a", end='')
+            sys.stdout.flush()
+            return
+        # Check if we got an answer for that hint list before
+        elif older_answer == "no":
+            # Mark as needing manual checks
+            self.db.set(package_id, "manual-check", "yes")
+            self.db.set(package_id, "using-hint", hashed_hint_list)
+            print("A", end='')
+            sys.stdout.flush()
+            return
+        # Now we need to ask the user if we've guessed right
+        print()
+        answered = False
+        while not answered:
+            print("Given this script")
+            print("v" * 80)
+            print(postinst)
+            print("^" * 80)
+            print("And those automatically-detected alternatives:")
+            for link, path in hint_list:
+                print("  {0}={1}".format(link, path))
+            print("Are the alternatives correct?")
+            choice = input("yes,no,[skip] > ")
+            if choice in ('', 's', 'skip'):
+                answered = True
+            elif choice in ('y', 'yes'):
+                answered = True
+                # Store the alternatives
+                self.db.set(
+                    package_id, "alternatives",
+                    " ".join([
+                        "{0}={1}".format(link, path)
+                        for link, path in hint_list]))
+                # Mark this as automatic so that we can reuse hint-hash and
+                # hint-correct (guessed right)
+                self.db.set(package_id, "automatic", "yes")
+                self.db.set(package_id, "hint-hash",
+                            self._get_hint_list_hash(hint_list))
+                self.db.set(package_id, "hint-correct", "yes")
+                self._older_answer[hashed_hint_list] = "yes"
+            elif choice in ('n', 'no'):
+                answered = True
+                # Mark it as manual-check so that we don't get prompted again
+                self.db.set(package_id, "manual-check", "yes")
+                # Mark this as automatic so that we can reuse hint-hash and
+                # hint-correct (guessed wrong)
+                self.db.set(package_id, "automatic", "yes")
+                self.db.set(package_id, "hint-hash",
+                            self._get_hint_list_hash(hint_list))
+                self.db.set(package_id, "hint-correct", "no")
+                self._older_answer[hashed_hint_list] = "no"
+
+    def load_db(self, filename):
+        """
+        Load database of update-alternatives annotations from a file
+        """
+        # Load the database from the file
+        logging.info("Loading database from %s", filename)
+        self.db.read([filename], encoding='UTF-8')
+        # Reset known answers
+        self._older_answer = {}
+        # Rebuild answers based on hint_hash and hint_answer key that were
+        # tagged as automatic. This helps us not ask the same question twice.
+        for package_id in self.db.sections():
+            automatic = self.db.get(
+                package_id, "automatic", fallback=None)
+            hint_hash = self.db.get(
+                package_id, "hint-hash", fallback=None)
+            hint_answer = self.db.get(
+                package_id, "hint-correct", fallback=None)
+            if (automatic == "yes"
+                    and hint_hash is not None
+                    and hint_answer in ("yes", "no")):
+                self._older_answer[hint_hash] = hint_answer
+
+    def save_db(self, filename):
+        """
+        Save the database of update-alternatives annotations to a file
+        """
+        logging.info("Saving database to %s", filename)
+        with open(filename, 'wt', encoding='UTF-8') as stream:
+            self.db.write(stream)
+
+    def print_legend(self):
+        print("Legend:")
+        print("  . - package without a postinst script")
+        print("  o - package without 'update-alternatives' in postint script")
+        print("  m - package that needs manual check")
+        print("  a - package automatically guessed right before")
+        print("  A - package automatically guessed wrong before")
+        print("  v - package is using variables with 'update-alternatives'")
+        print("  h - package has no hints but uses 'update-alternatives'")
+
+    def _get_hint_list(self, script, wanted_token):
+        """
+        Get hints for update-alternatives in the specified script
+
+        This method generates pairs (link, path) for each possible candidate.
+        """
+        for line in join_line_continuations(script):
+            if wanted_token not in line:
+                continue
+            token_iter = iter(shlex.split(line))
+            for token in token_iter:
+                if token == 'update-alternatives':
+                    continue
+                elif token in ('--install', '--slave'):
+                    link = next(token_iter)
+                    next(token_iter)
+                    path = next(token_iter)
+                    yield link, path
+                    continue
+
+    def _get_hint_list_hash(self, hint_list):
+        """
+        Get a hash representation of the list of hints
+        """
+        return hashlib.sha1(
+            json.dumps(hint_list).encode("ASCII")
+        ).hexdigest()
+
+
+def main():
+    parser = ArgumentParser()
+    parser.add_argument(
+        'archive', help="path to the archive to scan")
+    parser.add_argument(
+        "db", help="path to the database to amend")
+    ns = parser.parse_args()
+    scanner = Scanner()
+    if os.path.exists(ns.db):
+        scanner.load_db(ns.db)
+    scanner.print_legend()
+    try:
+        print("Scanning {0}".format(ns.archive))
+        for dirpath, dirnames, filenames in os.walk(ns.archive):
+            for filename in filenames:
+                if filename.endswith('.deb'):
+                    scanner.scan_pkg(os.path.join(dirpath, filename))
+    finally:
+        scanner.save_db(ns.db)
+
+if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.DEBUG,
+        filename="check-update-alternatives.log",
+        format='%(levelname)s %(message)s',
+        filemode='wt')
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass
