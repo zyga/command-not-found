@@ -90,6 +90,11 @@ class Scanner:
             print("m", end='')
             sys.stdout.flush()
             return
+        # if this package already has alternatives, skip it:
+        if self.db.get(package_id, "alternatives", fallback=None) is not None:
+            print("g", end='')
+            sys.stdout.flush()
+            return
         # If the package does not have a section, add one
         if not self.db.has_section(package_id):
             self.db.add_section(package_id)
@@ -218,11 +223,12 @@ class Scanner:
         print("Legend:")
         print("  . - package without a postinst script")
         print("  o - package without 'update-alternatives' in postint script")
-        print("  m - package that needs manual check")
-        print("  a - package automatically guessed right before")
-        print("  A - package automatically guessed wrong before")
-        print("  v - package is using variables with 'update-alternatives'")
-        print("  h - package has no hints but uses 'update-alternatives'")
+        print("  m - package that needs manual check (no change)")
+        print("  g - package that has good data (no change)")
+        print("  a - package handled based on earlier correct guess")
+        print("  A - package handled based on earlier incorrect guess")
+        print("  v - package skipped due to shell variables used with 'update-alternatives'")
+        print("  h - package skipped due to no hints despite seeing 'update-alternatives'")
 
     def _get_hint_list(self, script, wanted_token):
         """
