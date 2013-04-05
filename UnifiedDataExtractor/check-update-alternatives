@@ -124,7 +124,7 @@ class Scanner:
                 " ".join([
                     "{0}={1}".format(link, path)
                     for link, path in hint_list]))
-            self.db.set(package_id, "using-hint", hashed_hint_list)
+            self.db.set(package_id, "using-hint", "yes")
             print("a", end='')
             sys.stdout.flush()
             return
@@ -132,7 +132,7 @@ class Scanner:
         elif older_answer == "no":
             # Mark as needing manual checks
             self.db.set(package_id, "manual-check", "yes")
-            self.db.set(package_id, "using-hint", hashed_hint_list)
+            self.db.set(package_id, "using-hint", "yes")
             print("A", end='')
             sys.stdout.flush()
             return
