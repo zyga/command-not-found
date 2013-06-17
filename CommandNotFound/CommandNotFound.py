@@ -212,9 +212,9 @@ class CommandNotFound(object):
                 answer = input(prompt)
             else:
                 answer = raw_input(prompt)
-            if sys.stdin.encoding and isinstance(answer, str):
-                # Decode the answer so that we get an unicode value
-                answer = answer.decode(sys.stdin.encoding)
+                if sys.stdin.encoding and isinstance(answer, str):
+                    # Decode the answer so that we get an unicode value
+                    answer = answer.decode(sys.stdin.encoding)
             if answer.lower() == _("y"):
                 if posix.geteuid() == 0:
                     command_prefix = ""
