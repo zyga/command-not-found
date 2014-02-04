@@ -12,6 +12,7 @@ try:
     import gettext
     import locale
     import sys
+    import os
     from optparse import OptionParser
 
     from CommandNotFound.util import crash_guard
@@ -26,7 +27,16 @@ def enable_i18n():
     if sys.version < '3':
         kwargs["unicode"] = True
     cnf.install(**kwargs)
-    locale.setlocale(locale.LC_ALL, '')
+
+    try:
+        locale.setlocale(locale.LC_ALL, '')
+    except locale.Error as exc:
+        #   Fixing the case when remote system sends incorrect LC_CTYPE via SSH
+        if os.environ['LC_CTYPE'] == 'UTF-8':  # Mac OS X
+            #   Set the locale based on LANG environmental variable
+            locale.setlocale(locale.LC_ALL, os.environ.get('LANG', 'C'))
+        else:
+            raise exc
 
 
 def fix_sys_argv(encoding=None):
